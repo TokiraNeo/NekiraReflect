@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# 忽略VSCode 配置目录
+.vscode/

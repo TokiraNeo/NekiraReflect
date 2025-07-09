@@ -8,6 +8,10 @@ struct TStruct
     int x;
     float y;
 
+    const char *Name;
+
+    char Description[7] = "Tokira";
+
     void Func()
     {
         std::cout << "TStruct::Func called" << std::endl;
@@ -29,7 +33,9 @@ struct TStruct
 REFLECT_BEGIN(TStruct)
 REFLECT_VARIABLES(
     REGISTER_VARIABLE(&TStruct::x, x),
-    REGISTER_VARIABLE(&TStruct::y, y))
+    REGISTER_VARIABLE(&TStruct::y, y),
+    REGISTER_VARIABLE(&TStruct::Name, Name),
+    REGISTER_VARIABLE(&TStruct::Description, Description))
 REFLECT_FUNCTIONS(
     REGISTER_FUNCTION(&TStruct::Func, Func),
     REGISTER_FUNCTION(&TStruct::ConstFunc, ConstFunc),
@@ -38,7 +44,7 @@ REFLECT_END()
 
 int main()
 {
-    TStruct Obj{10, 20.5f};
+    TStruct Obj{10, 20.5f, "Tokira"};
 
     auto TStructInfo = GetTypeInfo<TStruct>();
 
@@ -64,14 +70,21 @@ int main()
     if (ConstFuncPtr)
     {
         (Obj.*ConstFuncPtr)();
+
+        auto IsConst = function_traits_IsConst<decltype(ConstFuncPtr)>;
+        std::cout << "Is Const Function: " << (IsConst ? "Yes" : "No") << std::endl;
     }
 
-    auto VarPtr = GetMemberVariable<TStruct, 0>();
+    auto VarPtr = GetMemberVariable<TStruct, 3>();
     if (VarPtr)
     {
-        std::cout << "Variable x: " << Obj.*VarPtr << std::endl;
-        Obj.*VarPtr = 90;
-        std::cout << "Updated Variable x: " << Obj.*VarPtr << std::endl;
+        std::cout << "Variable Name: " << Obj.*VarPtr << std::endl;
+
+        using RawType = variable_traits_RawType<decltype(VarPtr)>;
+
+        using ValueType = variable_traits_ValueType<decltype(VarPtr)>;
+
+        using ObjectType = variable_traits_ObjectType<decltype(VarPtr)>;
     }
 
     return 0;

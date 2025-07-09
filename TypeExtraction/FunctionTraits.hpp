@@ -6,7 +6,7 @@
 
 namespace NekiraReflect
 {
-    // =============================================== 函数萃取器 =============================================== //
+    // ============================================= 函数萃取器 =============================================== //
     // 基础的函数萃取器
     template <typename Callable>
     struct function_traits_base
@@ -73,7 +73,7 @@ namespace NekiraReflect
         static constexpr bool IsLambdaOrFunctionObject = true;
     };
 
-    // ================================================== 便捷别名和常量 ================================================== //
+    // ================================================ 便捷别名和常量 ================================================ //
     // 获取函数指针类型
     template <typename T>
     using function_traits_FuncType = typename function_traits<T>::FuncType;
@@ -105,5 +105,32 @@ namespace NekiraReflect
     // 获取第N个参数类型
     template <typename T, size_t N>
     using function_traits_Arg = std::tuple_element_t<N, function_traits_ArgTypes<T>>;
+} // namespace NekiraReflect
 
+namespace NekiraReflect
+{
+    // =============================================== 函数参数包萃取 =============================================== //
+
+    // 计算参数包中指定类型的数量
+    template <typename T, typename... Args>
+    struct CountTypeInPack
+    {
+    };
+
+    // 递归终止：参数包为空时，返回0
+    template <typename T>
+    struct CountTypeInPack<T> : std::integral_constant<size_t, 0>
+    {
+    };
+
+    // 递归展开计算
+    template <typename T, typename First, typename... Rest>
+    struct CountTypeInPack<T, First, Rest...> : std::integral_constant<size_t, CountTypeInPack<T, Rest...>::value + (std::is_same_v<T, First> ? 1 : 0)>
+    {
+    };
+
+    // ================================================ 便捷别名和常量 ================================================ //
+    // 获取参数包中指定类型的数量
+    template <typename FuncPtr, typename T>
+    constexpr size_t function_traits_CountTypeInArgs = CountTypeInPack<T, function_traits_ArgTypes<FuncPtr>>::value;
 } // namespace NekiraReflect

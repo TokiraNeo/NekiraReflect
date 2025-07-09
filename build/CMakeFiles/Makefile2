@@ -53,10 +53,10 @@ RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\ASUS\Desktop\Reflection
+CMAKE_SOURCE_DIR = D:\NekiraReflect
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\ASUS\Desktop\Reflection\build
+CMAKE_BINARY_DIR = D:\NekiraReflect\build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -84,14 +84,14 @@ clean: CMakeFiles/Reflection.dir/clean
 CMakeFiles/Reflection.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\ASUS\Desktop\Reflection\build\CMakeFiles --progress-num=1,2 "Built target Reflection"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\NekiraReflect\build\CMakeFiles --progress-num=1,2 "Built target Reflection"
 .PHONY : CMakeFiles/Reflection.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Reflection.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ASUS\Desktop\Reflection\build\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\NekiraReflect\build\CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Reflection.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ASUS\Desktop\Reflection\build\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\NekiraReflect\build\CMakeFiles 0
 .PHONY : CMakeFiles/Reflection.dir/rule
 
 # Convenience name for target.
@@ -101,7 +101,7 @@ Reflection: CMakeFiles/Reflection.dir/rule
 # codegen rule for target.
 CMakeFiles/Reflection.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\ASUS\Desktop\Reflection\build\CMakeFiles --progress-num=1,2 "Finished codegen for target Reflection"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\NekiraReflect\build\CMakeFiles --progress-num=1,2 "Finished codegen for target Reflection"
 .PHONY : CMakeFiles/Reflection.dir/codegen
 
 # clean rule for target.

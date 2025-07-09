@@ -1,8 +1,8 @@
 [
 {
-  "directory": "C:/Users/ASUS/Desktop/Reflection/build",
-  "command": "C:\\MinGW\\ucrt64\\bin\\g++.exe  @CMakeFiles/Reflection.dir/includes_CXX.rsp -g -std=gnu++23 -o CMakeFiles\\Reflection.dir\\ReflectMacro\\ReflectMacro.cpp.obj -c C:\\Users\\ASUS\\Desktop\\Reflection\\ReflectMacro\\ReflectMacro.cpp",
-  "file": "C:/Users/ASUS/Desktop/Reflection/ReflectMacro/ReflectMacro.cpp",
+  "directory": "D:/NekiraReflect/build",
+  "command": "C:\\MinGW\\ucrt64\\bin\\g++.exe  @CMakeFiles/Reflection.dir/includes_CXX.rsp -g -std=gnu++23 -o CMakeFiles\\Reflection.dir\\ReflectMacro\\ReflectMacro.cpp.obj -c D:\\NekiraReflect\\ReflectMacro\\ReflectMacro.cpp",
+  "file": "D:/NekiraReflect/ReflectMacro/ReflectMacro.cpp",
   "output": "CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj"
 }
 ]

@@ -4,10 +4,10 @@
 #include "../TypeExtraction/TypeExtration.hpp"
 
 #ifndef REFLECT_BEGIN
-#define REFLECT_BEGIN(Type) \
-    template <>             \
-    struct TypeInfo<Type>   \
-    {                       \
+#define REFLECT_BEGIN(Type)              \
+    template <>                          \
+    struct NekiraReflect::TypeInfo<Type> \
+    {                                    \
         static constexpr const char *Name = #Type;
 #endif
 
@@ -18,7 +18,7 @@
 
 #ifndef REGISTER_FUNCTION
 #define REGISTER_FUNCTION(FuncPtr, FuncName) \
-    field_traits { FuncPtr, #FuncName }
+    NekiraReflect::field_traits { FuncPtr, #FuncName }
 #endif
 
 #ifndef REFLECT_VARIABLES
@@ -28,7 +28,7 @@
 
 #ifndef REGISTER_VARIABLE
 #define REGISTER_VARIABLE(VarPtr, VarName) \
-    field_traits { VarPtr, #VarName }
+    NekiraReflect::field_traits { VarPtr, #VarName }
 #endif
 
 #ifndef REFLECT_END

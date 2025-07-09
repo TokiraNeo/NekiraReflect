@@ -1,17 +1,26 @@
 #include "ReflectMacro.hpp"
 #include <iostream>
 
+using namespace NekiraReflect;
+
 struct TStruct
 {
     int x;
     float y;
 
-    void Func() {}
+    void Func()
+    {
+        std::cout << "TStruct::Func called" << std::endl;
+    }
 
-    void ConstFunc() const {}
+    void ConstFunc() const
+    {
+        std::cout << "TStruct::ConstFunc called" << std::endl;
+    }
 
     int Function(int a, int b) const
     {
+        std::cout << "TStruct::Function called with a: " << a << ", b: " << b << std::endl;
         return a + b;
     }
 };
@@ -29,6 +38,8 @@ REFLECT_END()
 
 int main()
 {
+    TStruct Obj{10, 20.5f};
+
     auto TStructInfo = GetTypeInfo<TStruct>();
 
     std::cout << "Type Name: " << TStructInfo.Name << std::endl;
@@ -42,6 +53,26 @@ int main()
 
     auto VarTraits = std::get<0>(TStructInfo.Variables);
     std::cout << "Var Name: " << VarTraits.FieldName << std::endl;
+
+    auto FuncPtr = std::get<0>(TStructInfo.Functions).FieldPointer;
+    if (FuncPtr)
+    {
+        (Obj.*FuncPtr)();
+    }
+
+    auto ConstFuncPtr = GetMemberFunction<TStruct, 1>();
+    if (ConstFuncPtr)
+    {
+        (Obj.*ConstFuncPtr)();
+    }
+
+    auto VarPtr = GetMemberVariable<TStruct, 0>();
+    if (VarPtr)
+    {
+        std::cout << "Variable x: " << Obj.*VarPtr << std::endl;
+        Obj.*VarPtr = 90;
+        std::cout << "Updated Variable x: " << Obj.*VarPtr << std::endl;
+    }
 
     return 0;
 }

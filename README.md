@@ -26,6 +26,10 @@ NekiraReflect 是一个基于 C++ 的反射工具库，旨在为 C++ 提供更�
 
 请参考 `ReflectMacro/ReflectMacro.cpp` 或 `TypeExtraction/TypeExtration.cpp` 了解如何使用本库。
 
+## 命名空间
+
+- 本库的命名空间为 `NekiraReflect`，除了宏以外，其他的类型，函数都在该命名空间中。
+
 ## 目录结构
 
 - `DynamicReflect/` 动态反射相关头文件

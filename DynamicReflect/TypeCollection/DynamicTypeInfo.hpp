@@ -38,6 +38,7 @@ namespace NekiraReflect
     class NumericTypeInfo : public DynamicTypeInfo
     {
     public:
+        // 数值类别枚举
         enum class NumericCategory
         {
             Unknown,
@@ -84,6 +85,7 @@ namespace NekiraReflect
         NumericCategory Category;
         bool IsSigned;
 
+        // 根据数值类别返回对应的名称
         static std::string GetCategoryName(NumericCategory category)
         {
             switch (category)
@@ -105,6 +107,7 @@ namespace NekiraReflect
             }
         }
 
+        // 根据类型 T 返回对应的数值类别
         template <typename T>
         static NumericCategory type_category_v()
         {
@@ -148,10 +151,11 @@ namespace NekiraReflect
     class EnumTypeInfo : public DynamicTypeInfo
     {
     public:
+        // 枚举对结构体，用于存储枚举成员名称和值
         struct EnumPair
         {
-            std::string Name; // 枚举名称
-            size_t Value;     // 枚举值
+            std::string Name;
+            size_t Value;
         };
 
         // 构造函数，接受枚举类型的名称
@@ -225,6 +229,8 @@ namespace NekiraReflect
     // ClassTypeInfo 类用于表示类类型信息
     class ClassTypeInfo : public DynamicTypeInfo
     {
+    public:
+    private:
     };
 
 } // namespace NekiraReflect

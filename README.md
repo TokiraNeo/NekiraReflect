@@ -39,7 +39,3 @@ NekiraReflect 是一个基于 C++ 的反射工具库，旨在为 C++ 提供更�
 - `InfoCollection/` 反射信息收集相关
 
 ---
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.

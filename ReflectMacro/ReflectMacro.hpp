@@ -3,6 +3,9 @@
 #include "../InfoCollection/InfoCollection.hpp"
 #include "../TypeExtraction/TypeExtration.hpp"
 
+// [INFO] NekiraReflect::TypeInfo定义在InfoCollection/InfoCollection.hpp中
+// [INFO] NekiraReflect::field_traits定义在TypeExtraction/TypeExtration.hpp中
+
 #ifndef REFLECT_BEGIN
 #define REFLECT_BEGIN(Type)              \
     template <>                          \

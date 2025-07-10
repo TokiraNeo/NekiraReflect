@@ -56,11 +56,11 @@
 				},
 				{
 					"backtrace" : 2,
-					"path" : "D:/NekiraReflect/InfoCollection"
+					"path" : "D:/NekiraReflect/StaticReflect"
 				},
 				{
 					"backtrace" : 2,
-					"path" : "D:/NekiraReflect/ReflectMacro"
+					"path" : "D:/NekiraReflect/DynamicReflect"
 				}
 			],
 			"language" : "CXX",
@@ -116,7 +116,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "ReflectMacro/ReflectMacro.cpp",
+			"path" : "StaticReflect/StaticReflect.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

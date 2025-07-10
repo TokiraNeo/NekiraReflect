@@ -173,29 +173,29 @@ Reflection/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/build
 .PHONY : Reflection/fast
 
-ReflectMacro/ReflectMacro.obj: ReflectMacro/ReflectMacro.cpp.obj
-.PHONY : ReflectMacro/ReflectMacro.obj
+StaticReflect/StaticReflect.obj: StaticReflect/StaticReflect.cpp.obj
+.PHONY : StaticReflect/StaticReflect.obj
 
 # target to build an object file
-ReflectMacro/ReflectMacro.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj
-.PHONY : ReflectMacro/ReflectMacro.cpp.obj
+StaticReflect/StaticReflect.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj
+.PHONY : StaticReflect/StaticReflect.cpp.obj
 
-ReflectMacro/ReflectMacro.i: ReflectMacro/ReflectMacro.cpp.i
-.PHONY : ReflectMacro/ReflectMacro.i
+StaticReflect/StaticReflect.i: StaticReflect/StaticReflect.cpp.i
+.PHONY : StaticReflect/StaticReflect.i
 
 # target to preprocess a source file
-ReflectMacro/ReflectMacro.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.i
-.PHONY : ReflectMacro/ReflectMacro.cpp.i
+StaticReflect/StaticReflect.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.i
+.PHONY : StaticReflect/StaticReflect.cpp.i
 
-ReflectMacro/ReflectMacro.s: ReflectMacro/ReflectMacro.cpp.s
-.PHONY : ReflectMacro/ReflectMacro.s
+StaticReflect/StaticReflect.s: StaticReflect/StaticReflect.cpp.s
+.PHONY : StaticReflect/StaticReflect.s
 
 # target to generate assembly for a file
-ReflectMacro/ReflectMacro.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.s
-.PHONY : ReflectMacro/ReflectMacro.cpp.s
+StaticReflect/StaticReflect.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.s
+.PHONY : StaticReflect/StaticReflect.cpp.s
 
 # Help Target
 help:
@@ -210,9 +210,9 @@ help:
 	@echo ... list_install_components
 	@echo ... rebuild_cache
 	@echo ... Reflection
-	@echo ... ReflectMacro/ReflectMacro.obj
-	@echo ... ReflectMacro/ReflectMacro.i
-	@echo ... ReflectMacro/ReflectMacro.s
+	@echo ... StaticReflect/StaticReflect.obj
+	@echo ... StaticReflect/StaticReflect.i
+	@echo ... StaticReflect/StaticReflect.s
 .PHONY : help
 
 

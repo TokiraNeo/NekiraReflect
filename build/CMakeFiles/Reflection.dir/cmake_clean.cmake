@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj"
-  "CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj.d"
+  "CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj"
+  "CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj.d"
   "Reflection.exe"
   "Reflection.exe.manifest"
   "Reflection.pdb"

@@ -129,8 +129,17 @@ namespace NekiraReflect
     {
     };
 
+    // 辅助：展开tuple为参数包
+    template <typename T, typename Tuple>
+    struct CountTypeInTuple;
+    // 对于std::tuple的特化
+    template <typename T, typename... Args>
+    struct CountTypeInTuple<T, std::tuple<Args...>> : CountTypeInPack<T, Args...>
+    {
+    };
+
     // ================================================ 便捷别名和常量 ================================================ //
     // 获取参数包中指定类型的数量
     template <typename FuncPtr, typename T>
-    constexpr size_t function_traits_CountTypeInArgs = CountTypeInPack<T, function_traits_ArgTypes<FuncPtr>>::value;
+    constexpr size_t function_traits_CountTypeInArgs = CountTypeInTuple<T, function_traits_ArgTypes<FuncPtr>>::value;
 } // namespace NekiraReflect

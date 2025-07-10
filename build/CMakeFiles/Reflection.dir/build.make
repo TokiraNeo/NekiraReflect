@@ -71,29 +71,29 @@ include CMakeFiles/Reflection.dir/flags.make
 CMakeFiles/Reflection.dir/codegen:
 .PHONY : CMakeFiles/Reflection.dir/codegen
 
-CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj: CMakeFiles/Reflection.dir/flags.make
-CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj: CMakeFiles/Reflection.dir/includes_CXX.rsp
-CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj: D:/NekiraReflect/ReflectMacro/ReflectMacro.cpp
-CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj: CMakeFiles/Reflection.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\NekiraReflect\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj"
-	C:\MinGW\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj -MF CMakeFiles\Reflection.dir\ReflectMacro\ReflectMacro.cpp.obj.d -o CMakeFiles\Reflection.dir\ReflectMacro\ReflectMacro.cpp.obj -c D:\NekiraReflect\ReflectMacro\ReflectMacro.cpp
+CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj: CMakeFiles/Reflection.dir/flags.make
+CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj: CMakeFiles/Reflection.dir/includes_CXX.rsp
+CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj: D:/NekiraReflect/StaticReflect/StaticReflect.cpp
+CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj: CMakeFiles/Reflection.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\NekiraReflect\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj"
+	C:\MinGW\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj -MF CMakeFiles\Reflection.dir\StaticReflect\StaticReflect.cpp.obj.d -o CMakeFiles\Reflection.dir\StaticReflect\StaticReflect.cpp.obj -c D:\NekiraReflect\StaticReflect\StaticReflect.cpp
 
-CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.i"
-	C:\MinGW\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\NekiraReflect\ReflectMacro\ReflectMacro.cpp > CMakeFiles\Reflection.dir\ReflectMacro\ReflectMacro.cpp.i
+CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.i"
+	C:\MinGW\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\NekiraReflect\StaticReflect\StaticReflect.cpp > CMakeFiles\Reflection.dir\StaticReflect\StaticReflect.cpp.i
 
-CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.s"
-	C:\MinGW\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\NekiraReflect\ReflectMacro\ReflectMacro.cpp -o CMakeFiles\Reflection.dir\ReflectMacro\ReflectMacro.cpp.s
+CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.s"
+	C:\MinGW\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\NekiraReflect\StaticReflect\StaticReflect.cpp -o CMakeFiles\Reflection.dir\StaticReflect\StaticReflect.cpp.s
 
 # Object files for target Reflection
 Reflection_OBJECTS = \
-"CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj"
+"CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj"
 
 # External object files for target Reflection
 Reflection_EXTERNAL_OBJECTS =
 
-Reflection.exe: CMakeFiles/Reflection.dir/ReflectMacro/ReflectMacro.cpp.obj
+Reflection.exe: CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj
 Reflection.exe: CMakeFiles/Reflection.dir/build.make
 Reflection.exe: CMakeFiles/Reflection.dir/linkLibs.rsp
 Reflection.exe: CMakeFiles/Reflection.dir/objects1.rsp

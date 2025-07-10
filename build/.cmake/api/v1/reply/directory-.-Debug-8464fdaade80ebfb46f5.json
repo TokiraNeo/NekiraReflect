@@ -52,7 +52,7 @@
 			"destination" : "include",
 			"paths" : 
 			[
-				"InfoCollection"
+				"StaticReflect"
 			],
 			"type" : "directory"
 		},
@@ -62,7 +62,7 @@
 			"destination" : "include",
 			"paths" : 
 			[
-				"ReflectMacro"
+				"DynamicReflect"
 			],
 			"type" : "directory"
 		}

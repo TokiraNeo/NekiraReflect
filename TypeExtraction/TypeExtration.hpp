@@ -43,9 +43,9 @@ namespace NekiraReflect
     struct field_traits : field_traits_base<T>
     {
         T FieldPointer;
-        const char *FieldName;
+        const char* FieldName;
 
-        constexpr field_traits(T pointer, const char *name)
+        constexpr field_traits(T pointer, const char* name)
             : FieldPointer(pointer), FieldName(name)
         {
         }

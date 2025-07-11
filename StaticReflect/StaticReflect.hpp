@@ -2,7 +2,7 @@
 #pragma once
 
 #include "TypeCollection/StaticTypeInfo.hpp"
-#include "TypeExtraction/TypeExtration.hpp"
+#include "../TypeExtraction/TypeExtration.hpp"
 
 // [INFO] NekiraReflect::TypeInfo定义在TypeCollection/StaticTypeInfo.hpp中
 // [INFO] NekiraReflect::field_traits定义在TypeExtraction/TypeExtration.hpp中

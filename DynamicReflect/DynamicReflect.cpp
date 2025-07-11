@@ -14,9 +14,9 @@ enum class TestEnum
 int main()
 {
     EnumVector Enums = {
-        {std::string("ValueOne"), static_cast<size_t>(TestEnum::ValueOne)},
-        {std::string("ValueTwo"), static_cast<size_t>(TestEnum::ValueTwo)},
-        {std::string("ValueThree"), static_cast<size_t>(TestEnum::ValueThree)}};
+        {std::string("ValueOne"), static_cast<size_t>( TestEnum::ValueOne )},
+        {std::string("ValueTwo"), static_cast<size_t>( TestEnum::ValueTwo )},
+        {std::string("ValueThree"), static_cast<size_t>( TestEnum::ValueThree )} };
 
     auto EnumInfo = RegistEnumTypeInfo("TestEnum", std::move(Enums));
 
@@ -28,6 +28,8 @@ int main()
     {
         std::cout << EnumInfo->GetEnumNameByValue(i) << " = " << i << std::endl;
     }
+
+    std::cout << "Enum Value : " << EnumInfo->GetEnumValueByName("ValueOne") << std::endl;
 
     return 0;
 }

@@ -43,19 +43,19 @@ namespace NekiraReflect
 
     // 剥离引用
     template <typename T>
-    struct raw_type<T &> : raw_type<T>
+    struct raw_type<T&> : raw_type<T>
     {
     };
 
     // 剥离右值引用
     template <typename T>
-    struct raw_type<T &&> : raw_type<T>
+    struct raw_type<T&&> : raw_type<T>
     {
     };
 
     // 剥离指针
     template <typename T>
-    struct raw_type<T *> : raw_type<T>
+    struct raw_type<T*> : raw_type<T>
     {
     };
 

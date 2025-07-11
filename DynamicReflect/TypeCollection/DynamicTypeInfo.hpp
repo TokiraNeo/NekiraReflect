@@ -15,7 +15,7 @@ namespace NekiraReflect
     public:
         virtual ~DynamicTypeInfo() = default;
 
-        DynamicTypeInfo(const std::string &name)
+        DynamicTypeInfo(const std::string& name)
             : Name(name)
         {
         }
@@ -51,7 +51,7 @@ namespace NekiraReflect
         };
 
         // 拷贝构造函数
-        NumericTypeInfo(const NumericTypeInfo &other)
+        NumericTypeInfo(const NumericTypeInfo& other)
             : DynamicTypeInfo(GetCategoryName(other.Category)), Category(other.Category), IsSigned(other.IsSigned)
         {
         }
@@ -154,21 +154,21 @@ namespace NekiraReflect
         };
 
         // 构造函数，接受枚举类型的名称
-        EnumTypeInfo(const std::string &EnumTypeName)
+        EnumTypeInfo(const std::string& EnumTypeName)
             : DynamicTypeInfo(EnumTypeName)
         {
         }
 
         // 静态方法创建 EnumTypeInfo 实例
-        static std::shared_ptr<EnumTypeInfo> Create(const std::string &EnumTypeName)
+        static std::shared_ptr<EnumTypeInfo> Create(const std::string& EnumTypeName)
         {
             return std::make_shared<EnumTypeInfo>(EnumTypeName);
         }
 
         // 添加枚举对
-        void AddEnumPair(const std::string &name, size_t value)
+        void AddEnumPair(const std::string& name, size_t value)
         {
-            Enums.push_back(std::move(EnumPair{name, value}));
+            Enums.push_back(std::move(EnumPair{ name, value }));
         }
 
         // 获取枚举对的数量
@@ -178,11 +178,11 @@ namespace NekiraReflect
         }
 
         // 通过枚举成员名称获取枚举值
-        const size_t GetEnumValueByName(const std::string &name) const
+        const size_t GetEnumValueByName(const std::string& name) const
         {
             size_t Result = -1;
 
-            for (const auto &pair : Enums)
+            for (const auto& pair : Enums)
             {
                 if (pair.Name == name)
                 {
@@ -199,7 +199,7 @@ namespace NekiraReflect
         {
             std::string Result = "Unknown";
 
-            for (const auto &pair : Enums)
+            for (const auto& pair : Enums)
             {
                 if (pair.Value == value)
                 {
@@ -234,17 +234,18 @@ namespace NekiraReflect
 namespace NekiraReflect
 {
     // 辅助函数：用于转换DynamicTypeInfo为具体的子类
+    // Helper function to cast DynamicTypeInfo to specific derived type.
 
     template <typename T>
-    T *CastDynamicTypeInfo(DynamicTypeInfo *TypeInfo)
+    T* CastDynamicTypeInfo(DynamicTypeInfo* TypeInfo)
     {
-        return dynamic_cast<T *>(TypeInfo);
+        return dynamic_cast<T*>( TypeInfo );
     }
 
     template <typename T>
-    std::shared_ptr<T> CastDynamicTypeInfo(const std::shared_ptr<DynamicTypeInfo> &TypeInfo)
+    std::shared_ptr<T> CastDynamicTypeInfo(const std::shared_ptr<DynamicTypeInfo>& TypeInfo)
     {
-        return std::dynamic_pointer_cast<T>(TypeInfo);
+        return std::dynamic_pointer_cast<T>( TypeInfo );
     }
 
 } // namespace NekiraReflect

@@ -30,18 +30,18 @@ namespace NekiraReflect
 
     // 对普通函数指针的特化
     template <typename RT, typename... ParamTypes>
-    struct function_traits<RT (*)(ParamTypes...), void> : function_traits_base<RT (*)(ParamTypes...)>
+    struct function_traits<RT(*)( ParamTypes... ), void> : function_traits_base<RT(*)( ParamTypes... )>
     {
-        using FuncType = RT (*)(ParamTypes...);
+        using FuncType = RT(*)( ParamTypes... );
         using ReturnType = RT;
         using ArgTypes = std::tuple<ParamTypes...>;
     };
 
     // 对成员函数指针的特化
     template <typename ClassType, typename RT, typename... ParamTypes>
-    struct function_traits<RT (ClassType::*)(ParamTypes...), void> : function_traits_base<RT (ClassType::*)(ParamTypes...)>
+    struct function_traits<RT(ClassType::*)( ParamTypes... ), void> : function_traits_base<RT(ClassType::*)( ParamTypes... )>
     {
-        using FuncType = RT (ClassType::*)(ParamTypes...);
+        using FuncType = RT(ClassType::*)( ParamTypes... );
         using ReturnType = RT;
         using ArgTypes = std::tuple<ParamTypes...>;
         using ObjectType = ClassType;
@@ -50,9 +50,9 @@ namespace NekiraReflect
 
     // 对常量成员函数指针的特化
     template <typename ClassType, typename RT, typename... ParamTypes>
-    struct function_traits<RT (ClassType::*)(ParamTypes...) const, void> : function_traits_base<RT (ClassType::*)(ParamTypes...) const>
+    struct function_traits<RT(ClassType::*)( ParamTypes... ) const, void> : function_traits_base<RT(ClassType::*)( ParamTypes... ) const>
     {
-        using FuncType = RT (ClassType::*)(ParamTypes...) const;
+        using FuncType = RT(ClassType::*)( ParamTypes... ) const;
         using ReturnType = RT;
         using ArgTypes = std::tuple<ParamTypes...>;
         using ObjectType = ClassType;
@@ -62,13 +62,13 @@ namespace NekiraReflect
 
     // 对std::function的特化
     template <typename RT, typename... Args>
-    struct function_traits<std::function<RT(Args...)>, void> : function_traits<RT (*)(Args...)>
+    struct function_traits<std::function<RT(Args...)>, void> : function_traits<RT(*)( Args... )>
     {
     };
 
     // 对函数对象以及 lambda 表达式的特化（仅对类类型生效，避免递归冲突）
     template <typename Callable>
-    struct function_traits<Callable, std::enable_if_t<std::is_class_v<Callable>>> : function_traits<decltype(&Callable::operator())>
+    struct function_traits<Callable, std::enable_if_t<std::is_class_v<Callable>>> : function_traits<decltype( &Callable::operator() )>
     {
         static constexpr bool IsLambdaOrFunctionObject = true;
     };
@@ -125,7 +125,7 @@ namespace NekiraReflect
 
     // 递归展开计算
     template <typename T, typename First, typename... Rest>
-    struct CountTypeInPack<T, First, Rest...> : std::integral_constant<size_t, CountTypeInPack<T, Rest...>::value + (std::is_same_v<T, First> ? 1 : 0)>
+    struct CountTypeInPack<T, First, Rest...> : std::integral_constant<size_t, CountTypeInPack<T, Rest...>::value + ( std::is_same_v<T, First> ? 1 : 0 )>
     {
     };
 

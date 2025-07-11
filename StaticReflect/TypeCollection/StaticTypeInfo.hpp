@@ -10,7 +10,7 @@ namespace NekiraReflect
     struct StaticTypeInfo
     {
         // 类型名
-        static constexpr const char *Name = "UnknownType";
+        static constexpr const char* Name = "UnknownType";
 
         // 变量名元组
         static constexpr auto Variables = std::make_tuple();
@@ -30,14 +30,14 @@ namespace NekiraReflect
     template <typename ClassType, std::size_t Index>
     constexpr auto GetMemberFunction()
     {
-        return std::get<Index>(StaticTypeInfo<ClassType>::Functions).FieldPointer;
+        return std::get<Index>( StaticTypeInfo<ClassType>::Functions ).FieldPointer;
     }
 
     // 获取成员变量指针
     template <typename ClassType, std::size_t Index>
     constexpr auto GetMemberVariable()
     {
-        return std::get<Index>(StaticTypeInfo<ClassType>::Variables).FieldPointer;
+        return std::get<Index>( StaticTypeInfo<ClassType>::Variables ).FieldPointer;
     }
 
 } // namespace NekiraReflect

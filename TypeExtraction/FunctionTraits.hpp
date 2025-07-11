@@ -30,18 +30,18 @@ namespace NekiraReflect
 
     // 对普通函数指针的特化
     template <typename RT, typename... ParamTypes>
-    struct function_traits<RT(*)( ParamTypes... ), void> : function_traits_base<RT(*)( ParamTypes... )>
+    struct function_traits<RT( * )( ParamTypes... ), void> : function_traits_base<RT( * )( ParamTypes... )>
     {
-        using FuncType = RT(*)( ParamTypes... );
+        using FuncType = RT( * )( ParamTypes... );
         using ReturnType = RT;
         using ArgTypes = std::tuple<ParamTypes...>;
     };
 
     // 对成员函数指针的特化
     template <typename ClassType, typename RT, typename... ParamTypes>
-    struct function_traits<RT(ClassType::*)( ParamTypes... ), void> : function_traits_base<RT(ClassType::*)( ParamTypes... )>
+    struct function_traits<RT( ClassType::* )( ParamTypes... ), void> : function_traits_base<RT( ClassType::* )( ParamTypes... )>
     {
-        using FuncType = RT(ClassType::*)( ParamTypes... );
+        using FuncType = RT( ClassType::* )( ParamTypes... );
         using ReturnType = RT;
         using ArgTypes = std::tuple<ParamTypes...>;
         using ObjectType = ClassType;
@@ -50,9 +50,9 @@ namespace NekiraReflect
 
     // 对常量成员函数指针的特化
     template <typename ClassType, typename RT, typename... ParamTypes>
-    struct function_traits<RT(ClassType::*)( ParamTypes... ) const, void> : function_traits_base<RT(ClassType::*)( ParamTypes... ) const>
+    struct function_traits<RT( ClassType::* )( ParamTypes... ) const, void> : function_traits_base<RT( ClassType::* )( ParamTypes... ) const>
     {
-        using FuncType = RT(ClassType::*)( ParamTypes... ) const;
+        using FuncType = RT( ClassType::* )( ParamTypes... ) const;
         using ReturnType = RT;
         using ArgTypes = std::tuple<ParamTypes...>;
         using ObjectType = ClassType;
@@ -62,7 +62,7 @@ namespace NekiraReflect
 
     // 对std::function的特化
     template <typename RT, typename... Args>
-    struct function_traits<std::function<RT(Args...)>, void> : function_traits<RT(*)( Args... )>
+    struct function_traits<std::function<RT( Args... )>, void> : function_traits<RT( * )( Args... )>
     {
     };
 

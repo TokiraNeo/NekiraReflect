@@ -61,7 +61,7 @@ namespace NekiraReflect
 
     // 剥离数组
     template <typename T, std::size_t N>
-    struct raw_type<T[N]> : raw_type<T>
+    struct raw_type<T[ N ]> : raw_type<T>
     {
     };
 

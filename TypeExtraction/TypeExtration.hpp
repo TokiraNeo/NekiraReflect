@@ -45,13 +45,13 @@ namespace NekiraReflect
         T FieldPointer;
         const char* FieldName;
 
-        constexpr field_traits(T pointer, const char* name)
-            : FieldPointer(pointer), FieldName(name)
+        constexpr field_traits( T pointer, const char* name )
+            : FieldPointer( pointer ), FieldName( name )
         {
         }
 
-        constexpr field_traits(T Pointer)
-            : FieldPointer(Pointer), FieldName("")
+        constexpr field_traits( T Pointer )
+            : FieldPointer( Pointer ), FieldName( "" )
         {
         }
     };

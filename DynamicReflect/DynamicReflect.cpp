@@ -14,22 +14,22 @@ enum class TestEnum
 int main()
 {
     EnumVector Enums = {
-        {std::string("ValueOne"), static_cast<size_t>( TestEnum::ValueOne )},
-        {std::string("ValueTwo"), static_cast<size_t>( TestEnum::ValueTwo )},
-        {std::string("ValueThree"), static_cast<size_t>( TestEnum::ValueThree )} };
+        {std::string( "ValueOne" ), static_cast< size_t >( TestEnum::ValueOne )},
+        {std::string( "ValueTwo" ), static_cast< size_t >( TestEnum::ValueTwo )},
+        {std::string( "ValueThree" ), static_cast< size_t >( TestEnum::ValueThree )} };
 
-    auto EnumInfo = RegistEnumTypeInfo("TestEnum", std::move(Enums));
+    auto EnumInfo = RegistEnumTypeInfo( "TestEnum", std::move( Enums ) );
 
     std::cout << "Enum Name: " << EnumInfo->GetName() << std::endl;
     std::cout << "Enum Count: " << EnumInfo->GetEnumCount() << std::endl;
 
     std::cout << "Enum Values:" << std::endl;
-    for (size_t i = 0; i < EnumInfo->GetEnumCount(); ++i)
+    for ( size_t i = 0; i < EnumInfo->GetEnumCount(); ++i )
     {
-        std::cout << EnumInfo->GetEnumNameByValue(i) << " = " << i << std::endl;
+        std::cout << EnumInfo->GetEnumNameByValue( i ) << " = " << i << std::endl;
     }
 
-    std::cout << "Enum Value : " << EnumInfo->GetEnumValueByName("ValueOne") << std::endl;
+    std::cout << "Enum Value : " << EnumInfo->GetEnumValueByName( "ValueOne" ) << std::endl;
 
     return 0;
 }

@@ -1,8 +1,8 @@
 [
 {
   "directory": "D:/NekiraReflect/build",
-  "command": "C:\\MinGW\\ucrt64\\bin\\g++.exe  @CMakeFiles/Reflection.dir/includes_CXX.rsp -g -std=gnu++23 -o CMakeFiles\\Reflection.dir\\StaticReflect\\StaticReflect.cpp.obj -c D:\\NekiraReflect\\StaticReflect\\StaticReflect.cpp",
-  "file": "D:/NekiraReflect/StaticReflect/StaticReflect.cpp",
-  "output": "CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj"
+  "command": "C:\\MinGW\\ucrt64\\bin\\g++.exe  @CMakeFiles/Reflection.dir/includes_CXX.rsp -g -std=gnu++23 -o CMakeFiles\\Reflection.dir\\DynamicReflect\\DynamicReflect.cpp.obj -c D:\\NekiraReflect\\DynamicReflect\\DynamicReflect.cpp",
+  "file": "D:/NekiraReflect/DynamicReflect/DynamicReflect.cpp",
+  "output": "CMakeFiles/Reflection.dir/DynamicReflect/DynamicReflect.cpp.obj"
 }
 ]

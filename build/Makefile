@@ -173,29 +173,29 @@ Reflection/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/build
 .PHONY : Reflection/fast
 
-StaticReflect/StaticReflect.obj: StaticReflect/StaticReflect.cpp.obj
-.PHONY : StaticReflect/StaticReflect.obj
+DynamicReflect/DynamicReflect.obj: DynamicReflect/DynamicReflect.cpp.obj
+.PHONY : DynamicReflect/DynamicReflect.obj
 
 # target to build an object file
-StaticReflect/StaticReflect.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.obj
-.PHONY : StaticReflect/StaticReflect.cpp.obj
+DynamicReflect/DynamicReflect.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/DynamicReflect/DynamicReflect.cpp.obj
+.PHONY : DynamicReflect/DynamicReflect.cpp.obj
 
-StaticReflect/StaticReflect.i: StaticReflect/StaticReflect.cpp.i
-.PHONY : StaticReflect/StaticReflect.i
+DynamicReflect/DynamicReflect.i: DynamicReflect/DynamicReflect.cpp.i
+.PHONY : DynamicReflect/DynamicReflect.i
 
 # target to preprocess a source file
-StaticReflect/StaticReflect.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.i
-.PHONY : StaticReflect/StaticReflect.cpp.i
+DynamicReflect/DynamicReflect.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/DynamicReflect/DynamicReflect.cpp.i
+.PHONY : DynamicReflect/DynamicReflect.cpp.i
 
-StaticReflect/StaticReflect.s: StaticReflect/StaticReflect.cpp.s
-.PHONY : StaticReflect/StaticReflect.s
+DynamicReflect/DynamicReflect.s: DynamicReflect/DynamicReflect.cpp.s
+.PHONY : DynamicReflect/DynamicReflect.s
 
 # target to generate assembly for a file
-StaticReflect/StaticReflect.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/StaticReflect/StaticReflect.cpp.s
-.PHONY : StaticReflect/StaticReflect.cpp.s
+DynamicReflect/DynamicReflect.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Reflection.dir\build.make CMakeFiles/Reflection.dir/DynamicReflect/DynamicReflect.cpp.s
+.PHONY : DynamicReflect/DynamicReflect.cpp.s
 
 # Help Target
 help:
@@ -210,9 +210,9 @@ help:
 	@echo ... list_install_components
 	@echo ... rebuild_cache
 	@echo ... Reflection
-	@echo ... StaticReflect/StaticReflect.obj
-	@echo ... StaticReflect/StaticReflect.i
-	@echo ... StaticReflect/StaticReflect.s
+	@echo ... DynamicReflect/DynamicReflect.obj
+	@echo ... DynamicReflect/DynamicReflect.i
+	@echo ... DynamicReflect/DynamicReflect.s
 .PHONY : help
 
 

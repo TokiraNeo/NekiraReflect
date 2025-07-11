@@ -63,11 +63,6 @@ namespace NekiraReflect
         }
 
         // 创建 NumericTypeInfo 实例的静态方法
-        template <typename T>
-        static std::unique_ptr<DynamicTypeInfo> Create()
-        {
-            return std::make_unique<NumericTypeInfo>(type_category_v<T>(), std::is_signed_v<T>);
-        }
 
         // 获取类型类别
         const NumericCategory GetTypeCategory() const
@@ -165,9 +160,9 @@ namespace NekiraReflect
         }
 
         // 静态方法创建 EnumTypeInfo 实例
-        static std::unique_ptr<DynamicTypeInfo> Create(const std::string &EnumTypeName)
+        static std::shared_ptr<EnumTypeInfo> Create(const std::string &EnumTypeName)
         {
-            return std::make_unique<EnumTypeInfo>(EnumTypeName);
+            return std::make_shared<EnumTypeInfo>(EnumTypeName);
         }
 
         // 添加枚举对
@@ -226,11 +221,30 @@ namespace NekiraReflect
 namespace NekiraReflect
 {
 
-    // ClassTypeInfo 类用于表示类类型信息
+    // ClassTypeInfo 类用于表示类的类型信息
     class ClassTypeInfo : public DynamicTypeInfo
     {
     public:
     private:
     };
+
+} // namespace NekiraReflect
+
+// ====================================================== 辅助方法 ====================================================== //
+namespace NekiraReflect
+{
+    // 辅助函数：用于转换DynamicTypeInfo为具体的子类
+
+    template <typename T>
+    T *CastDynamicTypeInfo(DynamicTypeInfo *TypeInfo)
+    {
+        return dynamic_cast<T *>(TypeInfo);
+    }
+
+    template <typename T>
+    std::shared_ptr<T> CastDynamicTypeInfo(const std::shared_ptr<DynamicTypeInfo> &TypeInfo)
+    {
+        return std::dynamic_pointer_cast<T>(TypeInfo);
+    }
 
 } // namespace NekiraReflect

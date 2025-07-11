@@ -116,7 +116,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "StaticReflect/StaticReflect.cpp",
+			"path" : "DynamicReflect/DynamicReflect.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

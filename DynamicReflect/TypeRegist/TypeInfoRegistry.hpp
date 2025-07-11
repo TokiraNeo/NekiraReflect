@@ -84,4 +84,4 @@ namespace NekiraReflect
         return NewEnumTypeInfo;
     }
 
-}
+} // namespace NekiraReflect

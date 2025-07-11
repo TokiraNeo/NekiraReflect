@@ -17,6 +17,12 @@
 			{
 				"command" : 0,
 				"file" : 0,
+				"line" : 16,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
 				"line" : 17,
 				"parent" : 0
 			},
@@ -29,7 +35,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 19,
+				"line" : 20,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 21,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 22,
 				"parent" : 0
 			}
 		]
@@ -42,7 +60,7 @@
 			"destination" : "include",
 			"paths" : 
 			[
-				"TypeExtraction"
+				"StaticReflect"
 			],
 			"type" : "directory"
 		},
@@ -52,7 +70,7 @@
 			"destination" : "include",
 			"paths" : 
 			[
-				"StaticReflect"
+				"StaticReflect/TypeCollection"
 			],
 			"type" : "directory"
 		},
@@ -62,7 +80,37 @@
 			"destination" : "include",
 			"paths" : 
 			[
+				"StaticReflect/TypeExtration"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
 				"DynamicReflect"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"DynamicReflect/TypeCollection"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"DynamicReflect/TypeRegist"
 			],
 			"type" : "directory"
 		}

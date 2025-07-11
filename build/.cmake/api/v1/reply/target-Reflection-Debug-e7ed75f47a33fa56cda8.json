@@ -45,15 +45,11 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++23"
+					"fragment" : "-g -std=gnu++20"
 				}
 			],
 			"includes" : 
 			[
-				{
-					"backtrace" : 2,
-					"path" : "D:/NekiraReflect/TypeExtration"
-				},
 				{
 					"backtrace" : 2,
 					"path" : "D:/NekiraReflect/StaticReflect"
@@ -70,7 +66,7 @@
 				[
 					1
 				],
-				"standard" : "23"
+				"standard" : "20"
 			},
 			"sourceIndexes" : 
 			[

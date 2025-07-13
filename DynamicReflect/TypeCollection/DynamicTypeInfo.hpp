@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "../TypeExtraction/TypeExtraction.hpp"
+
 
 // ================================================== 动态类型信息存储 ================================================== //
 
@@ -211,6 +213,12 @@ namespace NekiraReflect
             return Result;
         }
 
+        // 获取所有枚举对
+        const std::vector<EnumPair>& GetEnums() const
+        {
+            return Enums;
+        }
+
     private:
         // 存储枚举对的向量
         std::vector<EnumPair> Enums;
@@ -220,12 +228,174 @@ namespace NekiraReflect
 
 namespace NekiraReflect
 {
-
     // ClassTypeInfo 类用于表示类的类型信息
+
+    // ================================================== 成员信息 ================================================== //
+    // 成员信息接口
+    struct IMemberInfo
+    {
+        virtual ~IMemberInfo() = default;
+        // 获取成员名称
+        virtual const char* GetName() const = 0;
+    };
+
+    // 成员变量信息
+    template <typename T>
+    struct MemberVarialbleInfo : IMemberInfo, field_traits<T>
+    {
+        constexpr MemberVarialbleInfo( T pointer, const char* name )
+            : field_traits<T>( pointer, name )
+        {
+        }
+
+        const char* GetName() const override
+        {
+            return field_traits<T>::FieldName;
+        }
+    };
+
+    // 成员函数信息
+    template <typename T>
+    struct MemberFunctionInfo : IMemberInfo, field_traits<T>
+    {
+        constexpr MemberFunctionInfo( T pointer, const char* name )
+            : field_traits<T>( pointer, name )
+        {
+        }
+
+        const char* GetName() const override
+        {
+            return field_traits<T>::FieldName;
+        }
+    };
+
+    // 判断成员变量指针
+    template <typename T>
+    using IsMemberVariablePtr = std::enable_if_t< std::is_member_pointer_v<T> && !std::is_member_function_pointer_v<T> >;
+
+    // 判断成员函数指针
+    template <typename T>
+    using IsMemberFunctionPtr = std::enable_if_t< std::is_member_function_pointer_v<T> >;
+
+    // 创建成员变量信息的辅助函数
+    template < typename T, typename = IsMemberVariablePtr<T> >
+    static std::shared_ptr<IMemberInfo> MakeMemberVariableInfo( T MemberVarPtr, const char* Name )
+    {
+        auto MemberVarInfo = std::make_shared< MemberVarialbleInfo<T> >( MemberVarPtr, Name );
+
+        return std::static_pointer_cast< IMemberInfo >( MemberVarInfo );
+    }
+
+    // 创建成员函数信息的辅助函数
+    template < typename T, typename = IsMemberFunctionPtr<T> >
+    static std::shared_ptr<IMemberInfo> MakeMemberFunctionInfo( T MemberFuncPtr, const char* Name )
+    {
+        auto MemberFuncInfo = std::make_shared< MemberFunctionInfo<T> >( MemberFuncPtr, Name );
+
+        return std::static_pointer_cast< IMemberInfo >( MemberFuncInfo );
+    }
+
+    // ================================================== 类类型信息 ================================================== //
     class ClassTypeInfo : public DynamicTypeInfo
     {
     public:
+        // 构造函数，接受类的名称
+        ClassTypeInfo( const std::string& ClassName )
+            : DynamicTypeInfo( ClassName )
+        {
+        }
+
+        // 创建 ClassTypeInfo 实例的静态方法
+        static std::shared_ptr<ClassTypeInfo> Create( const std::string& ClassName )
+        {
+            return std::make_shared<ClassTypeInfo>( ClassName );
+        }
+
+        // 添加成员变量(通过IMemberInfo接口)
+        void AddMemberVariable( std::shared_ptr<IMemberInfo> MemberVarInfo )
+        {
+            if ( MemberVarInfo )
+            {
+                Variables.push_back( std::move( MemberVarInfo ) );
+            }
+        }
+
+        // 添加成员变量(通过成员变量指针和名称)
+        template < typename T, typename = IsMemberVariablePtr<T> >
+        void AddMemberVariable( T MemberVarPtr, const char* Name )
+        {
+            auto MemberVarInfo = MakeMemberVariableInfo( MemberVarPtr, Name );
+
+            Variables.push_back( std::move( MemberVarInfo ) );
+        }
+
+        // 添加成员函数(通过IMemberInfo接口)
+        void AddMemberFunction( std::shared_ptr<IMemberInfo> MemberFuncInfo )
+        {
+            if ( MemberFuncInfo )
+            {
+                Functions.push_back( std::move( MemberFuncInfo ) );
+            }
+        }
+
+        // 添加成员函数(通过成员函数指针和名称)
+        template < typename T, typename = IsMemberFunctionPtr<T> >
+        void AddMemberFunction( T MemberFuncPtr, const char* Name )
+        {
+            auto MemberFuncInfo = MakeMemberFunctionInfo( MemberFuncPtr, Name );
+
+            Functions.push_back( std::move( MemberFuncInfo ) );
+        }
+
+        // 获取成员变量指针
+        template < typename T, typename = IsMemberVariablePtr<T> >
+        T GetMemberVariable( const std::string& Name ) const
+        {
+            if ( Name.empty() )
+            {
+                return nullptr;
+            }
+
+            for ( const auto& VarInfo : Variables )
+            {
+                if ( VarInfo->GetName() != Name ) { continue; }
+
+                // [TODO] God！Dam！Shit~ 这里没法拿到成员指针的信息，也没法类型转换，艹 Mamba Out! What can I say?
+                auto MemberVarInfo = std::dynamic_pointer_cast< MemberVarialbleInfo<T> >( VarInfo );
+
+                return MemberVarInfo ? MemberVarInfo->FieldPointer : nullptr;
+            }
+
+            return nullptr;
+        }
+
+        // 获取成员函数指针
+        template < typename T, typename = IsMemberFunctionPtr<T> >
+        T GetMemberFunction( const std::string& Name ) const
+        {
+            if ( Name.empty() )
+            {
+                return nullptr;
+            }
+
+            for ( const auto& FuncInfo : Functions )
+            {
+                if ( FuncInfo->GetName() != Name ) { continue; }
+
+                // [TODO] God！Dam！Shit~ 这里没法拿到成员指针的信息，也没法类型转换，艹 Mamba Out! What can I say?
+                auto MemberFuncInfo = std::dynamic_pointer_cast< MemberFunctionInfo<T> >( FuncInfo );
+
+                return MemberFuncInfo ? MemberFuncInfo->FieldPointer : nullptr;
+            }
+
+            return nullptr;
+        }
+
     private:
+        // 存储类的成员变量
+        std::vector< std::shared_ptr<IMemberInfo> > Variables;
+        // 存储类的成员函数
+        std::vector< std::shared_ptr<IMemberInfo> > Functions;
     };
 
 } // namespace NekiraReflect

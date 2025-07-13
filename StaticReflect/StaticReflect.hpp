@@ -2,10 +2,10 @@
 #pragma once
 
 #include "TypeCollection/StaticTypeInfo.hpp"
-#include "../TypeExtraction/TypeExtration.hpp"
+#include "../TypeExtraction/TypeExtraction.hpp"
 
 // [INFO] NekiraReflect::TypeInfo定义在TypeCollection/StaticTypeInfo.hpp中
-// [INFO] NekiraReflect::field_traits定义在TypeExtraction/TypeExtration.hpp中
+// [INFO] NekiraReflect::field_traits定义在TypeExtraction/TypeExtraction.hpp中
 
 #ifndef STATIC_REFLECT_BEGIN
 #define STATIC_REFLECT_BEGIN(Type)             \

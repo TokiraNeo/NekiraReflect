@@ -52,6 +52,10 @@
 			[
 				{
 					"backtrace" : 2,
+					"path" : "D:/NekiraReflect/TypeExtraction"
+				},
+				{
+					"backtrace" : 2,
 					"path" : "D:/NekiraReflect/StaticReflect"
 				},
 				{

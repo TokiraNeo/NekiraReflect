@@ -41,6 +41,13 @@ namespace NekiraReflect
             TypeInfoMap[ TypeName ] = std::move( TypeInfo );
         }
 
+        // 删除指定名称的类型信息
+        // Remove type information by type name.
+        void RemoveTypeInfo( const std::string& TypeName )
+        {
+            TypeInfoMap.erase( TypeName );
+        }
+
     private:
         TypeInfoRegistry() = default;
 
@@ -79,6 +86,7 @@ namespace NekiraReflect
         // 若未注册，则创建新的 EnumTypeInfo 实例
         // If not registered, create a new EnumTypeInfo instance.
         auto NewEnumTypeInfo = EnumTypeInfo::Create( EnumName );
+
         if ( NewEnumTypeInfo )
         {
             for ( auto& Pair : EnumPairs )
@@ -95,3 +103,52 @@ namespace NekiraReflect
     }
 
 } // namespace NekiraReflect
+
+namespace NekiraReflect
+{
+    // 注册类类型信息的辅助函数.
+    // Helper function to register Dynamic Class Type Info.
+
+    // [INFO] 使用NekiraReflect::MakeMemberVariableInfo()来创建IMemberInfo实例
+    // [INFO] Use NekiraReflect::MakeMemberVariableInfo() to create IMemberInfo instances.
+    using MemberVarInfoVector = std::vector< std::shared_ptr<IMemberInfo> >;
+
+    // [INFO] 使用NekiraReflect::MakeMemberFunctionInfo()来创建IMemberInfo实例
+    // [INFO] Use NekiraReflect::MakeMemberFunctionInfo() to create IMemberInfo instances.
+    using MemberFuncInfoVector = std::vector< std::shared_ptr<IMemberInfo> >;
+
+    static std::shared_ptr<ClassTypeInfo> RegistClassTypeInfo( const std::string& ClassName, const MemberVarInfoVector& MemberVars,
+        const MemberFuncInfoVector& MemberFuncs )
+    {
+        auto& Registry = TypeInfoRegistry::Get();
+
+        // 检查是否已经注册了该类类型
+        // Check if the class type is already registered.
+        if ( auto Info = Registry.GetTypeInfo( ClassName ); Info != nullptr )
+        {
+            return CastDynamicTypeInfo<ClassTypeInfo>( Info );
+        }
+
+        // 若未注册，则创建新的 ClassTypeInfo 实例
+        // If not registered, create a new ClassTypeInfo instance.
+        auto NewClassTypeInfo = ClassTypeInfo::Create( ClassName );
+
+        if ( NewClassTypeInfo )
+        {
+            for ( const auto& Var : MemberVars )
+            {
+                NewClassTypeInfo->AddMemberVariable( std::move( Var ) );
+            }
+            for ( const auto& Func : MemberFuncs )
+            {
+                NewClassTypeInfo->AddMemberFunction( std::move( Func ) );
+            }
+
+            // 注册新的类类型信息
+            // Register the new class type information.
+            Registry.RegistTypeInfo( ClassName, std::static_pointer_cast< DynamicTypeInfo >( NewClassTypeInfo ) );
+        }
+
+        return NewClassTypeInfo;
+    }
+}

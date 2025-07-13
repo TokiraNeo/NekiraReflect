@@ -360,7 +360,7 @@ namespace NekiraReflect
             {
                 if ( VarInfo->GetName() != Name ) { continue; }
 
-                // [TODO] God！Dam！Shit~ 这里没法拿到成员指针的信息，也没法类型转换，艹 Mamba Out! What can I say?
+                // 尝试转换为特定的MemberVarialbleInfo类型
                 auto MemberVarInfo = std::dynamic_pointer_cast< MemberVarialbleInfo<T> >( VarInfo );
 
                 return MemberVarInfo ? MemberVarInfo->FieldPointer : nullptr;
@@ -382,7 +382,7 @@ namespace NekiraReflect
             {
                 if ( FuncInfo->GetName() != Name ) { continue; }
 
-                // [TODO] God！Dam！Shit~ 这里没法拿到成员指针的信息，也没法类型转换，艹 Mamba Out! What can I say?
+                // 尝试转换为特定的MemberFunctionInfo类型
                 auto MemberFuncInfo = std::dynamic_pointer_cast< MemberFunctionInfo<T> >( FuncInfo );
 
                 return MemberFuncInfo ? MemberFuncInfo->FieldPointer : nullptr;

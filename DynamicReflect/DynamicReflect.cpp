@@ -57,7 +57,6 @@ int main()
     {
         std::cout << "ClassTypeInfo registered: " << ClassInfo->GetName() << std::endl;
 
-
         if ( auto aPtr = ClassInfo->GetMemberVariable<int( TestClass::* )>( "a" ) )
         {
             std::cout << "MemberVar a: " << Obj.*aPtr << std::endl;

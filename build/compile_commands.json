@@ -1,8 +1,0 @@
-[
-{
-  "directory": "D:/NekiraReflect/build",
-  "command": "C:\\MinGW\\ucrt64\\bin\\g++.exe  @CMakeFiles/Reflection.dir/includes_CXX.rsp -g -std=gnu++20 -o CMakeFiles\\Reflection.dir\\DynamicReflect\\DynamicReflect.cpp.obj -c D:\\NekiraReflect\\DynamicReflect\\DynamicReflect.cpp",
-  "file": "D:/NekiraReflect/DynamicReflect/DynamicReflect.cpp",
-  "output": "CMakeFiles/Reflection.dir/DynamicReflect/DynamicReflect.cpp.obj"
-}
-]

@@ -28,6 +28,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <algorithm>
 #include "../TypeExtraction/TypeExtraction.hpp"
 
 
@@ -414,6 +415,52 @@ namespace NekiraReflect
             }
 
             return nullptr;
+        }
+
+        // 移除成员变量
+        void RemoveMemberVariable( const std::string& Name )
+        {
+            if ( Name.empty() ) { return; }
+
+            auto It = std::remove_if
+            (
+                Variables.begin(), Variables.end(),
+                [ &Name ]( const std::shared_ptr<IMemberInfo>& VarInfo )
+                {
+                    return VarInfo->GetName() == Name;
+                }
+            );
+
+            Variables.erase( It, Variables.end() );
+        }
+
+        // 移除成员函数
+        void RemoveMemberFunction( const std::string& Name )
+        {
+            if ( Name.empty() ) { return; }
+
+            auto It = std::remove_if
+            (
+                Functions.begin(), Functions.end(),
+                [ &Name ]( const std::shared_ptr<IMemberInfo>& FuncInfo )
+                {
+                    return FuncInfo->GetName() == Name;
+                }
+            );
+
+            Functions.erase( It, Functions.end() );
+        }
+
+        // 获取所有成员变量
+        const std::vector< std::shared_ptr<IMemberInfo> >& GetMemberVariables() const
+        {
+            return Variables;
+        }
+
+        // 获取所有成员函数
+        const std::vector< std::shared_ptr<IMemberInfo> >& GetMemberFunctions() const
+        {
+            return Functions;
         }
 
     private:

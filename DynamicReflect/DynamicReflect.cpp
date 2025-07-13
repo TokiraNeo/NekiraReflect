@@ -57,6 +57,11 @@ public:
         std::cout << "TestClass::DoubleFunc called with x: " << x << " and y: " << y << std::endl;
     }
 
+    void PrintFunc() const
+    {
+        std::cout << "TestClass::PrintFunc called" << std::endl;
+    }
+
 };
 
 int main()
@@ -82,6 +87,9 @@ int main()
     {
         std::cout << "ClassTypeInfo registered: " << ClassInfo->GetName() << std::endl;
 
+        // [INFO] Mamually adding a member function
+        ClassInfo->AddMemberFunction( &TestClass::PrintFunc, "PrintFunc" );
+
         if ( auto aPtr = ClassInfo->GetMemberVariable<int( TestClass::* )>( "a" ) )
         {
             std::cout << "MemberVar a: " << Obj.*aPtr << std::endl;
@@ -105,6 +113,11 @@ int main()
         if ( auto doubleFuncPtr = ClassInfo->GetMemberFunction<void( TestClass::* )( int, float ) const>( "DoubleFunc" ) )
         {
             ( Obj.*doubleFuncPtr )( 42, 3.14f );
+        }
+
+        if ( auto printFuncPtr = ClassInfo->GetMemberFunction<void( TestClass::* )( ) const>( "PrintFunc" ) )
+        {
+            ( Obj.*printFuncPtr )( );
         }
     }
 

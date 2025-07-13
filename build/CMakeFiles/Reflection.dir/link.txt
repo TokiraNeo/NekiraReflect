@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\Reflection.dir/objects.a
-C:\MinGW\ucrt64\bin\ar.exe qc CMakeFiles\Reflection.dir/objects.a @CMakeFiles\Reflection.dir\objects1.rsp
-C:\MinGW\ucrt64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\Reflection.dir/objects.a -Wl,--no-whole-archive -o Reflection.exe -Wl,--out-implib,libReflection.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Reflection.dir\linkLibs.rsp

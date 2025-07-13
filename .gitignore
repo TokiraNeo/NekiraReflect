@@ -35,4 +35,4 @@
 .vscode/
 
 # 忽略CMake 生成的文件
-build
+build/

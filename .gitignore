@@ -34,5 +34,5 @@
 # 忽略VSCode 配置目录
 .vscode/
 
-# 忽略CMake 生成的文件
-build/
+# 忽略build目录
+build*

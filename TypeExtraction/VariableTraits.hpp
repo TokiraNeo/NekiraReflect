@@ -95,7 +95,7 @@ namespace NekiraReflect
     struct variable_traits_base
     {
         // 去除引用，指针，const等修饰符的类型
-        using RawType = typename raw_type<typename member_variable_traits<T>::Type>::Type;
+        using RawType = typename raw_type< typename member_variable_traits<T>::Type >::Type;
 
         using ValueType = T;
 

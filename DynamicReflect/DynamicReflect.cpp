@@ -29,95 +29,36 @@
 
 using namespace NekiraReflect;
 
+
 enum class TestEnum
 {
-    ValueOne,
-    ValueTwo,
-    ValueThree
-};
-
-class TestClass
-{
-public:
-    int a;
-    float b;
-
-    void Func()
-    {
-        std::cout << "TestClass::Func called" << std::endl;
-    }
-
-    void ConstFunc() const
-    {
-        std::cout << "TestClass::ConstFunc called" << std::endl;
-    }
-
-    void DoubleFunc( int x, float y ) const
-    {
-        std::cout << "TestClass::DoubleFunc called with x: " << x << " and y: " << y << std::endl;
-    }
-
-    void PrintFunc() const
-    {
-        std::cout << "TestClass::PrintFunc called" << std::endl;
-    }
-
+    Value1 = 1,
+    Value2 = 2,
+    Value3 = 3
 };
 
 int main()
 {
-    MemberVarInfoVector MemberVars =
+    auto EnumInfo = MakeEnumTypeInfo<TestEnum>( "TestEnum",
+        {
+            { "Value1", static_cast< __int64 >( TestEnum::Value1 ) },
+            { "Value2", static_cast< __int64 >( TestEnum::Value2 ) },
+            { "Value3", static_cast< __int64 >( TestEnum::Value3 ) }
+        }
+    );
+
+
+
+    RegisterEnumInfo( std::move( EnumInfo ) );
+
+    auto EnumTypeInfo = TypeInfoRegistry::Get().GetEnumInfo<TestEnum>();
+    if ( EnumTypeInfo )
     {
-        MakeMemberVariableInfo( &TestClass::a, "a" ),
-        MakeMemberVariableInfo( &TestClass::b, "b" )
-    };
-
-    MemberFuncInfoVector MemberFuncs =
-    {
-        MakeMemberFunctionInfo( &TestClass::Func, "Func" ),
-        MakeMemberFunctionInfo( &TestClass::ConstFunc, "ConstFunc" ),
-        MakeMemberFunctionInfo( &TestClass::DoubleFunc, "DoubleFunc" )
-    };
-
-    auto ClassInfo = RegistClassTypeInfo( "TestClass", MemberVars, MemberFuncs );
-
-    TestClass Obj{ 89, 4.5f };
-
-    if ( ClassInfo )
-    {
-        std::cout << "ClassTypeInfo registered: " << ClassInfo->GetName() << std::endl;
-
-        // [INFO] Mamually adding a member function
-        ClassInfo->AddMemberFunction( &TestClass::PrintFunc, "PrintFunc" );
-
-        if ( auto aPtr = ClassInfo->GetMemberVariable<int( TestClass::* )>( "a" ) )
+        std::cout << "Enum Name: " << EnumTypeInfo->GetName() << '\n';
+        std::cout << "Values:\n";
+        for ( const auto& Pair : EnumTypeInfo->GetAllEnumValues() )
         {
-            std::cout << "MemberVar a: " << Obj.*aPtr << std::endl;
-        }
-
-        if ( auto bPtr = ClassInfo->GetMemberVariable<float( TestClass::* )>( "b" ) )
-        {
-            std::cout << "MemberVar b: " << Obj.*bPtr << std::endl;
-        }
-
-        if ( auto funcPtr = ClassInfo->GetMemberFunction<void( TestClass::* )( )>( "Func" ) )
-        {
-            ( Obj.*funcPtr )( );
-        }
-
-        if ( auto constFuncPtr = ClassInfo->GetMemberFunction<void( TestClass::* )( ) const>( "ConstFunc" ) )
-        {
-            ( Obj.*constFuncPtr )( );
-        }
-
-        if ( auto doubleFuncPtr = ClassInfo->GetMemberFunction<void( TestClass::* )( int, float ) const>( "DoubleFunc" ) )
-        {
-            ( Obj.*doubleFuncPtr )( 42, 3.14f );
-        }
-
-        if ( auto printFuncPtr = ClassInfo->GetMemberFunction<void( TestClass::* )( ) const>( "PrintFunc" ) )
-        {
-            ( Obj.*printFuncPtr )( );
+            std::cout << "  " << Pair.first << " = " << Pair.second << '\n';
         }
     }
 

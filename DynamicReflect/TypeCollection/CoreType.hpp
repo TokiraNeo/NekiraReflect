@@ -105,9 +105,19 @@ namespace NekiraReflect
             EnumNames[ value ] = name;
         }
 
+        // Add Enum Values
+        // 添加多个枚举值
+        void AddEnumValues( const std::unordered_map<std::string, __int64>& values )
+        {
+            for ( const auto& Pair : values )
+            {
+                AddEnumValue( Pair.first, Pair.second );
+            }
+        }
+
         // Get Value by Name, true if found
         // 通过名称获取枚举值, 返回true表示找到
-        bool GetValueByName( const std::string& name, __int64& outValue ) const
+        bool GetEnumValueByName( const std::string& name, __int64& outValue ) const
         {
             bool bFound = false;
             auto it = EnumValues.find( name );
@@ -123,7 +133,7 @@ namespace NekiraReflect
 
         // Get Name by Value, true if found
         // 通过值获取枚举名称, 返回true表示找到
-        bool GetNameByValue( const __int64 value, std::string& outName ) const
+        bool GetEnumNameByValue( const __int64 value, std::string& outName ) const
         {
             bool bFound = false;
             auto it = EnumNames.find( value );
@@ -135,6 +145,20 @@ namespace NekiraReflect
             }
 
             return bFound;
+        }
+
+        // Get all enum values
+        // 获取所有枚举值
+        const std::unordered_map<std::string, __int64>& GetAllEnumValues() const
+        {
+            return EnumValues;
+        }
+
+        // Get all enum names
+        // 获取所有枚举名称
+        const std::unordered_map<__int64, std::string>& GetAllEnumNames() const
+        {
+            return EnumNames;
         }
 
     private:
@@ -160,7 +184,7 @@ namespace NekiraReflect
         MemberVarInfo( const std::string& name, VarType ClassType::* memberPtr )
             : TypeInfo( name, typeid( VarType ), sizeof( VarType ) )
         {
-            Offset = ( size_t ) & ( ( ( ClassType* )0 )->memberPtr )
+            Offset = ( size_t ) & ( ( ( ClassType* )0 )->memberPtr );
         }
 
         // Get Member Variable Value.
@@ -168,9 +192,6 @@ namespace NekiraReflect
         template <typename VarType>
         VarType& GetValue( void* Object ) const
         {
-            std::type_index TempIndex = typeid( VarType );
-            static_assert( TempIndex == TypeIndex, "Type mismatch in MemberVarInfo::GetValue" );
-
             VarType* MemberPtr = ( VarType* )( ( ( char* )Object ) + Offset );
 
             return *MemberPtr;
@@ -181,9 +202,6 @@ namespace NekiraReflect
         template <typename VarType>
         void SetValue( void* Object, const VarType& Value ) const
         {
-            std::type_index TempIndex = typeid( VarType );
-            static_assert( TempIndex == TypeIndex, "Type mismatch in MemberVarInfo::SetValue" );
-
             VarType* MemberPtr = ( VarType* )( ( ( char* )Object ) + Offset );
 
             *MemberPtr = Value;

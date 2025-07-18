@@ -28,3 +28,86 @@
 #include "TypeRegist/TypeInfoRegistry.hpp"
 
 
+ // ============================================= 动态反射注册工具 ============================================= //
+
+
+namespace NekiraReflect
+{
+    using EnumPairsMap = std::unordered_map<std::string, __int64>;
+
+    // Create Enum TypeInfo
+    template <typename EnumType>
+    static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo( const std::string& name )
+    {
+        std::type_index TypeIndex = std::type_index( typeid( EnumType ) );
+        ssize_t TypeSize = sizeof( EnumType );
+
+        auto EnumInfo = std::make_unique<EnumTypeInfo>( name, TypeIndex );
+
+        EnumInfo->SetSize( TypeSize );
+
+        return EnumInfo;
+    }
+
+    // Create Enum TypeInfo with Enum Pairs
+    template <typename EnumType>
+    static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo( const std::string& name, const EnumPairsMap& pairs )
+    {
+        std::type_index TypeIndex = std::type_index( typeid( EnumType ) );
+
+        ssize_t TypeSize = sizeof( EnumType );
+
+        auto EnumInfo = std::make_unique<EnumTypeInfo>( name, TypeIndex );
+
+        EnumInfo->SetSize( TypeSize );
+
+        for ( const auto& Pair : pairs )
+        {
+            EnumInfo->AddEnumValue( Pair.first, Pair.second );
+        }
+
+        return EnumInfo;
+    }
+
+
+
+} // namespace NekiraReflect
+
+
+
+namespace NekiraReflect
+{
+
+    // Create Class TypeInfo
+    template <typename ClassType>
+    static std::unique_ptr<ClassTypeInfo> MakeClassTypeInfo( const std::string& name )
+    {
+        std::type_index TypeIndex = std::type_index( typeid( ClassType ) );
+        ssize_t TypeSize = sizeof( ClassType );
+
+        auto ClassInfo = std::make_unique<ClassTypeInfo>( name, TypeIndex );
+
+        ClassInfo->SetSize( TypeSize );
+
+        return ClassInfo;
+    }
+
+} // namespace NekiraReflect
+
+
+
+namespace NekiraReflect
+{
+    // Register Enum TypeInfo
+    static void RegisterEnumInfo( std::unique_ptr<EnumTypeInfo> EnumInfo )
+    {
+        TypeInfoRegistry::Get().RegisterEnum( std::move( EnumInfo ) );
+    }
+
+    // Register Class TypeInfo
+    static void RegisterClassInfo( std::unique_ptr<ClassTypeInfo> ClassInfo )
+    {
+        TypeInfoRegistry::Get().RegisterClass( std::move( ClassInfo ) );
+    }
+
+} // namespace NekiraReflect

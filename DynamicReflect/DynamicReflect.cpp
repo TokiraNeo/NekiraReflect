@@ -28,3 +28,39 @@
 #include "DynamicReflect.hpp"
 
 using namespace NekiraReflect;
+
+
+enum class TestEnum
+{
+    Value1 = 1,
+    Value2 = 2,
+    Value3 = 3
+};
+
+int main()
+{
+    auto EnumInfo = MakeEnumTypeInfo<TestEnum>( "TestEnum",
+        {
+            { "Value1", static_cast< __int64 >( TestEnum::Value1 ) },
+            { "Value2", static_cast< __int64 >( TestEnum::Value2 ) },
+            { "Value3", static_cast< __int64 >( TestEnum::Value3 ) }
+        }
+    );
+
+
+
+    RegisterEnumInfo( std::move( EnumInfo ) );
+
+    auto EnumTypeInfo = TypeInfoRegistry::Get().GetEnumInfo<TestEnum>();
+    if ( EnumTypeInfo )
+    {
+        std::cout << "Enum Name: " << EnumTypeInfo->GetName() << '\n';
+        std::cout << "Values:\n";
+        for ( const auto& Pair : EnumTypeInfo->GetAllEnumValues() )
+        {
+            std::cout << "  " << Pair.first << " = " << Pair.second << '\n';
+        }
+    }
+
+    return 0;
+}

@@ -34,7 +34,7 @@ namespace NekiraReflect
     {
         virtual ~MemberFuncWrapper_Base() = default;
 
-        virtual RT Invoke( Args&&... args ) = 0;
+        virtual RT Invoke( Args... args ) = 0;
     };
 
     template <typename Callable, typename RT, typename... Args>
@@ -46,7 +46,7 @@ namespace NekiraReflect
         {
         }
 
-        RT Invoke( Args&&... args ) override
+        RT Invoke( Args... args ) override
         {
             return CallableObj( std::forward<Args>( args )... );
         }
@@ -74,7 +74,7 @@ namespace NekiraReflect
             return *this;
         }
 
-        RT Invoke( Args&&... args )
+        RT Invoke( Args... args )
         {
             return Wrapper->Invoke( std::forward<Args>( args )... );
         }

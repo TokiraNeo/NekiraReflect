@@ -71,9 +71,9 @@ namespace NekiraReflect
         }
 
         // Get Enum Info by TypeIndex
-        const EnumTypeInfo* GetEnumInfo( std::type_index TypeIndex ) const
+        EnumTypeInfo* GetEnumInfo( std::type_index TypeIndex ) const
         {
-            const EnumTypeInfo* Result = nullptr;
+            EnumTypeInfo* Result = nullptr;
 
             auto it = EnumInfos.find( TypeIndex );
 
@@ -87,7 +87,7 @@ namespace NekiraReflect
 
         // Get Enum Info by Enum Type
         template <typename EnumType>
-        const EnumTypeInfo* GetEnumInfo() const
+        EnumTypeInfo* GetEnumInfo() const
         {
             std::type_index TypeIndex = std::type_index( typeid( EnumType ) );
 
@@ -95,9 +95,9 @@ namespace NekiraReflect
         }
 
         // Get Enum Info by Name(Would be slower)
-        const EnumTypeInfo* GetEnumInfoByName( const std::string& Name )
+        EnumTypeInfo* GetEnumInfoByName( const std::string& Name )
         {
-            const EnumTypeInfo* Result = nullptr;
+            EnumTypeInfo* Result = nullptr;
 
             for ( const auto& Pair : EnumInfos )
             {
@@ -112,9 +112,9 @@ namespace NekiraReflect
         }
 
         // Get Class Info by TypeIndex
-        const ClassTypeInfo* GetClassInfo( std::type_index TypeIndex ) const
+        ClassTypeInfo* GetClassInfo( std::type_index TypeIndex ) const
         {
-            const ClassTypeInfo* Result = nullptr;
+            ClassTypeInfo* Result = nullptr;
 
             auto it = ClassInfos.find( TypeIndex );
 
@@ -128,7 +128,7 @@ namespace NekiraReflect
 
         // Get Class Info by Class Type
         template <typename ClassType>
-        const ClassTypeInfo* GetClassInfo() const
+        ClassTypeInfo* GetClassInfo() const
         {
             std::type_index TypeIndex = std::type_index( typeid( ClassType ) );
 
@@ -136,9 +136,9 @@ namespace NekiraReflect
         }
 
         // Get Class Info by Name(Would be slower)
-        const ClassTypeInfo* GetClassInfoByName( const std::string& Name ) const
+        ClassTypeInfo* GetClassInfoByName( const std::string& Name ) const
         {
-            const ClassTypeInfo* Result = nullptr;
+            ClassTypeInfo* Result = nullptr;
 
             for ( const auto& Pair : ClassInfos )
             {

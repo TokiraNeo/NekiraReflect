@@ -61,6 +61,8 @@ namespace NekiraReflect
     template <typename RT, typename... Args>
     struct MemberFuncWrapper<RT( Args... )>
     {
+        MemberFuncWrapper() = default;
+
         template <typename Callable> requires std::is_invocable_r_v<RT, Callable, Args...>
         MemberFuncWrapper( Callable func )
             : Wrapper( std::make_unique< MemberFuncWrapper_Impl<Callable, RT, Args...> >( std::move( func ) ) )
@@ -86,3 +88,6 @@ namespace NekiraReflect
 
 
 } // namespace NekiraReflect
+
+
+

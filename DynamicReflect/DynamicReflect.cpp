@@ -89,7 +89,7 @@ int main()
 
     if ( auto ClassTypeInfo = TypeInfoRegistry::Get().GetClassInfo( typeid( TestClass ) ) )
     {
-        ClassTypeInfo->SetVariableValue<int>( &ClassObj, "MemberVar", 999 );
+        ClassTypeInfo->SetVariableValue( &ClassObj, "MemberVar", 999 );
         std::cout << "MemberVar: " << ClassTypeInfo->GetVariableValue<int>( &ClassObj, "MemberVar" ) << '\n';
 
         ClassTypeInfo->GetFunction( "Func" )->Invoke( &ClassObj, 9768 );

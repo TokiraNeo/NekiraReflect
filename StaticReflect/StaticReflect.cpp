@@ -65,6 +65,9 @@ STATIC_REFLECT_VARIABLES
 )
 STATIC_REFLECT_END()
 
+auto Lambda = [ ]( int x, float y ) { std::cout << "Lambda called with: " << x << ", " << y << std::endl; };
+
+
 int main()
 {
     auto TStructInfo = GetStaticTypeInfo<TStruct>();
@@ -75,7 +78,9 @@ int main()
     auto IntCount = function_traits_CountTypeInArgs<decltype( FuncPtr ), int>;
     std::cout << "Number of int parameters in FuncWithArgs: " << IntCount << std::endl;
 
+    function_traits<decltype( Lambda )> LambdaTraits;
 
+    bool IsLambda = function_traits_IsLambdaOrFuncObject<decltype( Lambda )>;
 
     return 0;
 }

@@ -47,15 +47,15 @@ namespace NekiraReflect
         static constexpr bool IsLambdaOrFunctionObject = false;
     };
 
-    // 用于提取函数信息，默认实现（带SFINAE，避免递归冲突）
-    template <typename Callable, typename = void>
+    // 用于提取函数信息
+    template <typename Callable>
     struct function_traits : function_traits_base<Callable>
     {
     };
 
     // 对普通函数指针的特化
     template <typename RT, typename... ParamTypes>
-    struct function_traits<RT( * )( ParamTypes... ), void> : function_traits_base<RT( * )( ParamTypes... )>
+    struct function_traits<RT( * )( ParamTypes... )> : function_traits_base<RT( * )( ParamTypes... )>
     {
         using FuncType = RT( * )( ParamTypes... );
         using ReturnType = RT;
@@ -64,7 +64,7 @@ namespace NekiraReflect
 
     // 对成员函数指针的特化
     template <typename ClassType, typename RT, typename... ParamTypes>
-    struct function_traits<RT( ClassType::* )( ParamTypes... ), void> : function_traits_base<RT( ClassType::* )( ParamTypes... )>
+    struct function_traits<RT( ClassType::* )( ParamTypes... )> : function_traits_base<RT( ClassType::* )( ParamTypes... )>
     {
         using FuncType = RT( ClassType::* )( ParamTypes... );
         using ReturnType = RT;
@@ -75,7 +75,7 @@ namespace NekiraReflect
 
     // 对常量成员函数指针的特化
     template <typename ClassType, typename RT, typename... ParamTypes>
-    struct function_traits<RT( ClassType::* )( ParamTypes... ) const, void> : function_traits_base<RT( ClassType::* )( ParamTypes... ) const>
+    struct function_traits<RT( ClassType::* )( ParamTypes... ) const> : function_traits_base<RT( ClassType::* )( ParamTypes... ) const>
     {
         using FuncType = RT( ClassType::* )( ParamTypes... ) const;
         using ReturnType = RT;
@@ -87,13 +87,13 @@ namespace NekiraReflect
 
     // 对std::function的特化
     template <typename RT, typename... Args>
-    struct function_traits<std::function<RT( Args... )>, void> : function_traits<RT( * )( Args... )>
+    struct function_traits<std::function<RT( Args... )>> : function_traits<RT( * )( Args... )>
     {
     };
 
     // 对函数对象以及 lambda 表达式的特化（仅对类类型生效，避免递归冲突）
-    template <typename Callable>
-    struct function_traits<Callable, std::enable_if_t<std::is_class_v<Callable>>> : function_traits<decltype( &Callable::operator() )>
+    template <typename Callable> requires std::is_class_v<Callable>
+    struct function_traits<Callable> : function_traits<decltype( &Callable::operator() )>
     {
         static constexpr bool IsLambdaOrFunctionObject = true;
     };
@@ -123,13 +123,17 @@ namespace NekiraReflect
     template <typename T>
     constexpr bool function_traits_IsConst = function_traits<T>::IsConst;
 
+    // 是否为 lambda 或函数对象
+    template <typename T>
+    constexpr bool function_traits_IsLambdaOrFuncObject = function_traits<T>::IsLambdaOrFunctionObject;
+
     // 参数个数
     template <typename T>
-    constexpr size_t function_traits_Arity = std::tuple_size<function_traits_ArgTypes<T>>::value;
+    constexpr size_t function_traits_Arity = std::tuple_size< function_traits_ArgTypes<T> >::value;
 
     // 获取第N个参数类型
     template <typename T, size_t N>
-    using function_traits_Arg = std::tuple_element_t<N, function_traits_ArgTypes<T>>;
+    using function_traits_Arg = std::tuple_element_t< N, function_traits_ArgTypes<T> >;
 } // namespace NekiraReflect
 
 namespace NekiraReflect

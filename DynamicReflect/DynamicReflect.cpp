@@ -37,17 +37,32 @@ enum class TestEnum
     Value3 = 3
 };
 
+class TestClass
+{
+
+public:
+    int MemberVar;
+
+    void Func( int a )
+    {
+        std::cout << "TestClass::Func called with value: " << a << '\n';
+    }
+
+    void ConstFunc( float b ) const
+    {
+        std::cout << "TestClass::ConstFunc called with value: " << b << '\n';
+    }
+};
+
 int main()
 {
-    auto EnumInfo = MakeEnumTypeInfo<TestEnum>( "TestEnum",
-        {
-            { "Value1", static_cast< __int64 >( TestEnum::Value1 ) },
-            { "Value2", static_cast< __int64 >( TestEnum::Value2 ) },
-            { "Value3", static_cast< __int64 >( TestEnum::Value3 ) }
-        }
-    );
+    EnumValuesMap TestEnumValues = {
+        { "Value1", static_cast< __int64 >( TestEnum::Value1 ) },
+        { "Value2", static_cast< __int64 >( TestEnum::Value2 ) },
+        { "Value3", static_cast< __int64 >( TestEnum::Value3 ) }
+    };
 
-
+    auto EnumInfo = MakeEnumTypeInfo<TestEnum>( "TestEnum", TestEnumValues );
 
     RegisterEnumInfo( std::move( EnumInfo ) );
 
@@ -60,6 +75,26 @@ int main()
         {
             std::cout << "  " << Pair.first << " = " << Pair.second << '\n';
         }
+    }
+
+    auto ClassInfo = MakeClassTypeInfo<TestClass>( "TestClass" );
+    ClassInfo->AddVariable( MakeMemberVarInfo( "MemberVar", &TestClass::MemberVar ) );
+    ClassInfo->AddFunction( MakeMemberFuncInfo( "Func", &TestClass::Func ) );
+    ClassInfo->AddFunction( MakeMemberFuncInfo( "ConstFunc", &TestClass::ConstFunc ) );
+
+
+    RegisterClassInfo( std::move( ClassInfo ) );
+
+    TestClass ClassObj;
+
+    if ( auto ClassTypeInfo = TypeInfoRegistry::Get().GetClassInfo( typeid( TestClass ) ) )
+    {
+        ClassTypeInfo->SetVariableValue( &ClassObj, "MemberVar", 999 );
+        std::cout << "MemberVar: " << ClassTypeInfo->GetVariableValue<int>( &ClassObj, "MemberVar" ) << '\n';
+
+        ClassTypeInfo->GetFunction( "Func" )->Invoke( &ClassObj, 9768 );
+
+        ClassTypeInfo->GetFunction( "ConstFunc" )->Invoke( &ClassObj, 2.34f );
     }
 
     return 0;

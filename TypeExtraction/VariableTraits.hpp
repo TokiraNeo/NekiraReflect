@@ -39,7 +39,7 @@ namespace NekiraReflect
     };
 
     template <typename ClassType, typename MemberType>
-    struct member_variable_traits<MemberType ClassType::*>
+    struct member_variable_traits< MemberType ClassType::* >
     {
         using Type = MemberType;
         using ObjectType = ClassType;

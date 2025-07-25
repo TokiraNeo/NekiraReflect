@@ -40,14 +40,14 @@ namespace NekiraReflect
         using ReturnType = void;
         using ArgTypes = std::tuple<>;
         using ObjectType = void;
-        // 这里的static，主要是便于能够直接“类型级别”访问。并且由于模版会根据不同模版参数实例化，即每个T各一份。
+        // 由于模版会根据不同模版参数实例化，即每个T各一份。
         // 相当于每个T模版都是一个独立的类，它有自己的static成员变量IsMember,IsConst。
         static constexpr bool IsMember = false;
         static constexpr bool IsConst = false;
         static constexpr bool IsLambdaOrFunctionObject = false;
     };
 
-    // 用于提取函数信息
+    // 函数萃取器
     template <typename Callable>
     struct function_traits : function_traits_base<Callable>
     {

@@ -25,11 +25,11 @@
 
 #pragma once
 
-#include <type_traits>
 
 namespace NekiraReflect
 {
     // =============================================== 成员变量指针剥离 =============================================== //
+    
     // 成员变量指针的剥离
     template <typename T>
     struct member_variable_traits
@@ -46,6 +46,7 @@ namespace NekiraReflect
     };
 
     // ================================================== 类型剥离 ================================================== //
+    
     // 类型剥离，获取去除引用、指针、const等修饰符的类型
     template <typename T>
     struct raw_type
@@ -84,12 +85,13 @@ namespace NekiraReflect
     };
 
     // 剥离数组
-    template <typename T, std::size_t N>
+    template <typename T, size_t N>
     struct raw_type<T[ N ]> : raw_type<T>
     {
     };
 
     // =================================================== 变量萃取器 ================================================== //
+    
     // 基础的变量萃取器
     template <typename T>
     struct variable_traits_base
@@ -109,6 +111,7 @@ namespace NekiraReflect
     };
 
     // ================================================== 便捷别名和常量 ================================================== //
+    
     // 获取去除引用、指针、const等修饰符的类型
     template <typename T>
     using variable_traits_RawType = typename variable_traits<T>::RawType;

@@ -62,8 +62,8 @@ namespace NekiraReflect
     };
 
     // 字段萃取器
-    template <typename T, typename = std::enable_if_t<std::is_member_pointer_v<T> || std::is_pointer_v<T>>>
-    struct field_traits : field_traits_base<T>
+    template <typename T> requires ( std::is_member_pointer_v<T> || std::is_pointer_v<T> )
+        struct field_traits : field_traits_base<T>
     {
         T FieldPointer;
         const char* FieldName;

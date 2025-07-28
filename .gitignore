@@ -36,3 +36,7 @@
 
 # 忽略build目录
 build*
+
+# 忽略clangd相关
+.clangd
+.cache/

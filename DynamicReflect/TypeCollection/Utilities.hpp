@@ -39,7 +39,7 @@ namespace NekiraReflect
     static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo( const std::string& Name )
     {
         std::type_index TypeIndex = std::type_index( typeid( EnumType ) );
-        ssize_t TypeSize = sizeof( EnumType );
+        size_t TypeSize = sizeof( EnumType );
 
         auto EnumInfo = std::make_unique<EnumTypeInfo>( Name, TypeIndex );
 
@@ -54,7 +54,7 @@ namespace NekiraReflect
     {
         std::type_index TypeIndex = std::type_index( typeid( EnumType ) );
 
-        ssize_t TypeSize = sizeof( EnumType );
+        size_t TypeSize = sizeof( EnumType );
 
         auto EnumInfo = std::make_unique<EnumTypeInfo>( Name, TypeIndex );
 
@@ -107,7 +107,7 @@ namespace NekiraReflect
     static std::unique_ptr<ClassTypeInfo> MakeClassTypeInfo( const std::string& Name )
     {
         std::type_index TypeIndex = std::type_index( typeid( ClassType ) );
-        ssize_t TypeSize = sizeof( ClassType );
+        size_t TypeSize = sizeof( ClassType );
 
         auto ClassInfo = std::make_unique<ClassTypeInfo>( Name, TypeIndex );
 

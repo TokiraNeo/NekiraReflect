@@ -25,7 +25,9 @@
 
 #pragma once
 
- 
+#include <clang/AST/ASTContext.h>
+#include <clang/AST/Decl.h>
+#include <clang/AST/DeclCXX.h>
 
 #ifdef __clang__
 
@@ -39,12 +41,16 @@
 
     #define NFUNCTION(...) [[clang::annotate("NFunction", #__VA_ARGS__)]]
 
-#else 
+#else
 
-    #define NCLASS(...)
+    #define NCLASS(...) 
+
     #define NSTRUCT(...)
+
     #define NENUM(...) 
+
     #define NPROPERTY(...)
+
     #define NFUNCTION(...)
 
 #endif // __clang__

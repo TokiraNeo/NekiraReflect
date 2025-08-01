@@ -23,8 +23,38 @@
  */
 
 
+#pragma once
+#include <NekiraReflect/Generation/Tools/MetaInfo.hpp>
 
- 
- 
- 
 
+
+namespace NekiraReflect
+{
+    // 生成反射代码
+    class ReflectGenerator
+    {
+    public:
+        
+        void GenerateCode
+        (
+            const std::string& OutputFile, 
+            const std::vector<EnumMetaInfo>& Enums,
+            const std::vector<ClassMetaInfo>& Classes,
+            const std::vector<MemberVarMetaInfo>& MemberVars,
+            const std::vector<MemberFuncMetaInfo>& Functions
+        )
+        {
+            const std::string HeaderFile = OutputFile + ".gen.hpp";
+            const std::string SourceFile = OutputFile + ".gen.cpp";
+
+            const std::string GeneratorName = OutputFile + "_Generator";
+            const std::string GeneratorFuncName = OutputFile + "_Func()";
+        }
+
+
+    private:
+        
+    };
+
+} // namespace NekiraReflect
+ 

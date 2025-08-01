@@ -22,29 +22,13 @@
  * SOFTWARE.
  */
 
+ 
+ //#include "ReflectGenerator.hpp"
+ 
+ 
+ 
+int main()
+{
 
-#pragma once
-
-
-
-#ifdef __clang__
-
-    #define NCLASS(...) [[clang::annotate("NClass", #__VA_ARGS__)]]
-
-    #define NSTRUCT(...) [[clang::annotate("NStruct", #__VA_ARGS__)]]
-
-    #define NENUM(...) [[clang::annotate("NEnum", #__VA_ARGS__)]]
-
-    #define NPROPERTY(...) [[clang::annotate("NProperty", #__VA_ARGS__)]] 
-
-    #define NFUNCTION(...) [[clang::annotate("NFunction", #__VA_ARGS__)]]
-
-#else 
-
-    #define NCLASS(...)
-    #define NSTRUCT(...)
-    #define NENUM(...) 
-    #define NPROPERTY(...)
-    #define NFUNCTION(...)
-
-#endif // __clang__
+    return 0;
+}

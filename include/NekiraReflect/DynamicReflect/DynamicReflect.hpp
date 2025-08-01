@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "TypeRegist/TypeInfoRegistry.hpp"
-#include "TypeCollection/Utilities.hpp"
+#include <NekiraReflect/DynamicReflect/TypeRegist/TypeInfoRegistry.hpp>
+
 
 
  // ============================================= 动态反射注册工具 ============================================= //

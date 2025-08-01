@@ -23,9 +23,11 @@
  */
 
 
+
 #include <iostream>
 
-#include "DynamicReflect.hpp"
+#include <NekiraReflect/DynamicReflect/DynamicReflect.hpp>
+#include <NekiraReflect/DynamicReflect/TypeCollection/Utilities.hpp>
 
 using namespace NekiraReflect;
 
@@ -57,9 +59,9 @@ public:
 int main()
 {
     EnumValuesMap TestEnumValues = {
-        { "Value1", static_cast< __int64 >( TestEnum::Value1 ) },
-        { "Value2", static_cast< __int64 >( TestEnum::Value2 ) },
-        { "Value3", static_cast< __int64 >( TestEnum::Value3 ) }
+        { "Value1", static_cast< int64_t >( TestEnum::Value1 ) },
+        { "Value2", static_cast< int64_t >( TestEnum::Value2 ) },
+        { "Value3", static_cast< int64_t >( TestEnum::Value3 ) }
     };
 
     auto EnumInfo = MakeEnumTypeInfo<TestEnum>( "TestEnum", TestEnumValues );

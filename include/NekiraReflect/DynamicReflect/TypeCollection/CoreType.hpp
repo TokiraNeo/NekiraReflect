@@ -24,12 +24,14 @@
 
 
 #pragma once
+#include <cstdint>
 #include <string>
 #include <typeindex>
 #include <unordered_map>
 #include <any>
 #include <vector>
-#include "MemberFuncWrapper.hpp"
+#include <stdexcept>
+#include <NekiraReflect/DynamicReflect/TypeCollection/MemberFuncWrapper.hpp>
 
  // ======================================= 动态反射核心类型 ======================================= //
 
@@ -37,8 +39,8 @@
  // ======================================== 类型别名 ======================================== //
 namespace NekiraReflect
 {
-    using EnumValuesMap = std::unordered_map<std::string, __int64>;
-    using EnumNamesMap = std::unordered_map<__int64, std::string>;
+    using EnumValuesMap = std::unordered_map<std::string, int64_t>;
+    using EnumNamesMap = std::unordered_map<int64_t, std::string>;
 
     using VariableMap = std::unordered_map< std::string, std::unique_ptr<class MemberVarInfo> >;
     using FunctionMap = std::unordered_map< std::string, std::unique_ptr<class MemberFuncInfo> >;
@@ -110,7 +112,7 @@ namespace NekiraReflect
 
         // Add an enum value with its name
         // 通过枚举名称和对于的值添加枚举对
-        void AddEnumValue( const std::string& name, __int64 value )
+        void AddEnumValue( const std::string& name, int64_t value )
         {
             EnumValues[ name ] = value;
             EnumNames[ value ] = name;
@@ -128,7 +130,7 @@ namespace NekiraReflect
 
         // Get Value by Name, true if found
         // 通过名称获取枚举值, 返回true表示找到
-        bool GetEnumValueByName( const std::string& name, __int64& outValue ) const
+        bool GetEnumValueByName( const std::string& name, int64_t& outValue ) const
         {
             bool bFound = false;
             auto it = EnumValues.find( name );
@@ -144,7 +146,7 @@ namespace NekiraReflect
 
         // Get Name by Value, true if found
         // 通过值获取枚举名称, 返回true表示找到
-        bool GetEnumNameByValue( const __int64 value, std::string& outName ) const
+        bool GetEnumNameByValue( const int64_t value, std::string& outName ) const
         {
             bool bFound = false;
             auto it = EnumNames.find( value );
@@ -245,7 +247,7 @@ namespace NekiraReflect
     {
         if ( Params.size() != sizeof...( Args ) )
         {
-            throw runtime_error( "Parameter count mismatch" );
+            throw std::runtime_error( "Parameter count mismatch" );
         }
 
         return Anys_To_Tuple_Impl<Args...>( Params, std::index_sequence_for<Args...>{} );

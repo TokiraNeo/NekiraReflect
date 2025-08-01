@@ -24,27 +24,37 @@
 
 
 #pragma once
+#include <NekiraReflect/Generation/Tools/MetaInfo.hpp>
 
-#include "TypeRegist/TypeInfoRegistry.hpp"
-#include "TypeCollection/Utilities.hpp"
-
-
- // ============================================= 动态反射注册工具 ============================================= //
 
 
 namespace NekiraReflect
 {
-    // Register Enum TypeInfo
-    static void RegisterEnumInfo( std::unique_ptr<EnumTypeInfo> EnumInfo )
+    // 生成反射代码
+    class ReflectGenerator
     {
-        TypeInfoRegistry::Get().RegisterEnum( std::move( EnumInfo ) );
-    }
+    public:
+        
+        void GenerateCode
+        (
+            const std::string& OutputFile, 
+            const std::vector<EnumMetaInfo>& Enums,
+            const std::vector<ClassMetaInfo>& Classes,
+            const std::vector<MemberVarMetaInfo>& MemberVars,
+            const std::vector<MemberFuncMetaInfo>& Functions
+        )
+        {
+            const std::string HeaderFile = OutputFile + ".gen.hpp";
+            const std::string SourceFile = OutputFile + ".gen.cpp";
 
-    // Register Class TypeInfo
-    static void RegisterClassInfo( std::unique_ptr<ClassTypeInfo> ClassInfo )
-    {
-        TypeInfoRegistry::Get().RegisterClass( std::move( ClassInfo ) );
-    }
+            const std::string GeneratorName = OutputFile + "_Generator";
+            const std::string GeneratorFuncName = OutputFile + "_Func()";
+        }
+
+
+    private:
+        
+    };
 
 } // namespace NekiraReflect
-
+ 

@@ -25,32 +25,26 @@
 
 #pragma once
 
-#include <clang/AST/ASTContext.h>
-#include <clang/AST/Decl.h>
-#include <clang/AST/DeclCXX.h>
+#include <NekiraReflect/DynamicReflect/TypeRegist/TypeInfoRegistry.hpp>
 
-#ifdef REFLECT_GENERATION_ENABLE
 
-    #define NCLASS(...) __attribute__((annotate("NClass", #__VA_ARGS__)))
 
-    #define NSTRUCT(...) __attribute__((annotate("NStruct", #__VA_ARGS__)))
+ // ============================================= 动态反射注册工具 ============================================= //
 
-    #define NENUM(...) __attribute__((annotate("NEnum", #__VA_ARGS__)))
 
-    #define NPROPERTY(...) __attribute__((annotate("NProperty", #__VA_ARGS__))) 
+namespace NekiraReflect
+{
+    // Register Enum TypeInfo
+    static void RegisterEnumInfo( std::unique_ptr<EnumTypeInfo> EnumInfo )
+    {
+        TypeInfoRegistry::Get().RegisterEnum( std::move( EnumInfo ) );
+    }
 
-    #define NFUNCTION(...) __attribute__((annotate("NFunction", #__VA_ARGS__)))
+    // Register Class TypeInfo
+    static void RegisterClassInfo( std::unique_ptr<ClassTypeInfo> ClassInfo )
+    {
+        TypeInfoRegistry::Get().RegisterClass( std::move( ClassInfo ) );
+    }
 
-#else
+} // namespace NekiraReflect
 
-    #define NCLASS(...) 
-
-    #define NSTRUCT(...)
-
-    #define NENUM(...) 
-
-    #define NPROPERTY(...)
-
-    #define NFUNCTION(...)
-
-#endif // __clang__

@@ -43,3 +43,6 @@ build*
 
 # 忽略CMakeUserPresets.json
 CMakeUserPresets.json
+
+# 忽略install测试文件
+install/

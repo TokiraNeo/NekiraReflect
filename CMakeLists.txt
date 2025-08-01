@@ -94,7 +94,7 @@ target_link_libraries(ReflectGenerator PRIVATE
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-# 安装库和头文件
+# 安装库和反射生成器
 install(TARGETS NekiraReflection ReflectGenerator
     EXPORT NekiraReflectionTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

@@ -6,11 +6,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 # 查找llvm、clang库
 find_package(LLVM REQUIRED CONFIG)
 find_package(Clang REQUIRED CONFIG)
-
 
 # 调试信息
 message("LIBXML2_INCLUDE_DIR: ${LIBXML2_INCLUDE_DIR}")
@@ -21,7 +19,6 @@ message("LLVM_LIBRARIES: ${LLVM_LIBRARIES}")
 message("Clang_INCLUDE_DIRS: ${Clang_INCLUDE_DIRS}")
 message("Clang_DIR: ${Clang_DIR}")
 message("Clang_LIBRARIES: ${Clang_LIBRARIES}")
-
 
 add_executable(ReflectGenerator
     Generation/Generator/ReflectGenerator.cpp

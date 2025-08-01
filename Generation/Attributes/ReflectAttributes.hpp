@@ -29,17 +29,17 @@
 #include <clang/AST/Decl.h>
 #include <clang/AST/DeclCXX.h>
 
-#ifdef __clang__
+#ifdef REFLECT_GENERATION_ENABLE
 
-    #define NCLASS(...) [[clang::annotate("NClass", #__VA_ARGS__)]]
+    #define NCLASS(...) __attribute__((annotate("NClass", #__VA_ARGS__)))
 
-    #define NSTRUCT(...) [[clang::annotate("NStruct", #__VA_ARGS__)]]
+    #define NSTRUCT(...) __attribute__((annotate("NStruct", #__VA_ARGS__)))
 
-    #define NENUM(...) [[clang::annotate("NEnum", #__VA_ARGS__)]]
+    #define NENUM(...) __attribute__((annotate("NEnum", #__VA_ARGS__)))
 
-    #define NPROPERTY(...) [[clang::annotate("NProperty", #__VA_ARGS__)]] 
+    #define NPROPERTY(...) __attribute__((annotate("NProperty", #__VA_ARGS__))) 
 
-    #define NFUNCTION(...) [[clang::annotate("NFunction", #__VA_ARGS__)]]
+    #define NFUNCTION(...) __attribute__((annotate("NFunction", #__VA_ARGS__)))
 
 #else
 

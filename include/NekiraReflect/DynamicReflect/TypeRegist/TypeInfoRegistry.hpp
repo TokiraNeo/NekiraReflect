@@ -26,7 +26,7 @@
 #pragma once
 
 
-#include <NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp>
+#include <TypeCollection/CoreType.hpp>
 
  // ======================================= 动态反射全局注册表 ======================================= //
 namespace NekiraReflect

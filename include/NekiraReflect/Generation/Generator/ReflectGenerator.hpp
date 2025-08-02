@@ -24,24 +24,24 @@
 
 
 #pragma once
-#include <NekiraReflect/Generation/Tools/MetaInfo.hpp>
+
+
+#include <Tools/CodeGenerateHelper.hpp>
 
 
 
 namespace NekiraReflect
 {
     // 生成反射代码
-    class ReflectGenerator
+    class ReflectGenerator final
     {
     public:
         
-        void GenerateCode
+        static void GenerateCode
         (
             const std::string& OutputFile, 
             const std::vector<EnumMetaInfo>& Enums,
-            const std::vector<ClassMetaInfo>& Classes,
-            const std::vector<MemberVarMetaInfo>& MemberVars,
-            const std::vector<MemberFuncMetaInfo>& Functions
+            const std::vector<ClassMetaInfo>& Classes
         )
         {
             const std::string HeaderFile = OutputFile + ".gen.hpp";
@@ -49,6 +49,28 @@ namespace NekiraReflect
 
             const std::string GeneratorName = OutputFile + "_Generator";
             const std::string GeneratorFuncName = OutputFile + "_Func()";
+
+            // 头文件流，生成gen.hpp文件
+            std::ofstream HeaderStream(HeaderFile);
+            // 源文件流，生成gen.cpp文件
+            std::ofstream SourceStream(SourceFile);
+            
+            HeaderStream << "#pragma once" << '\n' << '\n';
+            HeaderStream << "#include <NekiraReflect/DynamicReflect/DynamicReflect.hpp>" << '\n' << '\n';
+
+            HeaderStream << "using namespace NekiraReflect;" << '\n' << '\n';
+
+            HeaderStream << "void " << GeneratorFuncName << '\n';
+            HeaderStream << "{\n";
+
+            // 生成枚举类型的反射代码
+
+            // 生成类的反射代码
+
+            HeaderStream << "}" << '\n' << '\n';
+
+            SourceStream << "#include \"" << HeaderFile << "\"" << '\n' << '\n';
+            SourceStream << GeneratorName << ' ' << GeneratorName << "_Inst;" << '\n';
         }
 
 

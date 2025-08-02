@@ -25,7 +25,8 @@
 
 #pragma once
 
-#include <NekiraReflect/DynamicReflect/TypeRegist/TypeInfoRegistry.hpp>
+#include <TypeRegist/TypeInfoRegistry.hpp>
+#include <TypeCollection/Utilities.hpp>
 
 
 

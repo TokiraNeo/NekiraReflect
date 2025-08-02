@@ -88,5 +88,11 @@ namespace NekiraReflect
 
         // 命名空间名称
         std::string Namespace;
+
+        // 类的成员变量
+        std::vector<MemberVarMetaInfo> MemberVars;
+
+        // 类的成员函数
+        std::vector<MemberFuncMetaInfo> MemberFuncs;
     };
 } // namespace NekiraReflect

@@ -26,8 +26,8 @@
 
 #include <iostream>
 
-#include <NekiraReflect/DynamicReflect/DynamicReflect.hpp>
-#include <NekiraReflect/DynamicReflect/TypeCollection/Utilities.hpp>
+#include <DynamicReflect.hpp>
+
 
 using namespace NekiraReflect;
 
@@ -65,6 +65,8 @@ int main()
     };
 
     auto EnumInfo = MakeEnumTypeInfo<TestEnum>( "TestEnum", TestEnumValues );
+
+    
 
     RegisterEnumInfo( std::move( EnumInfo ) );
 

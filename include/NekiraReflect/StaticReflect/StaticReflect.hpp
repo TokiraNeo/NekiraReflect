@@ -25,8 +25,9 @@
 
 #pragma once
 
-#include <NekiraReflect/StaticReflect/TypeCollection/StaticTypeInfo.hpp>
-#include <NekiraReflect/TypeExtraction/TypeExtraction.hpp>
+#include <TypeCollection/StaticTypeInfo.hpp>
+#include <TypeExtraction.hpp>
+
 
 
 

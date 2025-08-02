@@ -24,8 +24,10 @@
 
 
 #pragma once
-#include <NekiraReflect/TypeExtraction/FunctionTraits.hpp>
-#include <NekiraReflect/TypeExtraction/VariableTraits.hpp>
+
+#include <FunctionTraits.hpp>
+#include <VariableTraits.hpp>
+
 
 namespace NekiraReflect
 {

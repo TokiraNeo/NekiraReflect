@@ -26,7 +26,8 @@
 #pragma once
 
 
-#include <NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp>
+#include <TypeCollection/CoreType.hpp>
+#include <Registry/ReflectionRegistry.hpp>
 
 
 
@@ -116,6 +117,22 @@ namespace NekiraReflect
         return ClassInfo;
     }
 
+} // namespace NekiraReflect
 
+
+
+namespace NekiraReflect
+{
+    // Register Enum TypeInfo
+    static void RegisterEnumInfo( std::unique_ptr<EnumTypeInfo> EnumInfo )
+    {
+        ReflectionRegistry::Get().RegisterEnum( std::move( EnumInfo ) );
+    }
+
+    // Register Class TypeInfo
+    static void RegisterClassInfo( std::unique_ptr<ClassTypeInfo> ClassInfo )
+    {
+        ReflectionRegistry::Get().RegisterClass( std::move( ClassInfo ) );
+    }
 
 } // namespace NekiraReflect

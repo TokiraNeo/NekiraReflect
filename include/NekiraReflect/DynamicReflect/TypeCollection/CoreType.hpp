@@ -31,7 +31,7 @@
 #include <any>
 #include <vector>
 #include <stdexcept>
-#include <NekiraReflect/DynamicReflect/TypeCollection/MemberFuncWrapper.hpp>
+#include <TypeCollection/MemberFuncWrapper.hpp>
 
  // ======================================= 动态反射核心类型 ======================================= //
 

@@ -24,10 +24,11 @@
 
 
 
+
 #include <iostream>
 
-#include <NekiraReflect/DynamicReflect/DynamicReflect.hpp>
-#include <NekiraReflect/DynamicReflect/TypeCollection/Utilities.hpp>
+#include <DynamicReflect.hpp>
+
 
 using namespace NekiraReflect;
 
@@ -39,9 +40,11 @@ enum class TestEnum
     Value3 = 3
 };
 
+
+
 class TestClass
 {
-
+    
 public:
     int MemberVar;
 
@@ -54,7 +57,17 @@ public:
     {
         std::cout << "TestClass::ConstFunc called with value: " << b << '\n';
     }
+
+protected:
+    void ProtectedFunc()
+    {
+        std::cout << "TestClass::ProtectedFunc called\n";
+    }
+
+
 };
+
+
 
 int main()
 {
@@ -68,7 +81,7 @@ int main()
 
     RegisterEnumInfo( std::move( EnumInfo ) );
 
-    auto EnumTypeInfo = TypeInfoRegistry::Get().GetEnumInfo<TestEnum>();
+    auto EnumTypeInfo = ReflectionRegistry::Get().GetEnumInfo<TestEnum>();
     if ( EnumTypeInfo )
     {
         std::cout << "Enum Name: " << EnumTypeInfo->GetName() << '\n';
@@ -81,15 +94,17 @@ int main()
 
     auto ClassInfo = MakeClassTypeInfo<TestClass>( "TestClass" );
     ClassInfo->AddVariable( MakeMemberVarInfo( "MemberVar", &TestClass::MemberVar ) );
+    
     ClassInfo->AddFunction( MakeMemberFuncInfo( "Func", &TestClass::Func ) );
     ClassInfo->AddFunction( MakeMemberFuncInfo( "ConstFunc", &TestClass::ConstFunc ) );
-
-
+    
     RegisterClassInfo( std::move( ClassInfo ) );
+
+    
 
     TestClass ClassObj;
 
-    if ( auto ClassTypeInfo = TypeInfoRegistry::Get().GetClassInfo( typeid( TestClass ) ) )
+    if ( auto ClassTypeInfo = ReflectionRegistry::Get().GetClassInfo( typeid( TestClass ) ) )
     {
         ClassTypeInfo->SetVariableValue( &ClassObj, "MemberVar", 999 );
         std::cout << "MemberVar: " << ClassTypeInfo->GetVariableValue<int>( &ClassObj, "MemberVar" ) << '\n';

@@ -22,13 +22,10 @@
  * SOFTWARE.
  */
 
- 
- //#include "ReflectGenerator.hpp"
- 
- 
- 
-int main()
-{
 
-    return 0;
-}
+#pragma once
+
+#ifndef NEKIRA_REFLECT_BODY
+#define NEKIRA_REFLECT_BODY(ClassName) friend class NekiraReflect::ReflectionAccessor<ClassName>;
+#endif // NEKIRA_REFLECT_BODY
+

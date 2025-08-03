@@ -60,10 +60,10 @@ target_include_directories(NekiraReflection
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
-        ${CMAKE_INCLUDE_CURRENT_DIR}/NekiraReflect/DynamicReflect
-        ${CMAKE_INCLUDE_CURRENT_DIR}/NekiraReflect/StaticReflect
-        ${CMAKE_INCLUDE_CURRENT_DIR}/NekiraReflect/TypeExtraction
-        ${CMAKE_INCLUDE_CURRENT_DIR}/NekiraReflect/Generation
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/DynamicReflect
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/StaticReflect
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/TypeExtraction
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Generation
         ${LLVM_INCLUDE_DIRS}
         ${Clang_INCLUDE_DIRS}
 )
@@ -73,16 +73,16 @@ target_include_directories(NekiraReflection
 # =============================================================================
 
 # 生成工具可执行文件
-add_executable(ReflectGenerator
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Generation/Generator/ReflectGenerator.cpp
+add_executable(NekiraReflectGen
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/ReflectGenerator.cpp
 )
 
-target_include_directories(ReflectGenerator PRIVATE
+target_include_directories(NekiraReflectGen PRIVATE
     ${LLVM_INCLUDE_DIRS}
     ${Clang_INCLUDE_DIRS}
 )
 
-target_link_libraries(ReflectGenerator PRIVATE
+target_link_libraries(NekiraReflectGen PRIVATE
     NekiraReflection::NekiraReflection
     libclang
 )
@@ -94,8 +94,8 @@ target_link_libraries(ReflectGenerator PRIVATE
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-# 安装库和头文件
-install(TARGETS NekiraReflection ReflectGenerator
+# 安装库和反射生成器
+install(TARGETS NekiraReflection NekiraReflectGen
     EXPORT NekiraReflectionTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -142,7 +142,7 @@ install(FILES
 )
 
 # =============================================================================
-# 导出构建树中的目标（用于开发）
+# 导出
 # =============================================================================
 
 export(EXPORT NekiraReflectionTargets

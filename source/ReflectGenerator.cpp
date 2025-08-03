@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
+ 
+#include <Generator/ReflectGenerator.hpp>
 
-#pragma once
+ 
+int main()
+{
 
-
-#include <Utility/Utilities.hpp>
-
- // ============================================= 动态反射注册工具 ============================================= //
-
-
+    return 0;
+}

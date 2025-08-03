@@ -26,21 +26,21 @@
 #pragma once
 
 
-#include <NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp>
+#include <TypeCollection/CoreType.hpp>
 
  // ======================================= 动态反射全局注册表 ======================================= //
 namespace NekiraReflect
 {
 
-    class TypeInfoRegistry
+    class ReflectionRegistry
     {
         using EnumInfoMap = std::unordered_map< std::type_index, std::unique_ptr< EnumTypeInfo > >;
         using ClassInfoMap = std::unordered_map < std::type_index, std::unique_ptr< ClassTypeInfo > >;
 
     public:
-        static TypeInfoRegistry& Get()
+        static ReflectionRegistry& Get()
         {
-            static TypeInfoRegistry Instance;
+            static ReflectionRegistry Instance;
             return Instance;
         }
 
@@ -153,10 +153,10 @@ namespace NekiraReflect
         }
 
     private:
-        TypeInfoRegistry() = default;
+        ReflectionRegistry() = default;
 
-        TypeInfoRegistry( const TypeInfoRegistry& ) = delete;
-        TypeInfoRegistry& operator=( const TypeInfoRegistry& ) = delete;
+        ReflectionRegistry( const ReflectionRegistry& ) = delete;
+        ReflectionRegistry& operator=( const ReflectionRegistry& ) = delete;
 
     private:
         // Enum Info

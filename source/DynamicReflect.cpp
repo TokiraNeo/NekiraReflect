@@ -24,6 +24,7 @@
 
 
 
+
 #include <iostream>
 
 #include <DynamicReflect.hpp>
@@ -39,26 +40,10 @@ enum class TestEnum
     Value3 = 3
 };
 
-template <typename ClassType>
-class Reflector
-{
-public:
-    template<typename RT, typename... Args>
-    void AddFunction( const std::string& FuncName )
-    {
-        RT (ClassType::*FuncPtr)(Args...) = &ClassType::FuncName;
-    }
 
-    template<typename RT, typename... Args>
-    void AddConstFunction( const std::string& FuncName )
-    {
-        RT (ClassType::*FuncPtr)(Args...) const = &ClassType::FuncName;
-    }
-};
 
 class TestClass
 {
-    friend class Reflector<TestClass>;
     
 public:
     int MemberVar;
@@ -78,6 +63,7 @@ protected:
     {
         std::cout << "TestClass::ProtectedFunc called\n";
     }
+
 
 };
 
@@ -114,7 +100,6 @@ int main()
     
     RegisterClassInfo( std::move( ClassInfo ) );
 
-    
     
 
     TestClass ClassObj;

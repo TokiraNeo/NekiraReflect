@@ -25,10 +25,10 @@
 
 #pragma once
 
-#include "MetaInfo.hpp"
+
 #include <fstream>
 #include <Tools/MetaInfo.hpp>
-#include <vector>
+
 
 
 namespace NekiraReflect
@@ -36,98 +36,8 @@ namespace NekiraReflect
     class CodeGenerateHelper final
     {
     public:
-        // 生成枚举反射代码
-        static void GenerateEnumCode(std::ofstream& HeaderStream, const std::vector<EnumMetaInfo>& Enums)
-        {
-            HeaderStream << "    //===================Generate Enum Reflection Code===================" << '\n';
-
-            std::string EnumTypeInfoName;
-
-            for (const auto Enum : Enums)
-            {
-                GenerateIntervalLine(HeaderStream);
-
-                HeaderStream << "    // Enum: " << Enum.Name << '\n';
-                EnumTypeInfoName = Enum.Name + "_TypeInfo";
-                
-                // 创建EnumTypeInfo的实例
-                HeaderStream << "    auto " << EnumTypeInfoName << " = MakeEnumTypeInfo<";
-                HeaderStream << Enum.Name << ">" << "(\"" << Enum.Name << "\")" << '\n';
-
-                // 添加枚举对
-                for (const auto& Pair : Enum.Elements)
-                {
-                    HeaderStream << "    " << EnumTypeInfoName << "->AddEnumValue";
-                    HeaderStream << "(\"" << Pair.first << "\", " << Pair.second << ");" << '\n';
-                }
-
-                // 注册新建的EnumTypeInfo
-                HeaderStream << "    RegisterEnumInfo( std::move(" << EnumTypeInfoName << ") );" << '\n';
-
-                HeaderStream << '\n';
-            }
-        }
-
-        // 生成类反射代码
-        static void GenerateClassCode(std::ofstream& HeaderStream, const std::vector<ClassMetaInfo>& Classes)
-        {
-            HeaderStream << "    //===================Generate Class Reflection Code===================" << '\n';
-
-            std::string ClassTypeInfoName;
-
-            for(const auto& ClassMeta : Classes)
-            {
-                GenerateIntervalLine(HeaderStream);
-
-                HeaderStream << "    // Class/Struct: " << ClassMeta.QualifiedName << '\n';
-                ClassTypeInfoName = ClassMeta.Name + "_TypeInfo";
-
-                // 创建ClassTypeInfo的实例
-                HeaderStream << "    auto " << ClassTypeInfoName << " = MakeClassTypeInfo<";
-                HeaderStream << ClassMeta.Name << ">(\"" << ClassMeta.Name << "\")" << '\n';
-
-                // 添加成员变量
-                GenerateMemberVarCode(HeaderStream, ClassMeta.Name, ClassTypeInfoName, ClassMeta.MemberVars);
-
-                // 添加成员函数
-                GenerateMemberFuncCode(HeaderStream, ClassMeta.Name, ClassTypeInfoName, ClassMeta.MemberFuncs);
-
-                // 注册新建的ClassTypeInfo
-                HeaderStream << "    RegisterClassInfo( std::move(" << ClassTypeInfoName << ") );" << '\n';
-
-                HeaderStream << '\n';
-            }
-        }
-
-    private:    
-        // 生成成员变量反射代码
-        static void GenerateMemberVarCode(std::ofstream& HeaderStream, const std::string& ClassName, 
-            const std::string& ClassTypeInfoName, const std::vector<MemberVarMetaInfo>& MemberVars)
-        {
-            for(const auto& VarMeta : MemberVars)
-            {
-                HeaderStream << "    // Member Var: " << VarMeta.QualifiedName << '\n';
-
-                HeaderStream << "    " << ClassTypeInfoName << "->AddVariable( MakeMemberVarInfo( ";
-                HeaderStream << "\"" << VarMeta.Name << "\", ";
-                HeaderStream << "&" << ClassName << "::" << VarMeta.Name << " ) );" << '\n';
-            }
-        }
-
-        // 生成成员函数反射代码
-        static void GenerateMemberFuncCode(std::ofstream& HeaderStream, const std::string& ClassName,
-            const std::string& ClassTypeInfoName, const std::vector<MemberFuncMetaInfo>& MemberFuncs)
-        {
-            for(const auto& FuncMeta : MemberFuncs)
-            {
-                HeaderStream << "    // Member Func: " << FuncMeta.QualifiedName << '\n';
-
-                HeaderStream << "    " << ClassTypeInfoName << "->AddFunction( MakeMemberFuncInfo( ";
-                HeaderStream << "\"" << FuncMeta.Name << "\", ";
-                HeaderStream << "&" << ClassName << "::" << FuncMeta.Name << " ) );" << '\n';
-            }
-        }
-    
+        
+    private:
         // 生成间隔行
         static void GenerateIntervalLine(std::ofstream& Stream)
         {

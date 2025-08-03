@@ -102,7 +102,7 @@ namespace NekiraReflect_Inside \
 namespace NekiraReflect \
 {\
     template<> \
-    class ReflectAccessor<EnumName> \
+    class ReflectionAccessor<EnumName> \
     {\
     public: \
         using EnumType = EnumName;\
@@ -135,7 +135,7 @@ namespace NekiraReflect_Inside \
     {\
         EnumName##_EnumAutoRegister() \
         { \
-            NekiraReflect::ReflectAccessor<EnumName>::RegisterReflection(); \
+            NekiraReflect::ReflectionAccessor<EnumName>::RegisterReflection(); \
         } \
     }; \
     static EnumName##_EnumAutoRegister EnumName##_EnumAutoRegister_Inst; \

@@ -25,8 +25,8 @@
 
 #pragma once
 
-
 #include <Tools/CodeGenerateHelper.hpp>
+#include <fstream>
 
 
 
@@ -36,7 +36,8 @@ namespace NekiraReflect
     class ReflectGenerator final
     {
     public:
-        
+        // 生成枚举、类、结构体的反射代码
+        // OutputFile: 输出文件名(不包含后缀)
         static void GenerateCode
         (
             const std::string& OutputFile, 
@@ -44,37 +45,27 @@ namespace NekiraReflect
             const std::vector<ClassMetaInfo>& Classes
         )
         {
-            const std::string HeaderFile = OutputFile + ".gen.hpp";
-            const std::string SourceFile = OutputFile + ".gen.cpp";
+            const std::string HeaderName = OutputFile + ".gen.hpp";
 
-            const std::string GeneratorName = OutputFile + "_Generator";
-            const std::string GeneratorFuncName = OutputFile + "_Func()";
+            std::ofstream HeaderStream(HeaderName);
 
-            // 头文件流，生成gen.hpp文件
-            std::ofstream HeaderStream(HeaderFile);
-            // 源文件流，生成gen.cpp文件
-            std::ofstream SourceStream(SourceFile);
-            
             HeaderStream << "#pragma once" << '\n' << '\n';
-            HeaderStream << "#include <NekiraReflect/DynamicReflect/DynamicReflect.hpp>" << '\n' << '\n';
+            HeaderStream << "#include <NekiraReflect/DynamicReflect/Accessor/ReflectAccessor.hpp>" << '\n';
+            HeaderStream << '\n';
 
-            HeaderStream << "using namespace NekiraReflect;" << '\n' << '\n';
-
-            HeaderStream << "void " << GeneratorFuncName << '\n';
-            HeaderStream << "{\n";
-
-            // 生成枚举类型的反射代码
-            CodeGenerateHelper::GenerateEnumCode(HeaderStream, Enums);
-
-            // 生成类的反射代码
-            CodeGenerateHelper::GenerateClassCode(HeaderStream, Classes);
-
-            HeaderStream << "}" << '\n' << '\n';
-
-            SourceStream << "#include \"" << HeaderFile << "\"" << '\n' << '\n';
-            SourceStream << GeneratorName << ' ' << GeneratorName << "_Inst;" << '\n';
+            // 生成枚举的反射代码
+            if( !Enums.empty() )
+            {
+                CodeGenerateHelper::GenerateEnumCode(HeaderStream, Enums);
+            }
+            
+            // 生成类的反射注册代码
+            if( !Classes.empty() )
+            {
+                CodeGenerateHelper::GenerateClassCode(HeaderStream, Classes);
+            }
+            
         }
-
 
     private:
         

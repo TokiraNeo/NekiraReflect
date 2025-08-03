@@ -64,8 +64,10 @@ namespace NekiraReflect
             HeaderStream << "{\n";
 
             // 生成枚举类型的反射代码
+            CodeGenerateHelper::GenerateEnumCode(HeaderStream, Enums);
 
             // 生成类的反射代码
+            CodeGenerateHelper::GenerateClassCode(HeaderStream, Classes);
 
             HeaderStream << "}" << '\n' << '\n';
 

@@ -116,6 +116,7 @@ namespace NekiraReflect
         return ClassInfo;
     }
 
-
-
 } // namespace NekiraReflect
+
+
+

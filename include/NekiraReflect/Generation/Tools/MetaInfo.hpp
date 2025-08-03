@@ -49,6 +49,8 @@ namespace NekiraReflect
         // 成员变量的名称
         std::string Name;
 
+        std::string QualifiedName;
+
         // 成员变量的类型名称
         std::string TypeName;
 
@@ -65,6 +67,8 @@ namespace NekiraReflect
         // 成员函数的名称
         std::string Name;
 
+        std::string QualifiedName;
+
         // 成员函数的返回类型名称
         std::string ReturnType;
 
@@ -74,8 +78,8 @@ namespace NekiraReflect
         // 成员函数的参数列表  参数类型-参数名称
         std::vector< std::pair<std::string, std::string> > Parameters;
 
-        bool IsProtected = false;
-        bool IsPrivate = false;
+        // 是否为 const 成员函数
+        bool IsConst = false;
     };
 
     // 类的元信息

@@ -25,9 +25,8 @@
 
 #pragma once
 
-#include <TypeRegist/TypeInfoRegistry.hpp>
-#include <TypeCollection/Utilities.hpp>
-
+#include <Registry/ReflectionRegistry.hpp>
+#include <Utility/Utilities.hpp>
 
 
  // ============================================= 动态反射注册工具 ============================================= //
@@ -38,14 +37,13 @@ namespace NekiraReflect
     // Register Enum TypeInfo
     static void RegisterEnumInfo( std::unique_ptr<EnumTypeInfo> EnumInfo )
     {
-        TypeInfoRegistry::Get().RegisterEnum( std::move( EnumInfo ) );
+        ReflectionRegistry::Get().RegisterEnum( std::move( EnumInfo ) );
     }
 
     // Register Class TypeInfo
     static void RegisterClassInfo( std::unique_ptr<ClassTypeInfo> ClassInfo )
     {
-        TypeInfoRegistry::Get().RegisterClass( std::move( ClassInfo ) );
+        ReflectionRegistry::Get().RegisterClass( std::move( ClassInfo ) );
     }
 
 } // namespace NekiraReflect
-

@@ -32,48 +32,47 @@
 
 namespace NekiraReflect
 {
-    // 枚举类型的元信息
-    struct EnumMetaInfo
-    {
-        // 枚举类型的名称
-        std::string Name;
+// 枚举类型的元信息
+struct EnumMetaInfo
+{
+    // 枚举类型的名称
+    std::string Name;
 
-        // 枚举值对
-        std::vector< std::string > Elements;
-    };
+    // 枚举值对
+    std::vector<std::string> Elements;
+};
 
-    // 成员变量的元信息
-    struct MemberVarMetaInfo
-    {
-        // 成员变量的名称
-        std::string Name;
+// 成员变量的元信息
+struct MemberVarMetaInfo
+{
+    // 成员变量的名称
+    std::string Name;
+};
 
-    };
+// 成员函数的元信息
+struct MemberFuncMetaInfo
+{
+    // 成员函数的名称
+    std::string Name;
 
-    // 成员函数的元信息
-    struct MemberFuncMetaInfo
-    {
-        // 成员函数的名称
-        std::string Name;
+    std::string QualifiedName;
+};
 
-        std::string QualifiedName;
-    };
+// 类的元信息
+struct ClassMetaInfo
+{
+    // 类的名称
+    std::string Name;
 
-    // 类的元信息
-    struct ClassMetaInfo
-    {
-        // 类的名称
-        std::string Name;
+    std::string QualifiedName;
 
-        std::string QualifiedName;
+    // 命名空间名称
+    std::string Namespace;
 
-        // 命名空间名称
-        std::string Namespace;
+    // 类的成员变量
+    std::vector<MemberVarMetaInfo> MemberVars;
 
-        // 类的成员变量
-        std::vector<MemberVarMetaInfo> MemberVars;
-
-        // 类的成员函数
-        std::vector<MemberFuncMetaInfo> MemberFuncs;
-    };
+    // 类的成员函数
+    std::vector<MemberFuncMetaInfo> MemberFuncs;
+};
 } // namespace NekiraReflect

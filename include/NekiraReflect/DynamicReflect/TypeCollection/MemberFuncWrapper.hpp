@@ -29,65 +29,61 @@
 
 namespace NekiraReflect
 {
-    template <typename RT, typename... Args>
-    struct MemberFuncWrapper_Base
+template <typename RT, typename... Args>
+struct MemberFuncWrapper_Base
+{
+    virtual ~MemberFuncWrapper_Base() = default;
+
+    virtual RT Invoke(Args... args) = 0;
+};
+
+template <typename Callable, typename RT, typename... Args>
+    requires std::is_invocable_r_v<RT, Callable, Args...>
+struct MemberFuncWrapper_Impl : MemberFuncWrapper_Base<RT, Args...>
+{
+    MemberFuncWrapper_Impl(Callable&& obj) : CallableObj(std::forward<Callable>(obj))
+    {}
+
+    RT Invoke(Args... args) override
     {
-        virtual ~MemberFuncWrapper_Base() = default;
+        return CallableObj(std::forward<Args>(args)...);
+    }
 
-        virtual RT Invoke( Args... args ) = 0;
-    };
+private:
+    Callable CallableObj;
+};
 
-    template <typename Callable, typename RT, typename... Args>
+template <typename T>
+struct MemberFuncWrapper;
+
+template <typename RT, typename... Args>
+struct MemberFuncWrapper<RT(Args...)>
+{
+    MemberFuncWrapper() = default;
+
+    template <typename Callable>
         requires std::is_invocable_r_v<RT, Callable, Args...>
-    struct MemberFuncWrapper_Impl : MemberFuncWrapper_Base<RT, Args...>
+    MemberFuncWrapper(Callable func)
+        : Wrapper(std::make_unique<MemberFuncWrapper_Impl<Callable, RT, Args...>>(std::move(func)))
+    {}
+
+    template <typename Callable>
+        requires std::is_invocable_r_v<RT, Callable, Args...>
+    MemberFuncWrapper& operator=(Callable func)
     {
-        MemberFuncWrapper_Impl( Callable&& obj )
-            : CallableObj( std::forward<Callable>( obj ) )
-        {
-        }
+        Wrapper = std::make_unique<MemberFuncWrapper_Impl<Callable, RT, Args...>>(std::move(func));
+        return *this;
+    }
 
-        RT Invoke( Args... args ) override
-        {
-            return CallableObj( std::forward<Args>( args )... );
-        }
-
-    private:
-        Callable CallableObj;
-    };
-
-    template <typename T>
-    struct MemberFuncWrapper;
-
-    template <typename RT, typename... Args>
-    struct MemberFuncWrapper<RT( Args... )>
+    RT Invoke(Args... args)
     {
-        MemberFuncWrapper() = default;
+        return Wrapper->Invoke(std::forward<Args>(args)...);
+    }
 
-        template <typename Callable> requires std::is_invocable_r_v<RT, Callable, Args...>
-        MemberFuncWrapper( Callable func )
-            : Wrapper( std::make_unique< MemberFuncWrapper_Impl<Callable, RT, Args...> >( std::move( func ) ) )
-        {
-        }
-
-        template <typename Callable> requires std::is_invocable_r_v<RT, Callable, Args...>
-        MemberFuncWrapper& operator=( Callable func )
-        {
-            Wrapper = std::make_unique< MemberFuncWrapper_Impl<Callable, RT, Args...> >( std::move( func ) );
-            return *this;
-        }
-
-        RT Invoke( Args... args )
-        {
-            return Wrapper->Invoke( std::forward<Args>( args )... );
-        }
-
-    private:
-        std::unique_ptr< MemberFuncWrapper_Base<RT, Args...> > Wrapper;
-    };
+private:
+    std::unique_ptr<MemberFuncWrapper_Base<RT, Args...>> Wrapper;
+};
 
 
 
 } // namespace NekiraReflect
-
-
-

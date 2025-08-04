@@ -24,7 +24,6 @@
 
 
 
-
 #include <iostream>
 
 #include <DynamicReflect.hpp>
@@ -44,16 +43,16 @@ enum class TestEnum
 
 class TestClass
 {
-    
+
 public:
     int MemberVar;
 
-    void Func( int a )
+    void Func(int a)
     {
         std::cout << "TestClass::Func called with value: " << a << '\n';
     }
 
-    void ConstFunc( float b ) const
+    void ConstFunc(float b) const
     {
         std::cout << "TestClass::ConstFunc called with value: " << b << '\n';
     }
@@ -63,55 +62,52 @@ protected:
     {
         std::cout << "TestClass::ProtectedFunc called\n";
     }
-
-
 };
 
 
 
 int main()
 {
-    EnumValuesMap TestEnumValues = {
-        { "Value1", static_cast< int64_t >( TestEnum::Value1 ) },
-        { "Value2", static_cast< int64_t >( TestEnum::Value2 ) },
-        { "Value3", static_cast< int64_t >( TestEnum::Value3 ) }
-    };
+    EnumValuesMap TestEnumValues = {{"Value1", static_cast<int64_t>(TestEnum::Value1)},
+                                    {"Value2", static_cast<int64_t>(TestEnum::Value2)},
+                                    {"Value3", static_cast<int64_t>(TestEnum::Value3)}};
 
-    auto EnumInfo = MakeEnumTypeInfo<TestEnum>( "TestEnum", TestEnumValues );
+    auto EnumInfo = MakeEnumTypeInfo<TestEnum>("TestEnum", TestEnumValues);
 
-    RegisterEnumInfo( std::move( EnumInfo ) );
+    RegisterEnumInfo(std::move(EnumInfo));
 
     auto EnumTypeInfo = ReflectionRegistry::Get().GetEnumInfo<TestEnum>();
-    if ( EnumTypeInfo )
+    if (EnumTypeInfo)
     {
         std::cout << "Enum Name: " << EnumTypeInfo->GetName() << '\n';
         std::cout << "Values:\n";
-        for ( const auto& Pair : EnumTypeInfo->GetAllEnumValues() )
+        for (const auto& Pair : EnumTypeInfo->GetAllEnumValues())
         {
             std::cout << "  " << Pair.first << " = " << Pair.second << '\n';
         }
     }
 
-    auto ClassInfo = MakeClassTypeInfo<TestClass>( "TestClass" );
-    ClassInfo->AddVariable( MakeMemberVarInfo( "MemberVar", &TestClass::MemberVar ) );
-    
-    ClassInfo->AddFunction( MakeMemberFuncInfo( "Func", &TestClass::Func ) );
-    ClassInfo->AddFunction( MakeMemberFuncInfo( "ConstFunc", &TestClass::ConstFunc ) );
-    
-    RegisterClassInfo( std::move( ClassInfo ) );
+    auto ClassInfo = MakeClassTypeInfo<TestClass>("TestClass");
+    ClassInfo->AddVariable(MakeMemberVarInfo("MemberVar", &TestClass::MemberVar));
 
-    
+    ClassInfo->AddFunction(MakeMemberFuncInfo("Func", &TestClass::Func));
+    ClassInfo->AddFunction(MakeMemberFuncInfo("ConstFunc", &TestClass::ConstFunc));
+
+    RegisterClassInfo(std::move(ClassInfo));
+
+
 
     TestClass ClassObj;
 
-    if ( auto ClassTypeInfo = ReflectionRegistry::Get().GetClassInfo( typeid( TestClass ) ) )
+    if (auto ClassTypeInfo = ReflectionRegistry::Get().GetClassInfo(typeid(TestClass)))
     {
-        ClassTypeInfo->SetVariableValue( &ClassObj, "MemberVar", 999 );
-        std::cout << "MemberVar: " << ClassTypeInfo->GetVariableValue<int>( &ClassObj, "MemberVar" ) << '\n';
+        ClassTypeInfo->SetVariableValue(&ClassObj, "MemberVar", 999);
+        std::cout << "MemberVar: " << ClassTypeInfo->GetVariableValue<int>(&ClassObj, "MemberVar")
+                  << '\n';
 
-        ClassTypeInfo->GetFunction( "Func" )->Invoke( &ClassObj, 9768 );
+        ClassTypeInfo->GetFunction("Func")->Invoke(&ClassObj, 9768);
 
-        ClassTypeInfo->GetFunction( "ConstFunc" )->Invoke( &ClassObj, 2.34f );
+        ClassTypeInfo->GetFunction("ConstFunc")->Invoke(&ClassObj, 2.34f);
     }
 
     return 0;

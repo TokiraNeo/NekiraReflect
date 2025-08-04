@@ -26,96 +26,50 @@
 #pragma once
 
 
-#include <TypeCollection/CoreType.hpp>
 #include <Registry/ReflectionRegistry.hpp>
+#include <TypeCollection/CoreType.hpp>
 
 
 
- // ======================================= 动态反射工具函数 ======================================= //
-
-namespace NekiraReflect
-{
-    // Create Enum TypeInfo
-    template <typename EnumType>
-    static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo( const std::string& Name )
-    {
-        std::type_index TypeIndex = std::type_index( typeid( EnumType ) );
-        size_t TypeSize = sizeof( EnumType );
-
-        auto EnumInfo = std::make_unique<EnumTypeInfo>( Name, TypeIndex );
-
-        EnumInfo->SetSize( TypeSize );
-
-        return EnumInfo;
-    }
-
-    // Create Enum TypeInfo with Enum Pairs
-    template <typename EnumType>
-    static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo( const std::string& Name, const EnumValuesMap& Pairs )
-    {
-        std::type_index TypeIndex = std::type_index( typeid( EnumType ) );
-
-        size_t TypeSize = sizeof( EnumType );
-
-        auto EnumInfo = std::make_unique<EnumTypeInfo>( Name, TypeIndex );
-
-        EnumInfo->SetSize( TypeSize );
-
-        for ( const auto& Pair : Pairs )
-        {
-            EnumInfo->AddEnumValue( Pair.first, Pair.second );
-        }
-
-        return EnumInfo;
-    }
-
-} // namespace NekiraReflect
-
-
+// ======================================= 动态反射工具函数 ======================================= //
 
 
 namespace NekiraReflect
 {
-    // Create Member Varaible TypeInfo
-    template <typename ClassType, typename VarType>
-    static std::unique_ptr<MemberVarInfo> MakeMemberVarInfo( const std::string& Name, VarType ClassType::* MemberVarPtr )
-    {
-        return std::make_unique<MemberVarInfo>( Name, MemberVarPtr );
-    }
+// Create Enum TypeInfo
+template <typename EnumType>
+static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo(const std::string& Name)
+{
+    std::type_index TypeIndex = std::type_index(typeid(EnumType));
 
-    // Create Member Function TypeInfo
-    template <typename ClassType, typename RT, typename... Args>
-    static std::unique_ptr<MemberFuncInfo> MakeMemberFuncInfo( const std::string& Name, RT( ClassType::* FuncPtr )( Args... ) )
-    {
-        return std::make_unique<MemberFuncInfo>( Name, FuncPtr );
-    }
+    size_t TypeSize = sizeof(EnumType);
 
-    // Create Member Function TypeInfo(const)
-    template <typename ClassType, typename RT, typename... Args>
-    static std::unique_ptr<MemberFuncInfo> MakeMemberFuncInfo( const std::string& Name, RT( ClassType::* FuncPtr )( Args... )const )
-    {
-        return std::make_unique<MemberFuncInfo>( Name, FuncPtr );
-    }
+    auto EnumInfo = std::make_unique<EnumTypeInfo>(Name, TypeIndex);
+
+    EnumInfo->SetSize(TypeSize);
+
+    return EnumInfo;
 }
 
-
-
-namespace NekiraReflect
+// Create Enum TypeInfo with Enum Pairs
+template <typename EnumType>
+static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo(const std::string& Name, const EnumValuesMap& Pairs)
 {
+    std::type_index TypeIndex = std::type_index(typeid(EnumType));
 
-    // Create Class TypeInfo
-    template <typename ClassType>
-    static std::unique_ptr<ClassTypeInfo> MakeClassTypeInfo( const std::string& Name )
+    size_t TypeSize = sizeof(EnumType);
+
+    auto EnumInfo = std::make_unique<EnumTypeInfo>(Name, TypeIndex);
+
+    EnumInfo->SetSize(TypeSize);
+
+    for (const auto& Pair : Pairs)
     {
-        std::type_index TypeIndex = std::type_index( typeid( ClassType ) );
-        size_t TypeSize = sizeof( ClassType );
-
-        auto ClassInfo = std::make_unique<ClassTypeInfo>( Name, TypeIndex );
-
-        ClassInfo->SetSize( TypeSize );
-
-        return ClassInfo;
+        EnumInfo->AddEnumValue(Pair.first, Pair.second);
     }
+
+    return EnumInfo;
+}
 
 } // namespace NekiraReflect
 
@@ -123,16 +77,66 @@ namespace NekiraReflect
 
 namespace NekiraReflect
 {
-    // Register Enum TypeInfo
-    static void RegisterEnumInfo( std::unique_ptr<EnumTypeInfo> EnumInfo )
-    {
-        ReflectionRegistry::Get().RegisterEnum( std::move( EnumInfo ) );
-    }
+// Create Member Varaible TypeInfo
+template <typename ClassType, typename VarType>
+static std::unique_ptr<MemberVarInfo> MakeMemberVarInfo(const std::string& Name, VarType ClassType::* MemberVarPtr)
+{
+    return std::make_unique<MemberVarInfo>(Name, MemberVarPtr);
+}
 
-    // Register Class TypeInfo
-    static void RegisterClassInfo( std::unique_ptr<ClassTypeInfo> ClassInfo )
-    {
-        ReflectionRegistry::Get().RegisterClass( std::move( ClassInfo ) );
-    }
+// Create Member Function TypeInfo
+template <typename ClassType, typename RT, typename... Args>
+static std::unique_ptr<MemberFuncInfo> MakeMemberFuncInfo(const std::string& Name, RT (ClassType::*FuncPtr)(Args...))
+{
+    return std::make_unique<MemberFuncInfo>(Name, FuncPtr);
+}
+
+// Create Member Function TypeInfo(const)
+template <typename ClassType, typename RT, typename... Args>
+static std::unique_ptr<MemberFuncInfo> MakeMemberFuncInfo(const std::string& Name,
+                                                          RT (ClassType::*FuncPtr)(Args...) const)
+{
+    return std::make_unique<MemberFuncInfo>(Name, FuncPtr);
+}
+
+} // namespace NekiraReflect
+
+
+
+namespace NekiraReflect
+{
+
+// Create Class TypeInfo
+template <typename ClassType>
+static std::unique_ptr<ClassTypeInfo> MakeClassTypeInfo(const std::string& Name)
+{
+    std::type_index TypeIndex = std::type_index(typeid(ClassType));
+    size_t          TypeSize = sizeof(ClassType);
+
+    auto ClassInfo = std::make_unique<ClassTypeInfo>(Name, TypeIndex);
+
+    ClassInfo->SetSize(TypeSize);
+
+    return ClassInfo;
+}
+
+} // namespace NekiraReflect
+
+
+
+namespace NekiraReflect
+{
+
+// Register Enum TypeInfo
+static void RegisterEnumInfo(std::unique_ptr<EnumTypeInfo> EnumInfo)
+{
+    ReflectionRegistry::Get().RegisterEnum(std::move(EnumInfo));
+}
+
+// Register Class TypeInfo
+static void RegisterClassInfo(std::unique_ptr<ClassTypeInfo> ClassInfo)
+{
+    ReflectionRegistry::Get().RegisterClass(std::move(ClassInfo));
+}
 
 } // namespace NekiraReflect

@@ -30,46 +30,50 @@
 
 
 
+// [INFO] NekiraReflect::TypeInfo定义在TypeCollection/StaticTypeInfo.hpp中
+// [INFO] NekiraReflect::field_traits定义在TypeExtraction/TypeExtraction.hpp中
 
- // [INFO] NekiraReflect::TypeInfo定义在TypeCollection/StaticTypeInfo.hpp中
- // [INFO] NekiraReflect::field_traits定义在TypeExtraction/TypeExtraction.hpp中
-
- // 静态反射的起始宏
+// 静态反射的起始宏
 #ifndef STATIC_REFLECT_BEGIN
-#define STATIC_REFLECT_BEGIN(Type)             \
-    template <>                                \
-    struct NekiraReflect::StaticTypeInfo<Type> \
-    {                                          \
-        static constexpr const char *Name = #Type;
+#define STATIC_REFLECT_BEGIN(Type)                                                                                     \
+    template <>                                                                                                        \
+    struct NekiraReflect::StaticTypeInfo<Type>                                                                         \
+    {                                                                                                                  \
+        static constexpr const char* Name = #Type;
 #endif
 
- // 注册函数，接收的参数包为包装后的field_traits<>
+// 注册函数，接收的参数包为包装后的field_traits<>
 #ifndef STATIC_REFLECT_FUNCTIONS
-#define STATIC_REFLECT_FUNCTIONS(...) \
-    static constexpr auto Functions = std::make_tuple(__VA_ARGS__);
+#define STATIC_REFLECT_FUNCTIONS(...) static constexpr auto Functions = std::make_tuple(__VA_ARGS__);
 #endif
 
- // 用于将函数指针和函数名包装为field_traits
+// 用于将函数指针和函数名包装为field_traits
 #ifndef STATIC_REGISTER_FUNCTION
-#define STATIC_REGISTER_FUNCTION(FuncPtr, FuncName) \
-    NekiraReflect::field_traits { FuncPtr, #FuncName }
+#define STATIC_REGISTER_FUNCTION(FuncPtr, FuncName)                                                                    \
+    NekiraReflect::field_traits                                                                                        \
+    {                                                                                                                  \
+        FuncPtr, #FuncName                                                                                             \
+    }
 #endif
 
- // 注册变量，接收的参数包为包装后的field_traits<>
+// 注册变量，接收的参数包为包装后的field_traits<>
 #ifndef STATIC_REFLECT_VARIABLES
-#define STATIC_REFLECT_VARIABLES(...) \
-    static constexpr auto Variables = std::make_tuple(__VA_ARGS__);
+#define STATIC_REFLECT_VARIABLES(...) static constexpr auto Variables = std::make_tuple(__VA_ARGS__);
 #endif
 
- // 用于将变量指针和变量名包装为field_traits
+// 用于将变量指针和变量名包装为field_traits
 #ifndef STATIC_REGISTER_VARIABLE
-#define STATIC_REGISTER_VARIABLE(VarPtr, VarName) \
-    NekiraReflect::field_traits { VarPtr, #VarName }
+#define STATIC_REGISTER_VARIABLE(VarPtr, VarName)                                                                      \
+    NekiraReflect::field_traits                                                                                        \
+    {                                                                                                                  \
+        VarPtr, #VarName                                                                                               \
+    }
 #endif
 
- // 静态反射的结束宏
+// 静态反射的结束宏
 #ifndef STATIC_REFLECT_END
-#define STATIC_REFLECT_END() \
-    }                        \
+#define STATIC_REFLECT_END()                                                                                           \
+    }                                                                                                                  \
+    ;                                                                                                                  \
     ;
 #endif

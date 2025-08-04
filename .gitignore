@@ -38,7 +38,6 @@
 build*
 
 # 忽略clangd相关
-.clangd
 .cache/
 
 # 忽略CMakeUserPresets.json

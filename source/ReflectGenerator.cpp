@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
- 
+
 #include <Generator/ReflectGenerator.hpp>
 
- 
+
 int main()
 {
 

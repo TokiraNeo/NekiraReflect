@@ -32,44 +32,37 @@
 
 namespace NekiraReflect
 {
-    // 生成反射代码
-    class ReflectGenerator final
+// 生成反射代码
+class ReflectGenerator final
+{
+public:
+    // 生成枚举、类、结构体的反射代码
+    // OutputFile: 输出文件名(不包含后缀)
+    static void GenerateCode(const std::string& OutputFile, const std::vector<EnumMetaInfo>& Enums,
+                             const std::vector<ClassMetaInfo>& Classes)
     {
-    public:
-        // 生成枚举、类、结构体的反射代码
-        // OutputFile: 输出文件名(不包含后缀)
-        static void GenerateCode
-        (
-            const std::string& OutputFile, 
-            const std::vector<EnumMetaInfo>& Enums,
-            const std::vector<ClassMetaInfo>& Classes
-        )
+        const std::string HeaderName = OutputFile + ".gen.hpp";
+
+        std::ofstream HeaderStream(HeaderName);
+
+        HeaderStream << "#pragma once" << '\n' << '\n';
+        HeaderStream << "#include <NekiraReflect/DynamicReflect/Accessor/ReflectAccessor.hpp>" << '\n';
+        HeaderStream << '\n';
+
+        // 生成枚举的反射代码
+        if (!Enums.empty())
         {
-            const std::string HeaderName = OutputFile + ".gen.hpp";
-
-            std::ofstream HeaderStream(HeaderName);
-
-            HeaderStream << "#pragma once" << '\n' << '\n';
-            HeaderStream << "#include <NekiraReflect/DynamicReflect/Accessor/ReflectAccessor.hpp>" << '\n';
-            HeaderStream << '\n';
-
-            // 生成枚举的反射代码
-            if( !Enums.empty() )
-            {
-                CodeGenerateHelper::GenerateEnumCode(HeaderStream, Enums);
-            }
-            
-            // 生成类的反射注册代码
-            if( !Classes.empty() )
-            {
-                CodeGenerateHelper::GenerateClassCode(HeaderStream, Classes);
-            }
-            
+            CodeGenerateHelper::GenerateEnumCode(HeaderStream, Enums);
         }
 
-    private:
-        
-    };
+        // 生成类的反射注册代码
+        if (!Classes.empty())
+        {
+            CodeGenerateHelper::GenerateClassCode(HeaderStream, Classes);
+        }
+    }
+
+private:
+};
 
 } // namespace NekiraReflect
- 

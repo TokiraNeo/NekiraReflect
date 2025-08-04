@@ -29,9 +29,9 @@ using namespace NekiraReflect;
 
 struct TStruct
 {
-    int a;
+    int   a;
     float b;
-    char Name[ 7 ] = "Nekira";
+    char  Name[7] = "Nekira";
 
     void Func()
     {
@@ -43,28 +43,23 @@ struct TStruct
         std::cout << "TStruct::ConstFunc" << std::endl;
     }
 
-    void FuncWithArgs( int x, float y, int z )
+    void FuncWithArgs(int x, float y, int z)
     {
         std::cout << "TStruct::FuncWithArgs" << std::endl;
     }
 };
 
-STATIC_REFLECT_BEGIN( TStruct )
-STATIC_REFLECT_FUNCTIONS
-(
-    STATIC_REGISTER_FUNCTION( &TStruct::Func, Func ),
-    STATIC_REGISTER_FUNCTION( &TStruct::ConstFunc, ConstFunc ),
-    STATIC_REGISTER_FUNCTION( &TStruct::FuncWithArgs, FuncWithArgs )
-)
-STATIC_REFLECT_VARIABLES
-(
-    STATIC_REGISTER_VARIABLE( &TStruct::a, a ),
-    STATIC_REGISTER_VARIABLE( &TStruct::b, b ),
-    STATIC_REGISTER_VARIABLE( &TStruct::Name, Name )
-)
+STATIC_REFLECT_BEGIN(TStruct)
+STATIC_REFLECT_FUNCTIONS(STATIC_REGISTER_FUNCTION(&TStruct::Func, Func),
+                         STATIC_REGISTER_FUNCTION(&TStruct::ConstFunc, ConstFunc),
+                         STATIC_REGISTER_FUNCTION(&TStruct::FuncWithArgs, FuncWithArgs))
+
+STATIC_REFLECT_VARIABLES(STATIC_REGISTER_VARIABLE(&TStruct::a, a), STATIC_REGISTER_VARIABLE(&TStruct::b, b),
+                         STATIC_REGISTER_VARIABLE(&TStruct::Name, Name))
 STATIC_REFLECT_END()
 
-auto Lambda = [ ]( int x, float y ) { std::cout << "Lambda called with: " << x << ", " << y << std::endl; };
+
+auto Lambda = [](int x, float y) { std::cout << "Lambda called with: " << x << ", " << y << std::endl; };
 
 
 int main()
@@ -74,12 +69,12 @@ int main()
 
     auto FuncPtr = GetMemberFunction<TStruct, 2>();
 
-    auto IntCount = function_traits_CountTypeInArgs<decltype( FuncPtr ), int>;
+    auto IntCount = function_traits_CountTypeInArgs<decltype(FuncPtr), int>;
     std::cout << "Number of int parameters in FuncWithArgs: " << IntCount << std::endl;
 
-    function_traits<decltype( Lambda )> LambdaTraits;
+    function_traits<decltype(Lambda)> LambdaTraits;
 
-    bool IsLambda = function_traits_IsLambdaOrFuncObject<decltype( Lambda )>;
+    bool IsLambda = function_traits_IsLambdaOrFuncObject<decltype(Lambda)>;
 
     return 0;
 }

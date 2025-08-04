@@ -23,11 +23,15 @@
  */
 
 
-#include <Generator/ReflectGenerator.hpp>
+#pragma once
 
 
-int main()
+namespace NekiraReflect
 {
 
-    return 0;
-}
+class CodeScanner
+{
+public:
+};
+
+} // namespace NekiraReflect

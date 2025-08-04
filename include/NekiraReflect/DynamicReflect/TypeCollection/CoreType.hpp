@@ -24,26 +24,26 @@
 
 
 #pragma once
+#include <TypeCollection/MemberFuncWrapper.hpp>
+#include <any>
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 #include <typeindex>
 #include <unordered_map>
-#include <any>
 #include <vector>
-#include <stdexcept>
-#include <TypeCollection/MemberFuncWrapper.hpp>
 
- // ======================================= 动态反射核心类型 ======================================= //
+// ======================================= 动态反射核心类型 ======================================= //
 
 
- // ======================================== 类型别名 ======================================== //
+// ======================================== 类型别名 ======================================== //
 namespace NekiraReflect
 {
-    using EnumValuesMap = std::unordered_map<std::string, int64_t>;
-    using EnumNamesMap = std::unordered_map<int64_t, std::string>;
+using EnumValuesMap = std::unordered_map<std::string, int64_t>;
+using EnumNamesMap = std::unordered_map<int64_t, std::string>;
 
-    using VariableMap = std::unordered_map< std::string, std::unique_ptr<class MemberVarInfo> >;
-    using FunctionMap = std::unordered_map< std::string, std::unique_ptr<class MemberFuncInfo> >;
+using VariableMap = std::unordered_map<std::string, std::unique_ptr<class MemberVarInfo>>;
+using FunctionMap = std::unordered_map<std::string, std::unique_ptr<class MemberFuncInfo>>;
 
 } // namespace NekiraReflect
 
@@ -53,18 +53,17 @@ namespace NekiraReflect
 namespace NekiraReflect
 {
 
-    enum class TypeCategory
-    {
-        Unknown,
-        Fundamental,   // int, float, char, bool, etc.
-        Enum,
-        Class,
-        Pointer,
-        Array
-    };
+enum class TypeCategory
+{
+    Unknown,
+    Fundamental, // int, float, char, bool, etc.
+    Enum,
+    Class,
+    Pointer,
+    Array
+};
 
 } // namespace NekiraReflect
-
 
 
 
@@ -72,27 +71,38 @@ namespace NekiraReflect
 namespace NekiraReflect
 {
 
-    class TypeInfo
+class TypeInfo
+{
+public:
+    TypeInfo(const std::string& name, std::type_index typeIndex, size_t size)
+        : Name(name), TypeIndex(typeIndex), Size(size)
+    {}
+
+    const std::string GetName() const
     {
-    public:
-        TypeInfo( const std::string& name, std::type_index typeIndex, size_t size )
-            : Name( name ), TypeIndex( typeIndex ), Size( size )
-        {
-        }
+        return Name;
+    }
 
-        const std::string GetName() const { return Name; }
+    const std::type_index GetTypeIndex() const
+    {
+        return TypeIndex;
+    }
 
-        const std::type_index GetTypeIndex() const { return TypeIndex; }
+    const size_t GetSize() const
+    {
+        return Size;
+    }
 
-        const size_t GetSize() const { return Size; }
+    void SetSize(size_t size)
+    {
+        Size = size;
+    }
 
-        void SetSize( size_t size ) { Size = size; }
-
-    private:
-        std::string Name;
-        std::type_index TypeIndex;
-        size_t Size;
-    };
+private:
+    std::string     Name;
+    std::type_index TypeIndex;
+    size_t          Size;
+};
 
 } // namespace NekiraReflect
 
@@ -102,85 +112,83 @@ namespace NekiraReflect
 namespace NekiraReflect
 {
 
-    class EnumTypeInfo : public TypeInfo
+class EnumTypeInfo : public TypeInfo
+{
+public:
+    EnumTypeInfo(const std::string& name, std::type_index typeIndex) : TypeInfo(name, typeIndex, 0)
+    {}
+
+    // Add an enum value with its name
+    // 通过枚举名称和对于的值添加枚举对
+    void AddEnumValue(const std::string& name, int64_t value)
     {
-    public:
-        EnumTypeInfo( const std::string& name, std::type_index typeIndex )
-            : TypeInfo( name, typeIndex, 0 )
+        EnumValues[name] = value;
+        EnumNames[value] = name;
+    }
+
+    // Add Enum Values
+    // 添加多个枚举值
+    void AddEnumValues(const EnumValuesMap& values)
+    {
+        for (const auto& Pair : values)
         {
+            AddEnumValue(Pair.first, Pair.second);
+        }
+    }
+
+    // Get Value by Name, true if found
+    // 通过名称获取枚举值, 返回true表示找到
+    bool GetEnumValueByName(const std::string& name, int64_t& outValue) const
+    {
+        bool bFound = false;
+        auto it = EnumValues.find(name);
+
+        if (it != EnumValues.end())
+        {
+            outValue = it->second;
+            bFound = true;
         }
 
-        // Add an enum value with its name
-        // 通过枚举名称和对于的值添加枚举对
-        void AddEnumValue( const std::string& name, int64_t value )
+        return bFound;
+    }
+
+    // Get Name by Value, true if found
+    // 通过值获取枚举名称, 返回true表示找到
+    bool GetEnumNameByValue(const int64_t value, std::string& outName) const
+    {
+        bool bFound = false;
+        auto it = EnumNames.find(value);
+
+        if (it != EnumNames.end())
         {
-            EnumValues[ name ] = value;
-            EnumNames[ value ] = name;
+            outName = it->second;
+            bFound = true;
         }
 
-        // Add Enum Values
-        // 添加多个枚举值
-        void AddEnumValues( const EnumValuesMap& values )
-        {
-            for ( const auto& Pair : values )
-            {
-                AddEnumValue( Pair.first, Pair.second );
-            }
-        }
+        return bFound;
+    }
 
-        // Get Value by Name, true if found
-        // 通过名称获取枚举值, 返回true表示找到
-        bool GetEnumValueByName( const std::string& name, int64_t& outValue ) const
-        {
-            bool bFound = false;
-            auto it = EnumValues.find( name );
+    // Get all enum values
+    // 获取所有枚举值
+    const EnumValuesMap& GetAllEnumValues() const
+    {
+        return EnumValues;
+    }
 
-            if ( it != EnumValues.end() )
-            {
-                outValue = it->second;
-                bFound = true;
-            }
+    // Get all enum names
+    // 获取所有枚举名称
+    const EnumNamesMap& GetAllEnumNames() const
+    {
+        return EnumNames;
+    }
 
-            return bFound;
-        }
+private:
+    // Enum Values Map
+    EnumValuesMap EnumValues;
 
-        // Get Name by Value, true if found
-        // 通过值获取枚举名称, 返回true表示找到
-        bool GetEnumNameByValue( const int64_t value, std::string& outName ) const
-        {
-            bool bFound = false;
-            auto it = EnumNames.find( value );
-
-            if ( it != EnumNames.end() )
-            {
-                outName = it->second;
-                bFound = true;
-            }
-
-            return bFound;
-        }
-
-        // Get all enum values
-        // 获取所有枚举值
-        const EnumValuesMap& GetAllEnumValues() const
-        {
-            return EnumValues;
-        }
-
-        // Get all enum names
-        // 获取所有枚举名称
-        const EnumNamesMap& GetAllEnumNames() const
-        {
-            return EnumNames;
-        }
-
-    private:
-        // Enum Values Map
-        EnumValuesMap EnumValues;
-
-        // Enum Names Map
-        EnumNamesMap EnumNames;
-    };
+    // Enum Names Map
+    EnumNamesMap EnumNames;
+};
 
 } // namespace NekiraReflect
 
@@ -190,159 +198,151 @@ namespace NekiraReflect
 namespace NekiraReflect
 {
 
-    class MemberVarInfo : public TypeInfo
+class MemberVarInfo : public TypeInfo
+{
+public:
+    template <typename ClassType, typename VarType>
+    MemberVarInfo(const std::string& name, VarType ClassType::* memberPtr)
+        : TypeInfo(name, typeid(VarType), sizeof(VarType))
     {
-    public:
-        template <typename ClassType, typename VarType>
-        MemberVarInfo( const std::string& name, VarType ClassType::* memberPtr )
-            : TypeInfo( name, typeid( VarType ), sizeof( VarType ) )
-        {
-            Offset = ( size_t ) & ( ( ( ClassType* )0 )->*memberPtr );
-        }
+        Offset = (size_t)&(((ClassType*)0)->*memberPtr);
+    }
 
-        // Get Member Variable Value.
-        // 获取成员变量的值
-        template <typename VarType>
-        VarType& GetValue( void* Object ) const
-        {
-            VarType* MemberPtr = ( VarType* )( ( ( char* )Object ) + Offset );
+    // Get Member Variable Value.
+    // 获取成员变量的值
+    template <typename VarType>
+    VarType& GetValue(void* Object) const
+    {
+        VarType* MemberPtr = (VarType*)(((char*)Object) + Offset);
 
-            return *MemberPtr;
-        }
+        return *MemberPtr;
+    }
 
-        // Set Member Variable Value.
-        // 设置成员变量的值
-        template <typename VarType>
-        void SetValue( void* Object, const VarType& Value ) const
-        {
-            VarType* MemberPtr = ( VarType* )( ( ( char* )Object ) + Offset );
+    // Set Member Variable Value.
+    // 设置成员变量的值
+    template <typename VarType>
+    void SetValue(void* Object, const VarType& Value) const
+    {
+        VarType* MemberPtr = (VarType*)(((char*)Object) + Offset);
 
-            *MemberPtr = Value;
-        }
+        *MemberPtr = Value;
+    }
 
-    private:
-        // Member Variable Offset
-        // 成员变量的偏移量
-        size_t Offset;
-    };
+private:
+    // Member Variable Offset
+    // 成员变量的偏移量
+    size_t Offset;
+};
 
-}// namespace NekiraReflect
-
+} // namespace NekiraReflect
 
 
 
 // ========================================== 成员函数参数辅助 ========================================== //
 namespace NekiraReflect
 {
-    // Convert std::vector<std::any> to std::tuple<Args...>
+// Convert std::vector<std::any> to std::tuple<Args...>
 
-    template <typename... Args, size_t... Indices>
-    std::tuple<Args...> Anys_To_Tuple_Impl( const std::vector<std::any>& Params, std::index_sequence<Indices...> )
-    {
-        return std::make_tuple( std::any_cast< Args >( Params[ Indices ] )... );
-    }
-
-    template <typename... Args>
-    std::tuple<Args...> Anys_To_Tuple( const std::vector< std::any >& Params )
-    {
-        if ( Params.size() != sizeof...( Args ) )
-        {
-            throw std::runtime_error( "Parameter count mismatch" );
-        }
-
-        return Anys_To_Tuple_Impl<Args...>( Params, std::index_sequence_for<Args...>{} );
-    }
+template <typename... Args, size_t... Indices>
+std::tuple<Args...> Anys_To_Tuple_Impl(const std::vector<std::any>& Params, std::index_sequence<Indices...>)
+{
+    return std::make_tuple(std::any_cast<Args>(Params[Indices])...);
 }
+
+template <typename... Args>
+std::tuple<Args...> Anys_To_Tuple(const std::vector<std::any>& Params)
+{
+    if (Params.size() != sizeof...(Args))
+    {
+        throw std::runtime_error("Parameter count mismatch");
+    }
+
+    return Anys_To_Tuple_Impl<Args...>(Params, std::index_sequence_for<Args...>{});
+}
+} // namespace NekiraReflect
 
 
 
 // ========================================== 成员函数信息 ========================================== //
 namespace NekiraReflect
 {
-    class MemberFuncInfo : public TypeInfo
+class MemberFuncInfo : public TypeInfo
+{
+public:
+    // Member Function(non-const)
+    template <typename ClassType, typename RT, typename... Args>
+    MemberFuncInfo(const std::string& name, RT (ClassType::*funcPtr)(Args...))
+        : TypeInfo(name, typeid(funcPtr), sizeof(funcPtr))
     {
-    public:
-        // Member Function(non-const)
-        template <typename ClassType, typename RT, typename... Args>
-        MemberFuncInfo( const std::string& name, RT( ClassType::* funcPtr )( Args... ) )
-            : TypeInfo( name, typeid( funcPtr ), sizeof( funcPtr ) )
-        {
-            auto WrapperLambda = [ funcPtr ]( void* Object, const std::vector< std::any >& Params ) -> std::any
-                {
-                    ClassType* ObjectPtr = static_cast< ClassType* >( Object );
-                    if constexpr ( std::is_void_v<RT> )
-                    {
-                        auto VoidLambda = [ funcPtr, ObjectPtr ]( auto&&... args ) -> void
-                            {
-                                ( ObjectPtr->*funcPtr )( std::forward<Args>( args )... );
-                            };
-
-                        std::apply( VoidLambda, Anys_To_Tuple<Args...>( Params ) );
-
-                        return std::any();
-                    }
-                    else
-                    {
-                        auto AnyLambda = [ funcPtr, ObjectPtr ]( auto&&... args ) -> std::any
-                            {
-                                return ( ObjectPtr->*funcPtr )( std::forward<Args>( args )... );
-                            };
-
-                        return std::apply( AnyLambda, Anys_To_Tuple<Args...>( Params ) );
-                    }
+        auto WrapperLambda = [funcPtr](void* Object, const std::vector<std::any>& Params) -> std::any {
+            ClassType* ObjectPtr = static_cast<ClassType*>(Object);
+            if constexpr (std::is_void_v<RT>)
+            {
+                auto VoidLambda = [funcPtr, ObjectPtr](auto&&... args) -> void {
+                    (ObjectPtr->*funcPtr)(std::forward<Args>(args)...);
                 };
 
-            FuncWrapper = WrapperLambda;
-        }
+                std::apply(VoidLambda, Anys_To_Tuple<Args...>(Params));
 
-        // Member Function(const)
-        template <typename ClassType, typename RT, typename... Args>
-        MemberFuncInfo( const std::string& name, RT( ClassType::* funcPtr )( Args... ) const )
-            : TypeInfo( name, typeid( funcPtr ), sizeof( funcPtr ) )
-        {
-            auto WrapperLambda = [ funcPtr ]( void* Object, const std::vector< std::any >& Params ) -> std::any
-                {
-                    ClassType* ObjectPtr = static_cast< ClassType* >( Object );
-                    if constexpr ( std::is_void_v<RT> )
-                    {
-                        auto VoidLambda = [ funcPtr, ObjectPtr ]( auto&&... args ) -> void
-                            {
-                                ( ObjectPtr->*funcPtr )( std::forward<Args>( args )... );
-                            };
-
-                        std::apply( VoidLambda, Anys_To_Tuple<Args...>( Params ) );
-
-                        return std::any();
-                    }
-                    else
-                    {
-                        auto AnyLambda = [ funcPtr, ObjectPtr ]( auto&&... args ) -> std::any
-                            {
-                                return ( ObjectPtr->*funcPtr )( std::forward<Args>( args )... );
-                            };
-
-                        return std::apply( AnyLambda, Anys_To_Tuple<Args...>( Params ) );
-                    }
+                return std::any();
+            }
+            else
+            {
+                auto AnyLambda = [funcPtr, ObjectPtr](auto&&... args) -> std::any {
+                    return (ObjectPtr->*funcPtr)(std::forward<Args>(args)...);
                 };
 
-            FuncWrapper = WrapperLambda;
-        }
+                return std::apply(AnyLambda, Anys_To_Tuple<Args...>(Params));
+            }
+        };
+
+        FuncWrapper = WrapperLambda;
+    }
+
+    // Member Function(const)
+    template <typename ClassType, typename RT, typename... Args>
+    MemberFuncInfo(const std::string& name, RT (ClassType::*funcPtr)(Args...) const)
+        : TypeInfo(name, typeid(funcPtr), sizeof(funcPtr))
+    {
+        auto WrapperLambda = [funcPtr](void* Object, const std::vector<std::any>& Params) -> std::any {
+            ClassType* ObjectPtr = static_cast<ClassType*>(Object);
+            if constexpr (std::is_void_v<RT>)
+            {
+                auto VoidLambda = [funcPtr, ObjectPtr](auto&&... args) -> void {
+                    (ObjectPtr->*funcPtr)(std::forward<Args>(args)...);
+                };
+
+                std::apply(VoidLambda, Anys_To_Tuple<Args...>(Params));
+
+                return std::any();
+            }
+            else
+            {
+                auto AnyLambda = [funcPtr, ObjectPtr](auto&&... args) -> std::any {
+                    return (ObjectPtr->*funcPtr)(std::forward<Args>(args)...);
+                };
+
+                return std::apply(AnyLambda, Anys_To_Tuple<Args...>(Params));
+            }
+        };
+
+        FuncWrapper = WrapperLambda;
+    }
 
 
-        // Invoke Function
-        template <typename... Args>
-        std::any Invoke( void* Object, Args&&... args )
-        {
-            std::vector<std::any> Params{ std::any( std::forward<Args>( args ) ) ... };
-            return FuncWrapper.Invoke( Object, Params );
-        }
+    // Invoke Function
+    template <typename... Args>
+    std::any Invoke(void* Object, Args&&... args)
+    {
+        std::vector<std::any> Params{std::any(std::forward<Args>(args))...};
+        return FuncWrapper.Invoke(Object, Params);
+    }
 
-    private:
-        MemberFuncWrapper < std::any( void*, const std::vector< std::any >& ) > FuncWrapper;
-    };
+private:
+    MemberFuncWrapper<std::any(void*, const std::vector<std::any>&)> FuncWrapper;
+};
 
 } // namespace NekiraReflect
-
 
 
 
@@ -350,112 +350,110 @@ namespace NekiraReflect
 namespace NekiraReflect
 {
 
-    class ClassTypeInfo : public TypeInfo
+class ClassTypeInfo : public TypeInfo
+{
+
+
+public:
+    ClassTypeInfo(const std::string& name, std::type_index typeIndex) : TypeInfo(name, typeIndex, 0)
+    {}
+
+    // Get Variable Value
+    template <typename VarType>
+    VarType GetVariableValue(void* object, const std::string& name) const
     {
+        auto varInfo = GetVariable(name);
+        return varInfo ? varInfo->GetValue<VarType>(object) : VarType{};
+    }
 
-
-    public:
-        ClassTypeInfo( const std::string& name, std::type_index typeIndex )
-            : TypeInfo( name, typeIndex, 0 )
+    // Set Variblae Value
+    template <typename VarType>
+    void SetVariableValue(void* object, const std::string& name, const VarType& value)
+    {
+        auto varInfo = GetVariable(name);
+        if (varInfo)
         {
+            varInfo->SetValue(object, value);
+        }
+    }
+
+    // Add a member variable
+    void AddVariable(std::unique_ptr<MemberVarInfo> varInfo)
+    {
+        const auto name = varInfo->GetName();
+        Variables[name] = std::move(varInfo);
+    }
+
+
+    // Add a member function
+    void AddFunction(std::unique_ptr<MemberFuncInfo> funcInfo)
+    {
+        const auto name = funcInfo->GetName();
+        Functions[name] = std::move(funcInfo);
+    }
+
+    // Remove a member variable by name
+    void RemoveVariable(const std::string& name)
+    {
+        Variables.erase(name);
+    }
+
+    // Remove a member function by name
+    void RemoveFunction(const std::string& name)
+    {
+        Functions.erase(name);
+    }
+
+    // Get a member variable by name
+    MemberVarInfo* GetVariable(const std::string& name) const
+    {
+        MemberVarInfo* Result = nullptr;
+
+        auto it = Variables.find(name);
+
+        if (it != Variables.end())
+        {
+            Result = it->second.get();
         }
 
-        // Get Variable Value
-        template <typename VarType>
-        VarType GetVariableValue( void* object, const std::string& name ) const
+        return Result;
+    }
+
+    // Get a member function by name
+    MemberFuncInfo* GetFunction(const std::string& name) const
+    {
+        MemberFuncInfo* Result = nullptr;
+
+        auto it = Functions.find(name);
+
+        if (it != Functions.end())
         {
-            auto varInfo = GetVariable( name );
-            return varInfo ? varInfo->GetValue<VarType>( object ) : VarType{};
+            Result = it->second.get();
         }
 
-        // Set Variblae Value
-        template <typename VarType>
-        void SetVariableValue( void* object, const std::string& name, const VarType& value )
-        {
-            auto varInfo = GetVariable( name );
-            if ( varInfo )
-            {
-                varInfo->SetValue( object, value );
-            }
-        }
+        return Result;
+    }
 
-        // Add a member variable
-        void AddVariable( std::unique_ptr<MemberVarInfo> varInfo )
-        {
-            const auto name = varInfo->GetName();
-            Variables[ name ] = std::move( varInfo );
-        }
+    // Get all member variables
+    const VariableMap& GetAllVariables() const
+    {
+        return Variables;
+    }
 
-
-        // Add a member function
-        void AddFunction( std::unique_ptr<MemberFuncInfo> funcInfo )
-        {
-            const auto name = funcInfo->GetName();
-            Functions[ name ] = std::move( funcInfo );
-        }
-
-        // Remove a member variable by name
-        void RemoveVariable( const std::string& name )
-        {
-            Variables.erase( name );
-        }
-
-        // Remove a member function by name
-        void RemoveFunction( const std::string& name )
-        {
-            Functions.erase( name );
-        }
-
-        // Get a member variable by name
-        MemberVarInfo* GetVariable( const std::string& name ) const
-        {
-            MemberVarInfo* Result = nullptr;
-
-            auto it = Variables.find( name );
-
-            if ( it != Variables.end() )
-            {
-                Result = it->second.get();
-            }
-
-            return Result;
-        }
-
-        // Get a member function by name
-        MemberFuncInfo* GetFunction( const std::string& name ) const
-        {
-            MemberFuncInfo* Result = nullptr;
-
-            auto it = Functions.find( name );
-
-            if ( it != Functions.end() )
-            {
-                Result = it->second.get();
-            }
-
-            return Result;
-        }
-
-        // Get all member variables
-        const VariableMap& GetAllVariables() const
-        {
-            return Variables;
-        }
-
-        // Get all member functions
-        const FunctionMap& GetAllFunctions() const
-        {
-            return Functions;
-        }
+    // Get all member functions
+    const FunctionMap& GetAllFunctions() const
+    {
+        return Functions;
+    }
 
 
 
-    private:
-        // Member Variables
-        VariableMap Variables;
+private:
+    // Member Variables
+    VariableMap Variables;
 
-        // Member Functions
-        FunctionMap Functions;
-    };
+    // Member Functions
+    FunctionMap Functions;
+};
 
 } // namespace NekiraReflect

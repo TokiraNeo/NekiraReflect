@@ -29,26 +29,26 @@
 
 #ifdef __REFLECT_GEN_ENABLE__
 
-    #define NCLASS(...) __attribute__((annotate("NClass", #__VA_ARGS__)))
+#define NCLASS(...) __attribute__((annotate("NClass", #__VA_ARGS__)))
 
-    #define NSTRUCT(...) __attribute__((annotate("NStruct", #__VA_ARGS__)))
+#define NSTRUCT(...) __attribute__((annotate("NStruct", #__VA_ARGS__)))
 
-    #define NENUM(...) __attribute__((annotate("NEnum", #__VA_ARGS__)))
+#define NENUM(...) __attribute__((annotate("NEnum", #__VA_ARGS__)))
 
-    #define NPROPERTY(...) __attribute__((annotate("NProperty", #__VA_ARGS__))) 
+#define NPROPERTY(...) __attribute__((annotate("NProperty", #__VA_ARGS__)))
 
-    #define NFUNCTION(...) __attribute__((annotate("NFunction", #__VA_ARGS__)))
+#define NFUNCTION(...) __attribute__((annotate("NFunction", #__VA_ARGS__)))
 
-#else
+#else // __REFLECT_GEN_ENABLE__
 
-    #define NCLASS(...) 
+#define NCLASS(...)
 
-    #define NSTRUCT(...)
+#define NSTRUCT(...)
 
-    #define NENUM(...) 
+#define NENUM(...)
 
-    #define NPROPERTY(...)
+#define NPROPERTY(...)
 
-    #define NFUNCTION(...)
+#define NFUNCTION(...)
 
-#endif // REFLECT_GENERATION_ENABLE
+#endif // __REFLECT_GEN_ENABLE__

@@ -1,0 +1,47 @@
+---
+# 基础风格：LLVM（可改为 Google/Mozilla/GNU）
+BasedOnStyle: LLVM
+
+# 核心配置：强制所有花括号换行
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass:      true                                 # 类后换行
+  AfterStruct:     true                                 # 结构体后换行
+  AfterUnion:      true                                 # 联合体后换行
+  AfterFunction:   true                                 # 函数后换行
+  AfterControlStatement: Always                         # if/for/while等后换行
+  AfterEnum:       true                                 # 枚举后换行
+  AfterNamespace:  true                                 # 命名空间后换行
+  AfterExternBlock: true                                # extern块后换行
+  BeforeElse:      true                                 # else前换行
+  BeforeCatch:     true                                 # catch前换行
+  SplitEmptyFunction: false                             # 空函数不合并
+  SplitEmptyRecord: false                               # 空类不合并
+
+# 缩进与对齐
+IndentWidth: 4                                          # 4空格缩进
+TabWidth: 4
+UseTab: Never                                           # 只用空格
+AccessModifierOffset: -4                                # 访问修饰符对齐类名
+AlignAfterOpenBracket: Align                            # 括号内对齐
+AlignConsecutiveDeclarations: true                      # 连续声明对齐
+
+# 函数与语句控制
+AllowShortFunctionsOnASingleLine: None                  # 禁止短函数单行
+AllowShortIfStatementsOnASingleLine: false              # 禁止短if单行
+AllowShortLoopsOnASingleLine: false                     # 禁止短循环单行
+AlwaysBreakTemplateDeclarations: Yes                    # 模板声明换行
+
+# 空格与空行
+SpaceBeforeParens: ControlStatements                    # 控制语句加空格
+MaxEmptyLinesToKeep: 3                                  # 最多保留3个空行
+KeepEmptyLinesAtTheStartOfBlocks: true                  # 保留块首空行
+
+# 指针与引用
+PointerAlignment: Left                                  # 指针靠左: int* ptr
+ReferenceAlignment: Left                                # 引用靠左：int& ref;
+DerivePointerAlignment: false                           # 不自动推导
+
+# 其他重要选项
+ColumnLimit: 120                                        # 行宽限制
+FixNamespaceComments: true                              # 修复命名空间注释

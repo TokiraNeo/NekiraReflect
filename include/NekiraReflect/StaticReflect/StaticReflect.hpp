@@ -74,6 +74,5 @@
 #ifndef STATIC_REFLECT_END
 #define STATIC_REFLECT_END()                                                                                           \
     }                                                                                                                  \
-    ;                                                                                                                  \
     ;
 #endif

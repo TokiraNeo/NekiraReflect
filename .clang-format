@@ -2,7 +2,7 @@
 # 基础风格：LLVM（可改为 Google/Mozilla/GNU）
 BasedOnStyle: LLVM
 
-# 核心配置：强制所有花括号换行
+# 花括号换行
 BreakBeforeBraces: Custom
 BraceWrapping:
   AfterClass:      true                                 # 类后换行
@@ -17,6 +17,7 @@ BraceWrapping:
   BeforeCatch:     true                                 # catch前换行
   SplitEmptyFunction: false                             # 空函数不合并
   SplitEmptyRecord: false                               # 空类不合并
+  BeforeLambdaBody: true                                # Lambda 体前换行
 
 # 缩进与对齐
 IndentWidth: 4                                          # 4空格缩进
@@ -31,6 +32,12 @@ AllowShortFunctionsOnASingleLine: None                  # 禁止短函数单行
 AllowShortIfStatementsOnASingleLine: false              # 禁止短if单行
 AllowShortLoopsOnASingleLine: false                     # 禁止短循环单行
 AlwaysBreakTemplateDeclarations: Yes                    # 模板声明换行
+BreakBeforeBinaryOperators: NonAssignment               # 运算符前换行
+AllowAllParametersOfDeclarationOnNextLine: false        # 避免长参数挤在一行
+
+# Lambda 格式化控制
+AllowShortLambdasOnASingleLine: All                     # 允许简单 Lambda 单行
+LambdaBodyIndentation: Signature                        # Lambda 体缩进对齐签名
 
 # 空格与空行
 SpaceBeforeParens: ControlStatements                    # 控制语句加空格

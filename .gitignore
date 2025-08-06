@@ -45,3 +45,6 @@ CMakeUserPresets.json
 
 # 忽略install测试文件
 install/
+
+# 忽略Test文件
+Test/

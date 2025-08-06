@@ -1,8 +1,10 @@
+# 语法分析
 CompileFlags:
-    Add: [-std=c++20]
-    Remove: [-fno-keep-inline-dllexport]
-    Compiler: clang++
+  Add: [-std=c++20]
+  Remove: [-fno-keep-inline-dllexport]
+  Compiler: clang++
 
+# 代码补全
 Completion:
-    ArgumentLists: Delimiters
+  ArgumentLists: Delimiters # 函数补全：只补全函数名和括号
 

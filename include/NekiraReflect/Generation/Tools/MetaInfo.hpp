@@ -26,7 +26,6 @@
 #pragma once
 
 #include <string>
-
 #include <vector>
 
 
@@ -47,6 +46,8 @@ struct MemberVarMetaInfo
 {
     // 成员变量的名称
     std::string Name;
+
+    std::string QualifiedName;
 };
 
 // 成员函数的元信息
@@ -65,9 +66,6 @@ struct ClassMetaInfo
     std::string Name;
 
     std::string QualifiedName;
-
-    // 命名空间名称
-    std::string Namespace;
 
     // 类的成员变量
     std::vector<MemberVarMetaInfo> MemberVars;

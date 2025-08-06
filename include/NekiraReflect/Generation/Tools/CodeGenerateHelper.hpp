@@ -34,6 +34,7 @@
 
 namespace NekiraReflect
 {
+
 class CodeGenerateHelper final
 {
 public:

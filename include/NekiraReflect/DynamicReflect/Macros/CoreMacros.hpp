@@ -27,3 +27,30 @@
 #ifndef NEKIRA_REFLECT_BODY
 #define NEKIRA_REFLECT_BODY(ClassName) friend class NekiraReflect::ReflectionAccessor<ClassName>;
 #endif // NEKIRA_REFLECT_BODY
+
+
+#ifdef __REFLECT_GEN_ENABLE__
+
+#define NCLASS(...) __attribute__((annotate("NClass"))) __attribute__((annotate(#__VA_ARGS__)))
+
+#define NSTRUCT(...) __attribute__((annotate("NStruct"))) __attribute__((annotate(#__VA_ARGS__)))
+
+#define NENUM(...) __attribute__((annotate("NEnum"))) __attribute__((annotate(#__VA_ARGS__)))
+
+#define NPROPERTY(...) __attribute__((annotate("NProperty"))) __attribute__((annotate(#__VA_ARGS__)))
+
+#define NFUNCTION(...) __attribute__((annotate("NFunction"))) __attribute__((annotate(#__VA_ARGS__)))
+
+#else // __REFLECT_GEN_ENABLE__
+
+#define NCLASS(...)
+
+#define NSTRUCT(...)
+
+#define NENUM(...)
+
+#define NPROPERTY(...)
+
+#define NFUNCTION(...)
+
+#endif // __REFLECT_GEN_ENABLE__

@@ -24,14 +24,14 @@
 
 
 #pragma once
-
+#include <string>
+#include <vector>
 
 namespace NekiraReflect
 {
-
-class CodeScanner
+struct ReflectGenSettings
 {
-public:
+    std::vector<std::string> IncludePaths; // 头文件搜索路径
+    std::vector<std::string> Definitions;  // 预处理宏定义
 };
-
 } // namespace NekiraReflect

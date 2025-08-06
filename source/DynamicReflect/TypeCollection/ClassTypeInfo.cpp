@@ -22,29 +22,53 @@
  * SOFTWARE.
  */
 
-
-#pragma once
-
-#include <Tools/CodeUtilities.hpp>
-
-
+#include <TypeCollection/CoreType.hpp>
 
 namespace NekiraReflect
 {
-class CodeGenerator final
-{
-public:
-    // 生成枚举、类、结构体的反射代码
-    // OutputFile: 输出文件名(不包含后缀)
-    static void GenerateCode(const std::string& OutputFile, const std::vector<EnumMetaInfo>& Enums,
-                             const std::vector<ClassMetaInfo>& Classes);
-};
 
-// 用于扫描抽象语法树，查找反射相关Attribute
-class CodeScanner
+// Add a member variable
+void ClassTypeInfo::AddVariable(std::unique_ptr<MemberVarInfo> varInfo)
 {
-public:
-    static void ScanCode(const std::string& InputFile, VisitorData& OutData);
-};
+    const auto name = varInfo->GetName();
+    Variables[name] = std::move(varInfo);
+}
+
+// Add a member function
+void ClassTypeInfo::AddFunction(std::unique_ptr<MemberFuncInfo> funcInfo)
+{
+    const auto name = funcInfo->GetName();
+    Functions[name] = std::move(funcInfo);
+}
+
+// Get a member variable by name
+MemberVarInfo* ClassTypeInfo::GetVariable(const std::string& name) const
+{
+    MemberVarInfo* Result = nullptr;
+
+    auto it = Variables.find(name);
+
+    if (it != Variables.end())
+    {
+        Result = it->second.get();
+    }
+
+    return Result;
+}
+
+// Get a member function by name
+MemberFuncInfo* ClassTypeInfo::GetFunction(const std::string& name) const
+{
+    MemberFuncInfo* Result = nullptr;
+
+    auto it = Functions.find(name);
+
+    if (it != Functions.end())
+    {
+        Result = it->second.get();
+    }
+
+    return Result;
+}
 
 } // namespace NekiraReflect

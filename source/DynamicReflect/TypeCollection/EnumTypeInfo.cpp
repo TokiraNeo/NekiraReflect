@@ -22,29 +22,56 @@
  * SOFTWARE.
  */
 
-
-#pragma once
-
-#include <Tools/CodeUtilities.hpp>
-
+#include <TypeCollection/CoreType.hpp>
 
 
 namespace NekiraReflect
 {
-class CodeGenerator final
-{
-public:
-    // 生成枚举、类、结构体的反射代码
-    // OutputFile: 输出文件名(不包含后缀)
-    static void GenerateCode(const std::string& OutputFile, const std::vector<EnumMetaInfo>& Enums,
-                             const std::vector<ClassMetaInfo>& Classes);
-};
 
-// 用于扫描抽象语法树，查找反射相关Attribute
-class CodeScanner
+// Add enum value by name and corresponding value
+void EnumTypeInfo::AddEnumValue(const std::string& name, int64_t value)
 {
-public:
-    static void ScanCode(const std::string& InputFile, VisitorData& OutData);
-};
+    EnumValues[name] = value;
+    EnumNames[value] = name;
+}
+
+// Add multiple enum values
+void EnumTypeInfo::AddEnumValues(const EnumValuesMap& values)
+{
+    for (const auto& Pair : values)
+    {
+        AddEnumValue(Pair.first, Pair.second);
+    }
+}
+
+// Get enum value by name, return true if found
+bool EnumTypeInfo::GetEnumValueByName(const std::string& name, int64_t& outValue) const
+{
+    bool bFound = false;
+    auto it = EnumValues.find(name);
+
+    if (it != EnumValues.end())
+    {
+        outValue = it->second;
+        bFound = true;
+    }
+
+    return bFound;
+}
+
+// Get enum name by value, return true if found
+bool EnumTypeInfo::GetEnumNameByValue(const int64_t value, std::string& outName) const
+{
+    bool bFound = false;
+    auto it = EnumNames.find(value);
+
+    if (it != EnumNames.end())
+    {
+        outName = it->second;
+        bFound = true;
+    }
+
+    return bFound;
+}
 
 } // namespace NekiraReflect

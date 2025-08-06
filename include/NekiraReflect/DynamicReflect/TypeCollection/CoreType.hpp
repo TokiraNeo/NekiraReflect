@@ -78,22 +78,22 @@ public:
         : Name(name), TypeIndex(typeIndex), Size(size)
     {}
 
-    const std::string GetName() const
+    inline const std::string GetName() const
     {
         return Name;
     }
 
-    const std::type_index GetTypeIndex() const
+    inline const std::type_index GetTypeIndex() const
     {
         return TypeIndex;
     }
 
-    const size_t GetSize() const
+    inline const size_t GetSize() const
     {
         return Size;
     }
 
-    void SetSize(size_t size)
+    inline void SetSize(size_t size)
     {
         Size = size;
     }
@@ -118,66 +118,26 @@ public:
     EnumTypeInfo(const std::string& name, std::type_index typeIndex) : TypeInfo(name, typeIndex, 0)
     {}
 
-    // Add an enum value with its name
-    // 通过枚举名称和对于的值添加枚举对
-    void AddEnumValue(const std::string& name, int64_t value)
-    {
-        EnumValues[name] = value;
-        EnumNames[value] = name;
-    }
+    // Add enum value by name and corresponding value
+    void AddEnumValue(const std::string& name, int64_t value);
 
-    // Add Enum Values
-    // 添加多个枚举值
-    void AddEnumValues(const EnumValuesMap& values)
-    {
-        for (const auto& Pair : values)
-        {
-            AddEnumValue(Pair.first, Pair.second);
-        }
-    }
+    // Add multiple enum values
+    void AddEnumValues(const EnumValuesMap& values);
 
-    // Get Value by Name, true if found
-    // 通过名称获取枚举值, 返回true表示找到
-    bool GetEnumValueByName(const std::string& name, int64_t& outValue) const
-    {
-        bool bFound = false;
-        auto it = EnumValues.find(name);
+    // Get enum value by name, return true if found
+    bool GetEnumValueByName(const std::string& name, int64_t& outValue) const;
 
-        if (it != EnumValues.end())
-        {
-            outValue = it->second;
-            bFound = true;
-        }
-
-        return bFound;
-    }
-
-    // Get Name by Value, true if found
-    // 通过值获取枚举名称, 返回true表示找到
-    bool GetEnumNameByValue(const int64_t value, std::string& outName) const
-    {
-        bool bFound = false;
-        auto it = EnumNames.find(value);
-
-        if (it != EnumNames.end())
-        {
-            outName = it->second;
-            bFound = true;
-        }
-
-        return bFound;
-    }
+    // Get enum name by value, return true if found
+    bool GetEnumNameByValue(const int64_t value, std::string& outName) const;
 
     // Get all enum values
-    // 获取所有枚举值
-    const EnumValuesMap& GetAllEnumValues() const
+    inline const EnumValuesMap& GetAllEnumValues() const
     {
         return EnumValues;
     }
 
     // Get all enum names
-    // 获取所有枚举名称
-    const EnumNamesMap& GetAllEnumNames() const
+    inline const EnumNamesMap& GetAllEnumNames() const
     {
         return EnumNames;
     }
@@ -209,7 +169,6 @@ public:
     }
 
     // Get Member Variable Value.
-    // 获取成员变量的值
     template <typename VarType>
     VarType& GetValue(void* Object) const
     {
@@ -219,7 +178,6 @@ public:
     }
 
     // Set Member Variable Value.
-    // 设置成员变量的值
     template <typename VarType>
     void SetValue(void* Object, const VarType& Value) const
     {
@@ -230,7 +188,6 @@ public:
 
 private:
     // Member Variable Offset
-    // 成员变量的偏移量
     size_t Offset;
 };
 
@@ -274,13 +231,13 @@ public:
     MemberFuncInfo(const std::string& name, RT (ClassType::*funcPtr)(Args...))
         : TypeInfo(name, typeid(funcPtr), sizeof(funcPtr))
     {
-        auto WrapperLambda = [funcPtr](void* Object, const std::vector<std::any>& Params) -> std::any {
+        auto WrapperLambda = [funcPtr](void* Object, const std::vector<std::any>& Params) -> std::any
+        {
             ClassType* ObjectPtr = static_cast<ClassType*>(Object);
             if constexpr (std::is_void_v<RT>)
             {
-                auto VoidLambda = [funcPtr, ObjectPtr](auto&&... args) -> void {
-                    (ObjectPtr->*funcPtr)(std::forward<Args>(args)...);
-                };
+                auto VoidLambda = [funcPtr, ObjectPtr](auto&&... args) -> void
+                { (ObjectPtr->*funcPtr)(std::forward<Args>(args)...); };
 
                 std::apply(VoidLambda, Anys_To_Tuple<Args...>(Params));
 
@@ -288,9 +245,8 @@ public:
             }
             else
             {
-                auto AnyLambda = [funcPtr, ObjectPtr](auto&&... args) -> std::any {
-                    return (ObjectPtr->*funcPtr)(std::forward<Args>(args)...);
-                };
+                auto AnyLambda = [funcPtr, ObjectPtr](auto&&... args) -> std::any
+                { return (ObjectPtr->*funcPtr)(std::forward<Args>(args)...); };
 
                 return std::apply(AnyLambda, Anys_To_Tuple<Args...>(Params));
             }
@@ -304,13 +260,13 @@ public:
     MemberFuncInfo(const std::string& name, RT (ClassType::*funcPtr)(Args...) const)
         : TypeInfo(name, typeid(funcPtr), sizeof(funcPtr))
     {
-        auto WrapperLambda = [funcPtr](void* Object, const std::vector<std::any>& Params) -> std::any {
+        auto WrapperLambda = [funcPtr](void* Object, const std::vector<std::any>& Params) -> std::any
+        {
             ClassType* ObjectPtr = static_cast<ClassType*>(Object);
             if constexpr (std::is_void_v<RT>)
             {
-                auto VoidLambda = [funcPtr, ObjectPtr](auto&&... args) -> void {
-                    (ObjectPtr->*funcPtr)(std::forward<Args>(args)...);
-                };
+                auto VoidLambda = [funcPtr, ObjectPtr](auto&&... args) -> void
+                { (ObjectPtr->*funcPtr)(std::forward<Args>(args)...); };
 
                 std::apply(VoidLambda, Anys_To_Tuple<Args...>(Params));
 
@@ -318,9 +274,8 @@ public:
             }
             else
             {
-                auto AnyLambda = [funcPtr, ObjectPtr](auto&&... args) -> std::any {
-                    return (ObjectPtr->*funcPtr)(std::forward<Args>(args)...);
-                };
+                auto AnyLambda = [funcPtr, ObjectPtr](auto&&... args) -> std::any
+                { return (ObjectPtr->*funcPtr)(std::forward<Args>(args)...); };
 
                 return std::apply(AnyLambda, Anys_To_Tuple<Args...>(Params));
             }
@@ -378,74 +333,40 @@ public:
     }
 
     // Add a member variable
-    void AddVariable(std::unique_ptr<MemberVarInfo> varInfo)
-    {
-        const auto name = varInfo->GetName();
-        Variables[name] = std::move(varInfo);
-    }
-
+    void AddVariable(std::unique_ptr<MemberVarInfo> varInfo);
 
     // Add a member function
-    void AddFunction(std::unique_ptr<MemberFuncInfo> funcInfo)
-    {
-        const auto name = funcInfo->GetName();
-        Functions[name] = std::move(funcInfo);
-    }
+    void AddFunction(std::unique_ptr<MemberFuncInfo> funcInfo);
+
+    // Get a member variable by name
+    MemberVarInfo* GetVariable(const std::string& name) const;
+
+    // Get a member function by name
+    MemberFuncInfo* GetFunction(const std::string& name) const;
 
     // Remove a member variable by name
-    void RemoveVariable(const std::string& name)
+    inline void RemoveVariable(const std::string& name)
     {
         Variables.erase(name);
     }
 
     // Remove a member function by name
-    void RemoveFunction(const std::string& name)
+    inline void RemoveFunction(const std::string& name)
     {
         Functions.erase(name);
     }
 
-    // Get a member variable by name
-    MemberVarInfo* GetVariable(const std::string& name) const
-    {
-        MemberVarInfo* Result = nullptr;
-
-        auto it = Variables.find(name);
-
-        if (it != Variables.end())
-        {
-            Result = it->second.get();
-        }
-
-        return Result;
-    }
-
-    // Get a member function by name
-    MemberFuncInfo* GetFunction(const std::string& name) const
-    {
-        MemberFuncInfo* Result = nullptr;
-
-        auto it = Functions.find(name);
-
-        if (it != Functions.end())
-        {
-            Result = it->second.get();
-        }
-
-        return Result;
-    }
-
     // Get all member variables
-    const VariableMap& GetAllVariables() const
+    inline const VariableMap& GetAllVariables() const
     {
         return Variables;
     }
 
     // Get all member functions
-    const FunctionMap& GetAllFunctions() const
+    inline const FunctionMap& GetAllFunctions() const
     {
         return Functions;
     }
-
 
 
 private:

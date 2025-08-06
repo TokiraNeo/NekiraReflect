@@ -28,6 +28,7 @@
 
 #include <TypeCollection/CoreType.hpp>
 
+
 // ======================================= 动态反射全局注册表 ======================================= //
 namespace NekiraReflect
 {
@@ -38,52 +39,33 @@ class ReflectionRegistry
     using ClassInfoMap = std::unordered_map<std::type_index, std::unique_ptr<ClassTypeInfo>>;
 
 public:
-    static ReflectionRegistry& Get()
+    // 获取单例实例
+    static inline ReflectionRegistry& Get()
     {
         static ReflectionRegistry Instance;
         return Instance;
     }
 
     // Register Enum Info
-    void RegisterEnum(std::unique_ptr<EnumTypeInfo> EnumInfo)
-    {
-        std::type_index TypeIndex = EnumInfo->GetTypeIndex();
-        EnumInfos[TypeIndex] = std::move(EnumInfo);
-    }
+    void RegisterEnum(std::unique_ptr<EnumTypeInfo> EnumInfo);
 
     // Register Class Info
-    void RegisterClass(std::unique_ptr<ClassTypeInfo> ClassInfo)
-    {
-        std::type_index TypeIndex = ClassInfo->GetTypeIndex();
-        ClassInfos[TypeIndex] = std::move(ClassInfo);
-    }
+    void RegisterClass(std::unique_ptr<ClassTypeInfo> ClassInfo);
 
     // Remove Enum Info
-    void RemoveEnum(std::type_index TypeIndex)
+    inline void RemoveEnum(std::type_index TypeIndex)
     {
         EnumInfos.erase(TypeIndex);
     }
 
     // Remove Class Info
-    void RemoveClass(std::type_index TypeIndex)
+    inline void RemoveClass(std::type_index TypeIndex)
     {
         ClassInfos.erase(TypeIndex);
     }
 
     // Get Enum Info by TypeIndex
-    EnumTypeInfo* GetEnumInfo(std::type_index TypeIndex) const
-    {
-        EnumTypeInfo* Result = nullptr;
-
-        auto it = EnumInfos.find(TypeIndex);
-
-        if (it != EnumInfos.end())
-        {
-            Result = it->second.get();
-        }
-
-        return Result;
-    }
+    EnumTypeInfo* GetEnumInfo(std::type_index TypeIndex) const;
 
     // Get Enum Info by Enum Type
     template <typename EnumType>
@@ -95,36 +77,10 @@ public:
     }
 
     // Get Enum Info by Name(Would be slower)
-    EnumTypeInfo* GetEnumInfoByName(const std::string& Name)
-    {
-        EnumTypeInfo* Result = nullptr;
-
-        for (const auto& Pair : EnumInfos)
-        {
-            if (Pair.second->GetName() == Name)
-            {
-                Result = Pair.second.get();
-                break;
-            }
-        }
-
-        return Result;
-    }
+    EnumTypeInfo* GetEnumInfoByName(const std::string& Name);
 
     // Get Class Info by TypeIndex
-    ClassTypeInfo* GetClassInfo(std::type_index TypeIndex) const
-    {
-        ClassTypeInfo* Result = nullptr;
-
-        auto it = ClassInfos.find(TypeIndex);
-
-        if (it != ClassInfos.end())
-        {
-            Result = it->second.get();
-        }
-
-        return Result;
-    }
+    ClassTypeInfo* GetClassInfo(std::type_index TypeIndex) const;
 
     // Get Class Info by Class Type
     template <typename ClassType>
@@ -136,21 +92,7 @@ public:
     }
 
     // Get Class Info by Name(Would be slower)
-    ClassTypeInfo* GetClassInfoByName(const std::string& Name) const
-    {
-        ClassTypeInfo* Result = nullptr;
-
-        for (const auto& Pair : ClassInfos)
-        {
-            if (Pair.second->GetName() == Name)
-            {
-                Result = Pair.second.get();
-                break;
-            }
-        }
-
-        return Result;
-    }
+    ClassTypeInfo* GetClassInfoByName(const std::string& Name) const;
 
 private:
     ReflectionRegistry() = default;

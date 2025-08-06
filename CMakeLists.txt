@@ -34,7 +34,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # 添加头文件
 file(GLOB_RECURSE CORE_HEADERS
     "include/NekiraReflect/*.hpp"
-    "include/NekiraReflect/*.h"
 )
 
 # 收集源文件

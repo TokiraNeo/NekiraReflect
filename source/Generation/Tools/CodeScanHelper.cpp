@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+#include "clang-c/CXString.h"
+#include "clang-c/Index.h"
 #include <Tools/CodeUtilities.hpp>
 #include <iostream>
 
@@ -33,7 +35,7 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
 {
     CXIndex Index = clang_createIndex(0, 0);
 
-    const char*        ArgsStr[] = {"-std=c++20", "-D__REFLECT_GEN_ENABLE__"};
+    const char*        ArgsStr[] = {"-std=c++20", "-D__REFLECT_GEN_ENABLE__", "-fsyntax-only"};
     int                ArgsNum = sizeof(ArgsStr) / sizeof(ArgsStr[0]);
     const char* const* ArgsPtr = ArgsStr;
 
@@ -61,13 +63,13 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
 }
 
 // AST遍历回调函数
-CXChildVisitResult CodeScanHelper::Visitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData)
+CXChildVisitResult CodeScanHelper::Visitor(CXCursor Current, CXCursor Root, CXClientData ClientData)
 {
     VisitorData* Data = static_cast<VisitorData*>(ClientData);
-    CXCursorKind Kind = clang_getCursorKind(Cursor);
+    CXCursorKind Kind = clang_getCursorKind(Current);
 
     // 仅处理主文件中的节点
-    CXSourceLocation CursorLocation = clang_getCursorLocation(Cursor);
+    CXSourceLocation CursorLocation = clang_getCursorLocation(Current);
     if (clang_Location_isFromMainFile(CursorLocation) == 0)
     {
         return CXChildVisit_Continue;
@@ -78,19 +80,19 @@ CXChildVisitResult CodeScanHelper::Visitor(CXCursor Cursor, CXCursor Parent, CXC
     case CXCursor_EnumDecl:
         // 处理枚举声明
         // [INFO] 检查是否有NENUM属性，并提取枚举值
-        ProcessEnumDecl(Cursor, Data);
+        ProcessEnumDecl(Current, Data);
         break;
 
     case CXCursor_StructDecl:
         // 处理结构体声明
         // [INFO] 检查是否有NSTRUCT属性，并提取成员变量和函数
-        ProcessStructDecl(Cursor, Data);
+        ProcessStructDecl(Current, Data);
         break;
 
     case CXCursor_ClassDecl:
         // 处理类声明
         // [INFO] 检查是否有NCLASS属性，并提取成员变量和函数
-        ProcessClassDecl(Cursor, Data);
+        ProcessClassDecl(Current, Data);
         break;
 
     default:
@@ -106,6 +108,8 @@ void CodeScanHelper::ProcessEnumDecl(CXCursor Cursor, VisitorData* Data)
 {
     if (!CheckAttribute(Cursor, "NENUM"))
     {
+        // [TODO] Remove This.
+        std::cout << "Skip Enum: " << clang_getCString(clang_getCursorSpelling(Cursor)) << '\n';
         return;
     }
 
@@ -121,6 +125,9 @@ void CodeScanHelper::ProcessEnumDecl(CXCursor Cursor, VisitorData* Data)
 
     // 添加到枚举列表
     Data->Enums.push_back(std::move(EnumMeta));
+
+    // [TODO] Remove This.
+    std::cout << "Found NEnum: " << EnumMeta.Name << '\n';
 }
 
 // 处理结构体声明
@@ -148,6 +155,9 @@ void CodeScanHelper::ProcessStructDecl(CXCursor Cursor, VisitorData* Data)
 
     // 添加到类列表
     Data->Classes.push_back(std::move(StructMeta));
+
+    // [TODO] Remove This.
+    std::cout << "Found NStruct: " << StructMeta.Name << '\n';
 }
 
 // 处理类声明
@@ -175,6 +185,9 @@ void CodeScanHelper::ProcessClassDecl(CXCursor Cursor, VisitorData* Data)
 
     // 添加到类列表
     Data->Classes.push_back(std::move(ClassMeta));
+
+    // [TODO] Remove This.
+    std::cout << "Found NClass: " << ClassMeta.Name << '\n';
 }
 
 // 处理成员变量的声明
@@ -199,6 +212,9 @@ void CodeScanHelper::ProcessMemberVarDecl(CXCursor Cursor, ClassMetaInfo* ClassM
 
     // 添加到类的成员变量列表
     ClassMeta->MemberVars.push_back(std::move(VarMeta));
+
+    // [TODO] Remove This.
+    std::cout << "  Found NProperty: " << VarMeta.Name << '\n';
 }
 
 // 处理成员函数的声明
@@ -223,20 +239,23 @@ void CodeScanHelper::ProcessMemberFuncDecl(CXCursor Cursor, ClassMetaInfo* Class
 
     // 添加到类的成员函数列表
     ClassMeta->MemberFuncs.push_back(std::move(FuncMeta));
+
+    // [TODO] Remove This.
+    std::cout << "  Found NFunction: " << FuncMeta.Name << '\n';
 }
 
 // 成员访问回调(用于类和结构体)
-CXChildVisitResult CodeScanHelper::MemberVisitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData)
+CXChildVisitResult CodeScanHelper::MemberVisitor(CXCursor Current, CXCursor Root, CXClientData ClientData)
 {
     ClassMetaInfo* ClassMeta = static_cast<ClassMetaInfo*>(ClientData);
 
-    if (Cursor.kind == CXCursor_FieldDecl)
+    if (Current.kind == CXCursor_FieldDecl)
     {
-        ProcessMemberVarDecl(Cursor, ClassMeta);
+        ProcessMemberVarDecl(Current, ClassMeta);
     }
-    else if (Cursor.kind == CXCursor_CXXMethod)
+    else if (Current.kind == CXCursor_CXXMethod)
     {
-        ProcessMemberFuncDecl(Cursor, ClassMeta);
+        ProcessMemberFuncDecl(Current, ClassMeta);
     }
 
     // 继续遍历同级节点
@@ -244,19 +263,22 @@ CXChildVisitResult CodeScanHelper::MemberVisitor(CXCursor Cursor, CXCursor Paren
 }
 
 // 枚举值访问回调
-CXChildVisitResult CodeScanHelper::EnumValueVisitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData)
+CXChildVisitResult CodeScanHelper::EnumValueVisitor(CXCursor Current, CXCursor Root, CXClientData ClientData)
 {
-    if (Cursor.kind == CXCursor_EnumConstantDecl)
+    if (Current.kind == CXCursor_EnumConstantDecl)
     {
         EnumMetaInfo* EnumMeta = static_cast<EnumMetaInfo*>(ClientData);
 
         // 获取枚举值名称
-        CXString    ValueSpelling = clang_getCursorSpelling(Cursor);
+        CXString    ValueSpelling = clang_getCursorSpelling(Current);
         std::string ValueName = clang_getCString(ValueSpelling);
         clang_disposeString(ValueSpelling);
 
         // 添加到枚举值列表
         EnumMeta->Elements.push_back(std::move(ValueName));
+
+        // [TODO] Remove This.
+        std::cout << "Found Enum Value: " << EnumMeta->Name << "::" << ValueName << '\n';
     }
 
     // 继续遍历同级节点
@@ -271,21 +293,26 @@ bool CodeScanHelper::CheckAttribute(CXCursor Cursor, const std::string& Attribut
         return false;
     }
 
+    // [TODO] Remove This.
+    std::cout << "Check Cursor: " << clang_getCString(clang_getCursorSpelling(Cursor))
+              << " for Attribute: " << AttributeName << '\n';
+
     AttributeData Data{AttributeName, false};
 
     clang_visitChildren(
         Cursor,
-        [](CXCursor Current, CXCursor Parent, CXClientData ClientData) -> CXChildVisitResult
+        [](CXCursor Current, CXCursor Root, CXClientData ClientData) -> CXChildVisitResult
         {
-            if (Current.kind == CXCursor_AnnotateAttr)
+            if (clang_getCursorKind(Current) == CXCursor_AnnotateAttr)
             {
+
                 AttributeData* Data = static_cast<AttributeData*>(ClientData);
 
                 CXString AttrSpelling = clang_getCursorSpelling(Current);
                 auto     AttrString = clang_getCString(AttrSpelling);
                 clang_disposeString(AttrSpelling);
 
-                if (AttrString == Data->Attribute)
+                if (Data->Attribute.compare(AttrString) == 0)
                 {
                     Data->bHasAttribute = true;
                     return CXChildVisit_Break;

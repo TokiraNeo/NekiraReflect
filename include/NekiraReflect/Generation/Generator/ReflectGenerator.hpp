@@ -28,23 +28,15 @@
 #include <Tools/CodeConsume.hpp>
 
 
-
 namespace NekiraReflect
 {
+
 // 生成反射代码
 class ReflectGenerator final
 {
 public:
     // 扫描代码并生成反射代码
-    static void GenerateReflectCode(const std::string& InputFile, const std::string& OutputFile)
-    {
-        VisitorData Data;
-        // 扫描代码
-        CodeScanner::ScanCode(InputFile, Data);
-
-        // 生成反射代码
-        CodeGenerator::GenerateCode(OutputFile, Data.Enums, Data.Classes);
-    }
+    static void GenerateReflectCode(const std::string& InputFile);
 };
 
 } // namespace NekiraReflect

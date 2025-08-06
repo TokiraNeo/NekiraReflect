@@ -90,7 +90,6 @@ private:
     // 处理类声明
     static void ProcessClassDecl(CXCursor Cursor, VisitorData* Data);
 
-
     // 处理成员变量的声明
     static void ProcessMemberVarDecl(CXCursor Cursor, ClassMetaInfo* ClassMeta);
 

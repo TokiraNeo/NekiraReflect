@@ -24,27 +24,14 @@
 
 
 #pragma once
-
-#include <Tools/CodeConsume.hpp>
-
-
+#include <string>
+#include <vector>
 
 namespace NekiraReflect
 {
-// 生成反射代码
-class ReflectGenerator final
+struct ReflectGenSettings
 {
-public:
-    // 扫描代码并生成反射代码
-    static void GenerateReflectCode(const std::string& InputFile, const std::string& OutputFile)
-    {
-        VisitorData Data;
-        // 扫描代码
-        CodeScanner::ScanCode(InputFile, Data);
-
-        // 生成反射代码
-        CodeGenerator::GenerateCode(OutputFile, Data.Enums, Data.Classes);
-    }
+    std::vector<std::string> IncludePaths; // 头文件搜索路径
+    std::vector<std::string> Definitions;  // 预处理宏定义
 };
-
 } // namespace NekiraReflect

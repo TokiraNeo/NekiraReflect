@@ -25,6 +25,7 @@
 
 #include <Generator/ReflectGenerator.hpp>
 
+using namespace NekiraReflect;
 
 int main()
 {

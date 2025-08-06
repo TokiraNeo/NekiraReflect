@@ -26,11 +26,7 @@
 #pragma once
 
 #include <Tools/CodeGenerateHelper.hpp>
-#include <Tools/MetaInfo.hpp>
-#include <clang-c/CXString.h>
-#include <clang-c/Index.h>
-#include <iostream>
-#include <vector>
+#include <Tools/CodeScanHelper.hpp>
 
 
 
@@ -76,49 +72,10 @@ namespace NekiraReflect
 class CodeScanner
 {
 public:
-    static void ScanTranslationUnit(const std::string& InputFile, std::vector<EnumMetaInfo>& OutEnums,
-                                    std::vector<ClassMetaInfo>& OutClasses)
+    static void ScanCode(const std::string& InputFile, VisitorData& OutData)
     {
-        // [TODO] 扫描编译单元，检查NStruct，NClass，NEnum，NFunction，NProperty等Attribute
-
-        CXIndex Index = clang_createIndex(0, 0);
-
-        const char* ArgsStr = "-D__REFLECT_GEN_ENABLE__";
-
-        CXTranslationUnit TSUnit =
-            clang_parseTranslationUnit(Index, InputFile.c_str(), &ArgsStr, 0, nullptr, 0, CXTranslationUnit_None);
-
-        if (TSUnit == nullptr)
-        {
-            std::cerr << "Failed to parse translation unit: " << InputFile << '\n';
-
-            // 清理资源
-            clang_disposeIndex(Index);
-            clang_disposeTranslationUnit(TSUnit);
-
-            return;
-        }
-
-        // 清理资源
-        clang_disposeIndex(Index);
-        clang_disposeTranslationUnit(TSUnit);
-
-        // 获取AST根节点
-        CXCursor RootCursor = clang_getTranslationUnitCursor(TSUnit);
-
-        clang_visitChildren(
-            RootCursor,
-            [](CXCursor Child, CXCursor Parent, CXClientData ClientData) -> CXChildVisitResult
-            {
-                auto CursorSpelling = clang_getCursorSpelling(Child);
-
-                return CXChildVisit_Recurse;
-            },
-            nullptr);
+        CodeScanHelper::ScanCode(InputFile, OutData);
     }
-
-
-private:
 };
 
 } // namespace NekiraReflect

@@ -35,7 +35,18 @@ namespace NekiraReflect
 class ReflectGenerator final
 {
 public:
+    // 初始化相关
 private:
+    // 扫描代码并生成反射代码
+    static void GenerateReflectCode(const std::string& InputFile, const std::string& OutputFile)
+    {
+        VisitorData Data;
+        // 扫描代码
+        CodeScanner::ScanCode(InputFile, Data);
+
+        // 生成反射代码
+        CodeGenerator::GenerateCode(OutputFile, Data.Enums, Data.Classes);
+    }
 };
 
 } // namespace NekiraReflect

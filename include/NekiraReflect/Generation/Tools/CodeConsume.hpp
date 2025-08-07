@@ -26,6 +26,7 @@
 #pragma once
 
 #include <Tools/CodeUtilities.hpp>
+#include <filesystem>
 
 
 
@@ -35,8 +36,8 @@ class CodeGenerator final
 {
 public:
     // 生成枚举、类、结构体的反射代码
-    // OutputFile: 输出文件名(不包含后缀)
-    static void GenerateCode(const std::string& OutputFile, const std::vector<EnumMetaInfo>& Enums,
+    // OutputFileStem: 输出文件名(不包含后缀)
+    static void GenerateCode(const std::filesystem::path& InputFile, const std::vector<EnumMetaInfo>& Enums,
                              const std::vector<ClassMetaInfo>& Classes);
 };
 

@@ -52,13 +52,13 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
         return;
     }
 
-    // 检查诊断信息
+    // 提供诊断信息
     unsigned DiagNum = clang_getNumDiagnostics(TSUnit);
     for (unsigned i = 0; i < DiagNum; ++i)
     {
         CXDiagnostic Diag = clang_getDiagnostic(TSUnit, i);
         CXString     DiagStr = clang_formatDiagnostic(Diag, clang_defaultDiagnosticDisplayOptions());
-        std::cout << "Diagnostic: " << clang_getCString(DiagStr) << std::endl;
+        std::cout << "Diagnostic: " << clang_getCString(DiagStr) << '\n';
         clang_disposeString(DiagStr);
         clang_disposeDiagnostic(Diag);
     }
@@ -90,19 +90,19 @@ CXChildVisitResult CodeScanHelper::Visitor(CXCursor Current, CXCursor Root, CXCl
     {
     case CXCursor_EnumDecl:
         // 处理枚举声明
-        // [INFO] 检查是否有NENUM属性，并提取枚举值
+        // [INFO] 检查是否有NEnum属性，并提取枚举值
         ProcessEnumDecl(Current, Data);
         break;
 
     case CXCursor_StructDecl:
         // 处理结构体声明
-        // [INFO] 检查是否有NSTRUCT属性，并提取成员变量和函数
+        // [INFO] 检查是否有NStruct属性，并提取成员变量和函数
         ProcessStructDecl(Current, Data);
         break;
 
     case CXCursor_ClassDecl:
         // 处理类声明
-        // [INFO] 检查是否有NCLASS属性，并提取成员变量和函数
+        // [INFO] 检查是否有NClass属性，并提取成员变量和函数
         ProcessClassDecl(Current, Data);
         break;
 

@@ -42,8 +42,9 @@ public:
 
 // ========================================= 类的反射访问器 ========================================= //
 // 定义类的反射访问器特化
-#ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN
-#define NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN(ClassName)                                                                 \
+#ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_DECL
+#define NEKIRA_REFLECT_CLASS_ACCESSOR_DECL(ClassName)                                                                  \
+    class ClassName;                                                                                                   \
     namespace NekiraReflect                                                                                            \
     {                                                                                                                  \
     template <>                                                                                                        \
@@ -51,30 +52,38 @@ public:
     {                                                                                                                  \
     public:                                                                                                            \
         using ClassType = ClassName;                                                                                   \
-        static void RegisterReflection()                                                                               \
-        {                                                                                                              \
-            auto classInfo = MakeClassTypeInfo<ClassType>(#ClassName);
+        static void RegisterReflection();                                                                              \
+    };                                                                                                                 \
+    } // namespace NekiraReflect
 #endif
 
-// 通过反射访问器注册成员变量
+// 定义类反射访问器RegisterReflection()实现
+#ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN
+#define NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN(ClassName)                                                                 \
+    namespace NekiraReflect                                                                                            \
+    {                                                                                                                  \
+    void ReflectionAccessor<ClassName>::RegisterReflection()                                                           \
+    {                                                                                                                  \
+        auto classInfo = MakeClassTypeInfo<ClassType>(#ClassName);
+#endif
+
+// 通过类反射访问器注册成员变量
 #ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_VAR
 #define NEKIRA_REFLECT_CLASS_ACCESSOR_VAR(VarName)                                                                     \
     classInfo->AddVariable(MakeMemberVarInfo(#VarName, &ClassType::VarName));
 #endif
 
-// 通过反射访问器注册成员函数
+// 通过类反射访问器注册成员函数
 #ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_FUNC
 #define NEKIRA_REFLECT_CLASS_ACCESSOR_FUNC(FuncName)                                                                   \
     classInfo->AddFunction(MakeMemberFuncInfo(#FuncName, &ClassType::FuncName));
 #endif
 
-// 结束反射访问器的定义
+// 结束类反射访问器RegisterReflection()的实现
 #ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_END
 #define NEKIRA_REFLECT_CLASS_ACCESSOR_END()                                                                            \
     RegisterClassInfo(std::move(classInfo));                                                                           \
     }                                                                                                                  \
-    }                                                                                                                  \
-    ;                                                                                                                  \
     } // namespace NekiraReflect
 #endif
 
@@ -96,8 +105,9 @@ public:
 
 // ============================================ 枚举的反射访问器 ============================================ //
 // 定义枚举的反射访问器特化
-#ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN
-#define NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN(EnumName)                                                                   \
+#ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_DECL
+#define NEKIRA_REFLECT_ENUM_ACCESSOR_DECL(EnumName)                                                                    \
+    enum class EnumName;                                                                                               \
     namespace NekiraReflect                                                                                            \
     {                                                                                                                  \
     template <>                                                                                                        \
@@ -105,24 +115,32 @@ public:
     {                                                                                                                  \
     public:                                                                                                            \
         using EnumType = EnumName;                                                                                     \
-        static void RegisterReflection()                                                                               \
-        {                                                                                                              \
-            auto enumInfo = MakeEnumTypeInfo<EnumType>(#EnumName);
+        static void RegisterReflection();                                                                              \
+    };                                                                                                                 \
+    } // namespace NekiraReflect
 #endif
 
-// 通过反射访问器注册枚举值
+// 定义枚举的反射访问器RegisterReflection()实现
+#ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN
+#define NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN(EnumName)                                                                   \
+    namespace NekiraReflect                                                                                            \
+    {                                                                                                                  \
+    void ReflectionAccessor<EnumName>::RegisterReflection()                                                            \
+    {                                                                                                                  \
+        auto enumInfo = MakeEnumTypeInfo<EnumType>(#EnumName);
+#endif
+
+// 通过枚举反射访问器注册枚举值
 #ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_VALUE
 #define NEKIRA_REFLECT_ENUM_ACCESSOR_VALUE(ValueName)                                                                  \
     enumInfo->AddEnumValue(#ValueName, static_cast<int64_t>(EnumType::ValueName));
 #endif
 
-// 结束枚举反射访问器的定义
+// 结束枚举反射访问器RegisterReflection()的实现
 #ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_END
 #define NEKIRA_REFLECT_ENUM_ACCESSOR_END()                                                                             \
     RegisterEnumInfo(std::move(enumInfo));                                                                             \
     }                                                                                                                  \
-    }                                                                                                                  \
-    ;                                                                                                                  \
     } // namespace NekiraReflect
 #endif
 

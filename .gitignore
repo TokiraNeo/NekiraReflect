@@ -49,5 +49,5 @@ install/
 # 忽略Test文件
 Test/
 
-# 忽略测试用的生成文件夹
-#Generated/
+# 忽略测试用的生成文件
+Generated/

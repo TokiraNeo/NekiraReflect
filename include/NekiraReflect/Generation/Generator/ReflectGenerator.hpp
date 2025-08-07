@@ -26,7 +26,7 @@
 #pragma once
 
 #include <Tools/CodeConsume.hpp>
-
+#include <filesystem>
 
 namespace NekiraReflect
 {
@@ -36,7 +36,7 @@ class ReflectGenerator final
 {
 public:
     // 扫描代码并生成反射代码
-    static void GenerateReflectCode(const std::string& InputFile);
+    static void GenerateReflectCode(const std::filesystem::path& InputFile);
 };
 
 } // namespace NekiraReflect

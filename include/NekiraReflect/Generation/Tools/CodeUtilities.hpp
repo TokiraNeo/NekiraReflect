@@ -31,6 +31,8 @@
 #include <clang-c/CXString.h>
 #include <clang-c/Index.h>
 #include <fstream>
+#include <string>
+#include <vector>
 
 
 
@@ -42,10 +44,10 @@ struct VisitorData
     std::vector<ClassMetaInfo> Classes; // 需要反射的类或结构体
 };
 
-struct AttributeData
+struct AttributeSearchData
 {
-    std::string Attribute;             // 属性名称
-    bool        bHasAttribute = false; // 是否有该属性
+    std::string Attribute;      // 属性名称
+    bool        bFound = false; // 是否有该属性
 };
 } // namespace NekiraReflect
 

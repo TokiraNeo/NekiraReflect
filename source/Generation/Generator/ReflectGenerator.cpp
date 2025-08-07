@@ -38,9 +38,8 @@ void ReflectGenerator::GenerateReflectCode(const std::string& InputFile)
     std::filesystem::path InputPath(InputFile);
 
     // 扫描代码
-    CodeScanner::ScanCode(InputFile, Data);
-
     std::cout << "Scanning file: " << InputPath.filename() << '\n';
+    CodeScanner::ScanCode(InputFile, Data);
 
     if (Data.Enums.empty() && Data.Classes.empty())
     {

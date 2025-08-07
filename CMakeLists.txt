@@ -21,6 +21,16 @@ message("Clang_INCLUDE_DIRS: ${Clang_INCLUDE_DIRS}")
 message("Clang_DIR: ${Clang_DIR}")
 message("Clang_LIBRARIES: ${Clang_LIBRARIES}")
 
+# =============================================================================
+# 生成目录Generated
+# =============================================================================
+
+# 设置代码生成目录
+set(GENERATED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Generated)
+
+# 创建生成目录
+file(MAKE_DIRECTORY ${GENERATED_DIR})
+
 
 # =============================================================================
 # 核心库定义
@@ -30,6 +40,8 @@ message("Clang_LIBRARIES: ${Clang_LIBRARIES}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+
 
 # 添加头文件
 file(GLOB_RECURSE CORE_HEADERS

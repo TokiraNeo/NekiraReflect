@@ -23,6 +23,7 @@
  */
 
 #include <Tools/CodeConsume.hpp>
+#include <fstream>
 
 
 
@@ -30,25 +31,42 @@ namespace NekiraReflect
 {
 // 生成枚举、类、结构体的反射代码
 // OutputFile: 输出文件名(不包含后缀)
-void CodeGenerator::GenerateCode(const std::string& OutputFile, const std::vector<EnumMetaInfo>& Enums,
+void CodeGenerator::GenerateCode(const std::filesystem::path& InputFile, const std::vector<EnumMetaInfo>& Enums,
                                  const std::vector<ClassMetaInfo>& Classes)
 {
-    std::ofstream HeaderStream(OutputFile);
+    const std::string InputFileStem = InputFile.stem().string();
 
+    // 输出文件名(.gen.hpp & .gen.cpp)
+    const std::string HeaderFileName = InputFileStem + ".gen.hpp";
+    const std::string SourceFileName = InputFileStem + ".gen.cpp";
+
+    // 输出文件路径
+    const std::string HeaderFile = "Generated/" + HeaderFileName;
+    const std::string SourceFile = "Generated/" + SourceFileName;
+
+    std::ofstream HeaderStream(HeaderFile);
+    std::ofstream SourceStream(SourceFile);
+
+    // 生成头文件内容
     HeaderStream << "#pragma once" << '\n' << '\n';
     HeaderStream << "#include <NekiraReflect/DynamicReflect/Accessor/ReflectAccessor.hpp>" << '\n';
     HeaderStream << '\n';
 
+    // 生成源文件内容
+    SourceStream << "#include \"" << HeaderFileName << "\"" << '\n';
+    SourceStream << "#include \"" << "../" << InputFile.string() << "\"" << '\n';
+    SourceStream << '\n';
+
     // 生成枚举的反射代码
     if (!Enums.empty())
     {
-        CodeGenerateHelper::GenerateEnumCode(HeaderStream, Enums);
+        CodeGenerateHelper::GenerateEnumCode(HeaderStream, SourceStream, Enums);
     }
 
     // 生成类的反射注册代码
     if (!Classes.empty())
     {
-        CodeGenerateHelper::GenerateClassCode(HeaderStream, Classes);
+        CodeGenerateHelper::GenerateClassCode(HeaderStream, SourceStream, Classes);
     }
 }
 

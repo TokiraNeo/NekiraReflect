@@ -59,10 +59,11 @@ class CodeGenerateHelper final
 {
 public:
     // 生成枚举的反射代码
-    static void GenerateEnumCode(std::ofstream& Stream, const std::vector<EnumMetaInfo>& Enums);
+    static void GenerateEnumCode(std::ofstream& Header, std::ofstream& Source, const std::vector<EnumMetaInfo>& Enums);
 
     // 生成类的反射代码
-    static void GenerateClassCode(std::ofstream& Stream, const std::vector<ClassMetaInfo>& Classes);
+    static void GenerateClassCode(std::ofstream& Header, std::ofstream& Source,
+                                  const std::vector<ClassMetaInfo>& Classes);
 
 private:
     // 生成间隔行

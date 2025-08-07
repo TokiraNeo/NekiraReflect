@@ -23,12 +23,14 @@
  */
 
 #include <Generator/ReflectGenerator.hpp>
+#include <filesystem>
 #include <iostream>
+
 
 int main()
 {
-    std::cout << "NekiraReflect Input File: ";
-    std::string InputFile;
+    std::filesystem::path InputFile;
+    std::cout << "Input File: ";
     std::cin >> InputFile;
 
     NekiraReflect::ReflectGenerator::GenerateReflectCode(InputFile);

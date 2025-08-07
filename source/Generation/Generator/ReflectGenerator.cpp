@@ -23,42 +23,36 @@
  */
 
 
+
 #include <Generator/ReflectGenerator.hpp>
-#include <filesystem>
+
 #include <iostream>
 
 namespace NekiraReflect
 {
 // 扫描代码并生成反射代码
-void ReflectGenerator::GenerateReflectCode(const std::string& InputFile)
+void ReflectGenerator::GenerateReflectCode(const std::filesystem::path& InputFile)
 {
     VisitorData Data;
 
-    // 输入路径
-    std::filesystem::path InputPath(InputFile);
-
     // 扫描代码
-    std::cout << "Scanning file: " << InputPath.filename() << '\n';
-    CodeScanner::ScanCode(InputFile, Data);
+    std::cout << "Scanning file: " << InputFile.filename() << '\n';
+    CodeScanner::ScanCode(InputFile.string(), Data);
 
     if (Data.Enums.empty() && Data.Classes.empty())
     {
-        std::cout << "Skip File: " << InputPath.filename() << '\n';
+        std::cout << "Skip File: " << InputFile.filename() << '\n';
         return;
     }
 
-    // 获取输入文件名字(去除路径和后缀)
-    const std::string InputFileStem = InputPath.stem().string();
-
-    // 输出文件名
-    const std::string OutputFileName = InputFileStem + ".gen.hpp";
-
-    // 输出文件（路径 + 文件名）
-    std::filesystem::path OutputFile = "Generated/" + OutputFileName;
-
-    std::cout << "Generating Code: " << InputPath.filename() << " -> " << OutputFileName << '\n';
+    // 创建输出目录
+    std::filesystem::directory_entry GeneratedDir("Generated");
+    if (!GeneratedDir.exists())
+    {
+        std::filesystem::create_directory("Generated");
+    }
 
     // 生成反射代码
-    CodeGenerator::GenerateCode(OutputFile.string(), Data.Enums, Data.Classes);
+    CodeGenerator::GenerateCode(InputFile, Data.Enums, Data.Classes);
 }
 } // namespace NekiraReflect

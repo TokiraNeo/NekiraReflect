@@ -29,64 +29,82 @@ namespace NekiraReflect
 {
 
 // 生成枚举的反射代码
-void CodeGenerateHelper::GenerateEnumCode(std::ofstream& Stream, const std::vector<EnumMetaInfo>& Enums)
+void CodeGenerateHelper::GenerateEnumCode(std::ofstream& Header, std::ofstream& Source,
+                                          const std::vector<EnumMetaInfo>& Enums)
 {
-    Stream << "// =========================== Generate Enum Reflection Code =========================== " << '\n';
-
     for (const auto& EnumMeta : Enums)
     {
-        Stream << "// Enum: " << EnumMeta.Name << '\n';
+        // --头文件内容
 
-        // NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN(EnumName), 声明枚举的反射访问器特化
-        Stream << "NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN" << "(" << EnumMeta.Name << ")" << '\n';
+        Header << "// Enum: " << EnumMeta.Name << '\n';
+
+        // NEKIRA_REFLECT_ENUM_ACCESSOR_DECL(EnumName),声明枚举的反射访问器特化
+        Header << "NEKIRA_REFLECT_ENUM_ACCESSOR_DECL" << "(" << EnumMeta.Name << ")" << '\n';
+
+        GenerateIntervalLine(Header);
+
+        // --源文件内容
+
+        Source << "// Enum: " << EnumMeta.Name << '\n';
+
+        // NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN(EnumName),定义枚举的反射访问器RegisterReflection()实现
+        Source << "NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN" << "(" << EnumMeta.Name << ")" << '\n';
 
         // NEKIRA_REFLECT_ENUM_ACCESSOR_VALUE(ValueName), 注册枚举值
-        for (const auto& Element : EnumMeta.Elements)
+        for (const auto& EnumItem : EnumMeta.Elements)
         {
-            Stream << "NEKIRA_REFLECT_ENUM_ACCESSOR_VALUE" << "(" << Element << ")" << '\n';
+            Source << "NEKIRA_REFLECT_ENUM_ACCESSOR_VALUE" << "(" << EnumItem << ")" << '\n';
         }
 
-        // NEKIRA_REFLECT_ENUM_ACCESSOR_END(), 结束枚举的反射访问器定义
-        Stream << "NEKIRA_REFLECT_ENUM_ACCESSOR_END()" << '\n' << '\n';
+        // NEKIRA_REFLECT_ENUM_ACCESSOR_END(),结束枚举反射访问器RegisterReflection()的实现
+        Source << "NEKIRA_REFLECT_ENUM_ACCESSOR_END()" << '\n';
 
-        // NEKIRA_REFLECT_ENUM_REGISTER_AUTO(EnumName), 自动注册枚举的反射信息
-        Stream << "NEKIRA_REFLECT_ENUM_REGISTER_AUTO" << "(" << EnumMeta.Name << ")" << '\n';
+        // NEKIRA_REFLECT_ENUM_REGISTER_AUTO(EnumName),自动注册枚举反射信息
+        Source << "NEKIRA_REFLECT_ENUM_REGISTER_AUTO" << "(" << EnumMeta.Name << ")" << '\n';
 
-        GenerateIntervalLine(Stream);
+        GenerateIntervalLine(Source);
     }
 }
 
 // 生成类的反射代码
-void CodeGenerateHelper::GenerateClassCode(std::ofstream& Stream, const std::vector<ClassMetaInfo>& Classes)
+void CodeGenerateHelper::GenerateClassCode(std::ofstream& Header, std::ofstream& Source,
+                                           const std::vector<ClassMetaInfo>& Classes)
 {
-    Stream << "// =========================== Generate Class Reflection Code =========================== " << '\n';
-
-    for (const auto& ClassMeta : Classes)
+    for (const auto ClassMeta : Classes)
     {
-        Stream << "// Class: " << ClassMeta.QualifiedName << '\n';
+        // --头文件内容
+        Header << "// Class/Struct: " << ClassMeta.QualifiedName << '\n';
 
-        // NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN(ClassName)，声明类的反射访问器特化
-        Stream << "NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN" << "(" << ClassMeta.Name << ")" << '\n';
+        // NEKIRA_REFLECT_CLASS_ACCESSOR_DECL(ClassName),声明类的反射访问器特化
+        Header << "NEKIRA_REFLECT_CLASS_ACCESSOR_DECL" << "(" << ClassMeta.Name << ")" << '\n';
 
-        // NEKIRA_REFLECT_CLASS_ACCESSOR_VAR(VarName)，注册类的成员变量
+        GenerateIntervalLine(Header);
+
+        // --源文件内容
+        Source << "// Class/Struct: " << ClassMeta.QualifiedName << '\n';
+
+        // NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN(ClassName),定义类的反射访问器RegisterReflection()实现
+        Source << "NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN" << "(" << ClassMeta.Name << ")" << '\n';
+
+        // NEKIRA_REFLECT_CLASS_ACCESSOR_VAR(VarName), 注册类成员变量
         for (const auto& VarMeta : ClassMeta.MemberVars)
         {
-            Stream << "NEKIRA_REFLECT_CLASS_ACCESSOR_VAR" << "(" << VarMeta.Name << ")" << '\n';
+            Source << "NEKIRA_REFLECT_CLASS_ACCESSOR_VAR" << "(" << VarMeta.Name << ")" << '\n';
         }
 
-        // NEKIRA_REFLECT_CLASS_ACCESSOR_FUNC(FuncName), 注册类的成员函数
+        // NEKIRA_REFLECT_CLASS_ACCESSOR_FUNC(FuncName), 注册类成员函数
         for (const auto& FuncMeta : ClassMeta.MemberFuncs)
         {
-            Stream << "NEKIRA_REFLECT_CLASS_ACCESSOR_FUNC" << "(" << FuncMeta.Name << ")" << '\n';
+            Source << "NEKIRA_REFLECT_CLASS_ACCESSOR_FUNC" << "(" << FuncMeta.Name << ")" << '\n';
         }
 
-        // NEKIRA_REFLECT_CLASS_ACCESSOR_END(), 结束类的反射访问器定义
-        Stream << "NEKIRA_REFLECT_CLASS_ACCESSOR_END()" << '\n' << '\n';
+        // NEKIRA_REFLECT_CLASS_ACCESSOR_END(),结束类反射访问器RegisterReflection()的实现
+        Source << "NEKIRA_REFLECT_CLASS_ACCESSOR_END()" << '\n';
 
-        // NEKIRA_REFLECT_CLASS_REGISTER_AUTO(ClassName), 自动注册类的反射信息
-        Stream << "NEKIRA_REFLECT_CLASS_REGISTER_AUTO" << "(" << ClassMeta.Name << ")" << '\n';
+        // NEKIRA_REFLECT_CLASS_REGISTER_AUTO(ClassName),自动注册类反射信息
+        Source << "NEKIRA_REFLECT_CLASS_REGISTER_AUTO" << "(" << ClassMeta.Name << ")" << '\n';
 
-        GenerateIntervalLine(Stream);
+        GenerateIntervalLine(Source);
     }
 }
 

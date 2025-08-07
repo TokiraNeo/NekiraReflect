@@ -73,14 +73,19 @@ target_include_directories(NekiraReflection
 
 # 生成工具可执行文件
 add_executable(NekiraReflectGen
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/ReflectGenerator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Main/NekiraReflectGen.cpp
 )
 
 target_include_directories(NekiraReflectGen PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/DynamicReflect
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/StaticReflect
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/TypeExtraction
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Generation
     ${LLVM_INCLUDE_DIRS}
     ${Clang_INCLUDE_DIRS}
 )
 
+# 链接库
 target_link_libraries(NekiraReflectGen PRIVATE
     NekiraReflection::NekiraReflection
     libclang

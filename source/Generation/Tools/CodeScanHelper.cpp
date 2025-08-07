@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+#include "clang-c/CXString.h"
+#include "clang-c/Index.h"
 #include <Tools/CodeUtilities.hpp>
 #include <iostream>
 
@@ -33,12 +35,12 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
 {
     CXIndex Index = clang_createIndex(0, 0);
 
-    const char*        ArgsStr[] = {"-std=c++20", "-D__REFLECT_GEN_ENABLE__"};
-    int                ArgsNum = sizeof(ArgsStr) / sizeof(ArgsStr[0]);
+    const char* ArgsStr[] = {"-std=c++20", "-D__REFLECT_GEN_ENABLE__", "-fsyntax-only", "-Id:/NekiraReflect/include"};
+    int         ArgsNum = sizeof(ArgsStr) / sizeof(ArgsStr[0]);
     const char* const* ArgsPtr = ArgsStr;
 
-    CXTranslationUnit TSUnit =
-        clang_parseTranslationUnit(Index, FileName.c_str(), ArgsPtr, ArgsNum, nullptr, 0, CXTranslationUnit_None);
+    CXTranslationUnit TSUnit = clang_parseTranslationUnit(Index, FileName.c_str(), ArgsPtr, ArgsNum, nullptr, 0,
+                                                          CXTranslationUnit_DetailedPreprocessingRecord);
 
     if (TSUnit == nullptr)
     {
@@ -48,6 +50,17 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
         clang_disposeTranslationUnit(TSUnit);
 
         return;
+    }
+
+    // 检查诊断信息
+    unsigned DiagNum = clang_getNumDiagnostics(TSUnit);
+    for (unsigned i = 0; i < DiagNum; ++i)
+    {
+        CXDiagnostic Diag = clang_getDiagnostic(TSUnit, i);
+        CXString     DiagStr = clang_formatDiagnostic(Diag, clang_defaultDiagnosticDisplayOptions());
+        std::cout << "Diagnostic: " << clang_getCString(DiagStr) << std::endl;
+        clang_disposeString(DiagStr);
+        clang_disposeDiagnostic(Diag);
     }
 
     // 获取AST根节点
@@ -61,13 +74,13 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
 }
 
 // AST遍历回调函数
-CXChildVisitResult CodeScanHelper::Visitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData)
+CXChildVisitResult CodeScanHelper::Visitor(CXCursor Current, CXCursor Root, CXClientData ClientData)
 {
     VisitorData* Data = static_cast<VisitorData*>(ClientData);
-    CXCursorKind Kind = clang_getCursorKind(Cursor);
+    CXCursorKind Kind = clang_getCursorKind(Current);
 
     // 仅处理主文件中的节点
-    CXSourceLocation CursorLocation = clang_getCursorLocation(Cursor);
+    CXSourceLocation CursorLocation = clang_getCursorLocation(Current);
     if (clang_Location_isFromMainFile(CursorLocation) == 0)
     {
         return CXChildVisit_Continue;
@@ -78,19 +91,19 @@ CXChildVisitResult CodeScanHelper::Visitor(CXCursor Cursor, CXCursor Parent, CXC
     case CXCursor_EnumDecl:
         // 处理枚举声明
         // [INFO] 检查是否有NENUM属性，并提取枚举值
-        ProcessEnumDecl(Cursor, Data);
+        ProcessEnumDecl(Current, Data);
         break;
 
     case CXCursor_StructDecl:
         // 处理结构体声明
         // [INFO] 检查是否有NSTRUCT属性，并提取成员变量和函数
-        ProcessStructDecl(Cursor, Data);
+        ProcessStructDecl(Current, Data);
         break;
 
     case CXCursor_ClassDecl:
         // 处理类声明
         // [INFO] 检查是否有NCLASS属性，并提取成员变量和函数
-        ProcessClassDecl(Cursor, Data);
+        ProcessClassDecl(Current, Data);
         break;
 
     default:
@@ -104,7 +117,7 @@ CXChildVisitResult CodeScanHelper::Visitor(CXCursor Cursor, CXCursor Parent, CXC
 // 处理枚举声明
 void CodeScanHelper::ProcessEnumDecl(CXCursor Cursor, VisitorData* Data)
 {
-    if (!CheckAttribute(Cursor, "NENUM"))
+    if (!CheckAttribute(Cursor, "NEnum"))
     {
         return;
     }
@@ -126,7 +139,7 @@ void CodeScanHelper::ProcessEnumDecl(CXCursor Cursor, VisitorData* Data)
 // 处理结构体声明
 void CodeScanHelper::ProcessStructDecl(CXCursor Cursor, VisitorData* Data)
 {
-    if (!CheckAttribute(Cursor, "NSTRUCT"))
+    if (!CheckAttribute(Cursor, "NStruct"))
     {
         return;
     }
@@ -153,7 +166,7 @@ void CodeScanHelper::ProcessStructDecl(CXCursor Cursor, VisitorData* Data)
 // 处理类声明
 void CodeScanHelper::ProcessClassDecl(CXCursor Cursor, VisitorData* Data)
 {
-    if (!CheckAttribute(Cursor, "NCLASS"))
+    if (!CheckAttribute(Cursor, "NClass"))
     {
         return;
     }
@@ -180,7 +193,7 @@ void CodeScanHelper::ProcessClassDecl(CXCursor Cursor, VisitorData* Data)
 // 处理成员变量的声明
 void CodeScanHelper::ProcessMemberVarDecl(CXCursor Cursor, ClassMetaInfo* ClassMeta)
 {
-    if (!CheckAttribute(Cursor, "NPROPERTY"))
+    if (!CheckAttribute(Cursor, "NProperty"))
     {
         return;
     }
@@ -204,7 +217,7 @@ void CodeScanHelper::ProcessMemberVarDecl(CXCursor Cursor, ClassMetaInfo* ClassM
 // 处理成员函数的声明
 void CodeScanHelper::ProcessMemberFuncDecl(CXCursor Cursor, ClassMetaInfo* ClassMeta)
 {
-    if (!CheckAttribute(Cursor, "NFUNCTION"))
+    if (!CheckAttribute(Cursor, "NFunction"))
     {
         return;
     }
@@ -226,17 +239,17 @@ void CodeScanHelper::ProcessMemberFuncDecl(CXCursor Cursor, ClassMetaInfo* Class
 }
 
 // 成员访问回调(用于类和结构体)
-CXChildVisitResult CodeScanHelper::MemberVisitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData)
+CXChildVisitResult CodeScanHelper::MemberVisitor(CXCursor Current, CXCursor Root, CXClientData ClientData)
 {
     ClassMetaInfo* ClassMeta = static_cast<ClassMetaInfo*>(ClientData);
 
-    if (Cursor.kind == CXCursor_FieldDecl)
+    if (Current.kind == CXCursor_FieldDecl)
     {
-        ProcessMemberVarDecl(Cursor, ClassMeta);
+        ProcessMemberVarDecl(Current, ClassMeta);
     }
-    else if (Cursor.kind == CXCursor_CXXMethod)
+    else if (Current.kind == CXCursor_CXXMethod)
     {
-        ProcessMemberFuncDecl(Cursor, ClassMeta);
+        ProcessMemberFuncDecl(Current, ClassMeta);
     }
 
     // 继续遍历同级节点
@@ -244,14 +257,14 @@ CXChildVisitResult CodeScanHelper::MemberVisitor(CXCursor Cursor, CXCursor Paren
 }
 
 // 枚举值访问回调
-CXChildVisitResult CodeScanHelper::EnumValueVisitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData)
+CXChildVisitResult CodeScanHelper::EnumValueVisitor(CXCursor Current, CXCursor Root, CXClientData ClientData)
 {
-    if (Cursor.kind == CXCursor_EnumConstantDecl)
+    if (Current.kind == CXCursor_EnumConstantDecl)
     {
         EnumMetaInfo* EnumMeta = static_cast<EnumMetaInfo*>(ClientData);
 
         // 获取枚举值名称
-        CXString    ValueSpelling = clang_getCursorSpelling(Cursor);
+        CXString    ValueSpelling = clang_getCursorSpelling(Current);
         std::string ValueName = clang_getCString(ValueSpelling);
         clang_disposeString(ValueSpelling);
 
@@ -271,24 +284,31 @@ bool CodeScanHelper::CheckAttribute(CXCursor Cursor, const std::string& Attribut
         return false;
     }
 
-    AttributeData Data{AttributeName, false};
+    AttributeSearchData Data{AttributeName, false};
 
     clang_visitChildren(
         Cursor,
-        [](CXCursor Current, CXCursor Parent, CXClientData ClientData) -> CXChildVisitResult
+        [](CXCursor Current, CXCursor Root, CXClientData ClientData) -> CXChildVisitResult
         {
-            if (Current.kind == CXCursor_AnnotateAttr)
+            if (clang_getCursorKind(Current) == CXCursor_AnnotateAttr)
             {
-                AttributeData* Data = static_cast<AttributeData*>(ClientData);
+                AttributeSearchData* Data = static_cast<AttributeSearchData*>(ClientData);
 
-                CXString AttrSpelling = clang_getCursorSpelling(Current);
-                auto     AttrString = clang_getCString(AttrSpelling);
-                clang_disposeString(AttrSpelling);
+                CXString    AttrSpelling = clang_getCursorSpelling(Current);
+                const char* AttrCStr = clang_getCString(AttrSpelling);
+                // 这里如果过早释放CXString，会导致AttrCStr为空
 
-                if (AttrString == Data->Attribute)
+                // 比较
+                if (AttrCStr != nullptr)
                 {
-                    Data->bHasAttribute = true;
-                    return CXChildVisit_Break;
+                    std::string AttrString(AttrCStr);
+                    if (Data->Attribute == AttrString)
+                    {
+                        Data->bFound = true;
+
+                        clang_disposeString(AttrSpelling);
+                        return CXChildVisit_Break;
+                    }
                 }
             }
 
@@ -296,7 +316,9 @@ bool CodeScanHelper::CheckAttribute(CXCursor Cursor, const std::string& Attribut
         },
         &Data);
 
-    return Data.bHasAttribute;
+    return Data.bFound;
 }
+
+
 
 } // namespace NekiraReflect

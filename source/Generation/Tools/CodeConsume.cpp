@@ -25,6 +25,7 @@
 #include <Tools/CodeConsume.hpp>
 
 
+
 namespace NekiraReflect
 {
 // 生成枚举、类、结构体的反射代码
@@ -32,9 +33,7 @@ namespace NekiraReflect
 void CodeGenerator::GenerateCode(const std::string& OutputFile, const std::vector<EnumMetaInfo>& Enums,
                                  const std::vector<ClassMetaInfo>& Classes)
 {
-    const std::string HeaderName = OutputFile + ".gen.hpp";
-
-    std::ofstream HeaderStream(HeaderName);
+    std::ofstream HeaderStream(OutputFile);
 
     HeaderStream << "#pragma once" << '\n' << '\n';
     HeaderStream << "#include <NekiraReflect/DynamicReflect/Accessor/ReflectAccessor.hpp>" << '\n';

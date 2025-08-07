@@ -22,10 +22,18 @@
  * SOFTWARE.
  */
 
-
+#include <Generator/ReflectGenerator.hpp>
+#include <iostream>
 
 int main()
 {
+    std::cout << "NekiraReflect Input File: ";
+    std::string InputFile;
+    std::cin >> InputFile;
+
+    NekiraReflect::ReflectGenerator::GenerateReflectCode(InputFile);
+
+    std::cout << "Reflection Code Generated Successfully!" << '\n';
 
     return 0;
 }

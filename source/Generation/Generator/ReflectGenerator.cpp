@@ -22,35 +22,43 @@
  * SOFTWARE.
  */
 
-#pragma once
 
-#ifndef NEKIRA_REFLECT_BODY
-#define NEKIRA_REFLECT_BODY(ClassName) friend class NekiraReflect::ReflectionAccessor<ClassName>;
-#endif // NEKIRA_REFLECT_BODY
+#include <Generator/ReflectGenerator.hpp>
+#include <filesystem>
+#include <iostream>
 
+namespace NekiraReflect
+{
+// 扫描代码并生成反射代码
+void ReflectGenerator::GenerateReflectCode(const std::string& InputFile)
+{
+    VisitorData Data;
 
-#ifdef __REFLECT_GEN_ENABLE__
+    // 输入路径
+    std::filesystem::path InputPath(InputFile);
 
-#define NCLASS(...) __attribute__((annotate("NClass"))) __attribute__((annotate(#__VA_ARGS__)))
+    // 扫描代码
+    std::cout << "Scanning file: " << InputPath.filename() << '\n';
+    CodeScanner::ScanCode(InputFile, Data);
 
-#define NSTRUCT(...) __attribute__((annotate("NStruct"))) __attribute__((annotate(#__VA_ARGS__)))
+    if (Data.Enums.empty() && Data.Classes.empty())
+    {
+        std::cout << "Skip File: " << InputPath.filename() << '\n';
+        return;
+    }
 
-#define NENUM(...) __attribute__((annotate("NEnum"))) __attribute__((annotate(#__VA_ARGS__)))
+    // 获取输入文件名字(去除路径和后缀)
+    const std::string InputFileStem = InputPath.stem().string();
 
-#define NPROPERTY(...) __attribute__((annotate("NProperty"))) __attribute__((annotate(#__VA_ARGS__)))
+    // 输出文件名
+    const std::string OutputFileName = InputFileStem + ".gen.hpp";
 
-#define NFUNCTION(...) __attribute__((annotate("NFunction"))) __attribute__((annotate(#__VA_ARGS__)))
+    // 输出文件（路径 + 文件名）
+    std::filesystem::path OutputFile = "Generated/" + OutputFileName;
 
-#else // __REFLECT_GEN_ENABLE__
+    std::cout << "Generating Code: " << InputPath.filename() << " -> " << OutputFileName << '\n';
 
-#define NCLASS(...)
-
-#define NSTRUCT(...)
-
-#define NENUM(...)
-
-#define NPROPERTY(...)
-
-#define NFUNCTION(...)
-
-#endif // __REFLECT_GEN_ENABLE__
+    // 生成反射代码
+    CodeGenerator::GenerateCode(OutputFile.string(), Data.Enums, Data.Classes);
+}
+} // namespace NekiraReflect

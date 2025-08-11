@@ -34,8 +34,14 @@ namespace NekiraReflect
 // 枚举类型的元信息
 struct EnumMetaInfo
 {
+    // 命名空间
+    std::string NameSpace;
+
     // 枚举类型的名称
     std::string Name;
+
+    // 枚举类型的限定名称(包含命名空间),若无命名空间则等同于Name
+    std::string QualifiedName;
 
     // 枚举值对
     std::vector<std::string> Elements;
@@ -62,9 +68,13 @@ struct MemberFuncMetaInfo
 // 类的元信息
 struct ClassMetaInfo
 {
+    // 命名空间
+    std::string NameSpace;
+
     // 类的名称
     std::string Name;
 
+    // 类的限定名称(包含命名空间),若无命名空间则等同于Name
     std::string QualifiedName;
 
     // 类的成员变量

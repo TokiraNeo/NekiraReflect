@@ -25,7 +25,6 @@
 
 #pragma once
 
-#include <Tools/CodeConsume.hpp>
 #include <filesystem>
 
 namespace NekiraReflect

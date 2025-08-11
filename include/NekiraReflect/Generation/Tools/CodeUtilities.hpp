@@ -28,7 +28,6 @@
 
 
 #include <Tools/MetaInfo.hpp>
-#include <clang-c/CXString.h>
 #include <clang-c/Index.h>
 #include <fstream>
 #include <string>
@@ -82,30 +81,36 @@ public:
 
 private:
     // AST遍历回调函数
-    static CXChildVisitResult Visitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData);
+    static CXChildVisitResult Visitor(CXCursor Cursor, CXCursor Root, CXClientData ClientData);
 
     // 处理枚举声明
-    static void ProcessEnumDecl(CXCursor Cursor, VisitorData* Data);
+    static void ProcessEnumDecl(const CXCursor& Cursor, VisitorData* Data);
 
     // 处理结构体声明
-    static void ProcessStructDecl(CXCursor Cursor, VisitorData* Data);
+    static void ProcessStructDecl(const CXCursor& Cursor, VisitorData* Data);
 
     // 处理类声明
-    static void ProcessClassDecl(CXCursor Cursor, VisitorData* Data);
+    static void ProcessClassDecl(const CXCursor& Cursor, VisitorData* Data);
 
     // 处理成员变量的声明
-    static void ProcessMemberVarDecl(CXCursor Cursor, ClassMetaInfo* ClassMeta);
+    static void ProcessMemberVarDecl(const CXCursor& Cursor, ClassMetaInfo* ClassMeta);
 
     // 处理成员函数的声明
-    static void ProcessMemberFuncDecl(CXCursor Cursor, ClassMetaInfo* ClassMeta);
+    static void ProcessMemberFuncDecl(const CXCursor& Cursor, ClassMetaInfo* ClassMeta);
 
     // 成员访问回调(用于类和结构体)
-    static CXChildVisitResult MemberVisitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData);
+    static CXChildVisitResult MemberVisitor(CXCursor Cursor, CXCursor Root, CXClientData ClientData);
 
     // 枚举值访问回调
-    static CXChildVisitResult EnumValueVisitor(CXCursor Cursor, CXCursor Parent, CXClientData ClientData);
+    static CXChildVisitResult EnumValueVisitor(CXCursor Cursor, CXCursor Root, CXClientData ClientData);
 
     // 检查是否有特定的Attribute
-    static bool CheckAttribute(CXCursor Cursor, const std::string& AttributeName);
+    static bool CheckAttribute(const CXCursor& Cursor, const std::string& AttributeName);
+
+    // 获取完整命名空间(以::分隔)
+    static std::string GetFullNameSpace(const CXCursor& Cursor);
+
+    // 获取限定名称(包含命名空间)
+    static std::string BuildQualifiedName(const std::string& NameSpace, const std::string& Name);
 };
 } // namespace NekiraReflect

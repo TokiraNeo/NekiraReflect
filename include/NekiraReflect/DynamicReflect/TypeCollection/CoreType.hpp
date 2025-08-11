@@ -27,11 +27,12 @@
 #include <TypeCollection/MemberFuncWrapper.hpp>
 #include <any>
 #include <cstdint>
-#include <stdexcept>
+#include <iostream>
 #include <string>
 #include <typeindex>
 #include <unordered_map>
 #include <vector>
+
 
 // ======================================= 动态反射核心类型 ======================================= //
 
@@ -211,7 +212,7 @@ std::tuple<Args...> Anys_To_Tuple(const std::vector<std::any>& Params)
 {
     if (Params.size() != sizeof...(Args))
     {
-        throw std::runtime_error("Parameter count mismatch");
+        std::cerr << "Parameter count mismatch! Expected: " << sizeof...(Args) << ", Actual: " << Params.size() << '\n';
     }
 
     return Anys_To_Tuple_Impl<Args...>(Params, std::index_sequence_for<Args...>{});

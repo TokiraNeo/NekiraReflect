@@ -25,7 +25,7 @@
 
 
 #include <Generator/ReflectGenerator.hpp>
-
+#include <Tools/CodeConsume.hpp>
 #include <iostream>
 
 namespace NekiraReflect
@@ -46,7 +46,7 @@ void ReflectGenerator::GenerateReflectCode(const std::filesystem::path& InputFil
     }
 
     // 创建输出目录
-    std::filesystem::directory_entry GeneratedDir("Generated");
+    const std::filesystem::directory_entry GeneratedDir("Generated");
     if (!GeneratedDir.exists())
     {
         std::filesystem::create_directory("Generated");

@@ -40,8 +40,9 @@ public:
 };
 } // namespace NekiraReflect
 
+
 // ========================================= 类的反射访问器 ========================================= //
-// 定义类的反射访问器特化
+// 定义类的反射访问器特化(无命名空间)
 #ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_DECL
 #define NEKIRA_REFLECT_CLASS_ACCESSOR_DECL(ClassName)                                                                  \
     class ClassName;                                                                                                   \
@@ -57,14 +58,33 @@ public:
     } // namespace NekiraReflect
 #endif
 
-// 定义类反射访问器RegisterReflection()实现
-#ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN
-#define NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN(ClassName)                                                                 \
+// 定义类的反射访问器特化(有命名空间)
+#ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_DECL_NS
+#define NEKIRA_REFLECT_CLASS_ACCESSOR_DECL_NS(NameSpace, ClassName)                                                    \
+    namespace NameSpace                                                                                                \
+    {                                                                                                                  \
+    class ClassName;                                                                                                   \
+    }                                                                                                                  \
     namespace NekiraReflect                                                                                            \
     {                                                                                                                  \
-    void ReflectionAccessor<ClassName>::RegisterReflection()                                                           \
+    template <>                                                                                                        \
+    class ReflectionAccessor<NameSpace::ClassName>                                                                     \
     {                                                                                                                  \
-        auto classInfo = MakeClassTypeInfo<ClassType>(#ClassName);
+    public:                                                                                                            \
+        using ClassType = NameSpace::ClassName;                                                                        \
+        static void RegisterReflection();                                                                              \
+    };                                                                                                                 \
+    } // namespace NekiraReflect
+#endif
+
+// 定义类反射访问器RegisterReflection()实现
+#ifndef NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN
+#define NEKIRA_REFLECT_CLASS_ACCESSOR_BEGIN(QualifiedName)                                                             \
+    namespace NekiraReflect                                                                                            \
+    {                                                                                                                  \
+    void ReflectionAccessor<QualifiedName>::RegisterReflection()                                                       \
+    {                                                                                                                  \
+        auto classInfo = MakeClassTypeInfo<QualifiedName>(#QualifiedName);
 #endif
 
 // 通过类反射访问器注册成员变量
@@ -87,11 +107,9 @@ public:
     } // namespace NekiraReflect
 #endif
 
-// 自动注册类的反射信息
+// 自动注册类的反射信息(无命名空间)
 #ifndef NEKIRA_REFLECT_CLASS_REGISTER_AUTO
 #define NEKIRA_REFLECT_CLASS_REGISTER_AUTO(ClassName)                                                                  \
-    namespace NekiraReflect_Inside                                                                                     \
-    {                                                                                                                  \
     struct ClassName##_ClassAutoRegister                                                                               \
     {                                                                                                                  \
         ClassName##_ClassAutoRegister()                                                                                \
@@ -99,12 +117,27 @@ public:
             NekiraReflect::ReflectionAccessor<ClassName>::RegisterReflection();                                        \
         }                                                                                                              \
     };                                                                                                                 \
+    static ClassName##_ClassAutoRegister ClassName##_ClassAutoRegister_Inst;
+#endif
+
+// 自动注册类的反射信息(有命名空间)
+#ifndef NEKIRA_REFLECT_CLASS_REGISTER_AUTO_NS
+#define NEKIRA_REFLECT_CLASS_REGISTER_AUTO_NS(NameSpace, ClassName)                                                    \
+    namespace NameSpace                                                                                                \
+    {                                                                                                                  \
+    struct ClassName##_ClassAutoRegister                                                                               \
+    {                                                                                                                  \
+        ClassName##_ClassAutoRegister()                                                                                \
+        {                                                                                                              \
+            NekiraReflect::ReflectionAccessor<NameSpace::ClassName>::RegisterReflection();                             \
+        }                                                                                                              \
+    };                                                                                                                 \
     static ClassName##_ClassAutoRegister ClassName##_ClassAutoRegister_Inst;                                           \
-    } // namespace NekiraReflect_Inside
+    } // namespace NameSpace
 #endif
 
 // ============================================ 枚举的反射访问器 ============================================ //
-// 定义枚举的反射访问器特化
+// 定义枚举的反射访问器特化(无命名空间)
 #ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_DECL
 #define NEKIRA_REFLECT_ENUM_ACCESSOR_DECL(EnumName)                                                                    \
     enum class EnumName;                                                                                               \
@@ -120,14 +153,34 @@ public:
     } // namespace NekiraReflect
 #endif
 
-// 定义枚举的反射访问器RegisterReflection()实现
-#ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN
-#define NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN(EnumName)                                                                   \
+// 定义枚举的反射访问器特化(有命名空间)
+#ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_DECL_NS
+#define NEKIRA_REFLECT_ENUM_ACCESSOR_DECL_NS(NameSpace, EnumName)                                                      \
+    namespace NameSpace                                                                                                \
+    {                                                                                                                  \
+    enum class EnumName;                                                                                               \
+    }                                                                                                                  \
     namespace NekiraReflect                                                                                            \
     {                                                                                                                  \
-    void ReflectionAccessor<EnumName>::RegisterReflection()                                                            \
+    template <>                                                                                                        \
+    class ReflectionAccessor<NameSpace::EnumName>                                                                      \
     {                                                                                                                  \
-        auto enumInfo = MakeEnumTypeInfo<EnumType>(#EnumName);
+    public:                                                                                                            \
+        using EnumType = NameSpace::EnumName;                                                                          \
+        static void RegisterReflection();                                                                              \
+    };                                                                                                                 \
+    } // namespace NekiraReflect
+#endif
+
+
+// 定义枚举的反射访问器RegisterReflection()实现
+#ifndef NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN
+#define NEKIRA_REFLECT_ENUM_ACCESSOR_BEGIN(QualifiedName)                                                              \
+    namespace NekiraReflect                                                                                            \
+    {                                                                                                                  \
+    void ReflectionAccessor<QualifiedName>::RegisterReflection()                                                       \
+    {                                                                                                                  \
+        auto enumInfo = MakeEnumTypeInfo<QualifiedName>(#QualifiedName);
 #endif
 
 // 通过枚举反射访问器注册枚举值
@@ -144,11 +197,9 @@ public:
     } // namespace NekiraReflect
 #endif
 
-// 自动注册枚举的反射信息
+// 自动注册枚举的反射信息(无命名空间)
 #ifndef NEKIRA_REFLECT_ENUM_REGISTER_AUTO
 #define NEKIRA_REFLECT_ENUM_REGISTER_AUTO(EnumName)                                                                    \
-    namespace NekiraReflect_Inside                                                                                     \
-    {                                                                                                                  \
     struct EnumName##_EnumAutoRegister                                                                                 \
     {                                                                                                                  \
         EnumName##_EnumAutoRegister()                                                                                  \
@@ -156,6 +207,21 @@ public:
             NekiraReflect::ReflectionAccessor<EnumName>::RegisterReflection();                                         \
         }                                                                                                              \
     };                                                                                                                 \
+    static EnumName##_EnumAutoRegister EnumName##_EnumAutoRegister_Inst;
+#endif
+
+// 自动注册枚举的反射信息(有命名空间)
+#ifndef NEKIRA_REFLECT_ENUM_REGISTER_AUTO_NS
+#define NEKIRA_REFLECT_ENUM_REGISTER_AUTO_NS(NameSpace, EnumName)                                                      \
+    namespace NameSpace                                                                                                \
+    {                                                                                                                  \
+    struct EnumName##_EnumAutoRegister                                                                                 \
+    {                                                                                                                  \
+        EnumName##_EnumAutoRegister()                                                                                  \
+        {                                                                                                              \
+            NekiraReflect::ReflectionAccessor<NameSpace::EnumName>::RegisterReflection();                              \
+        }                                                                                                              \
+    };                                                                                                                 \
     static EnumName##_EnumAutoRegister EnumName##_EnumAutoRegister_Inst;                                               \
-    } // namespace NekiraReflect_Inside
+    } // namespace NameSpace
 #endif

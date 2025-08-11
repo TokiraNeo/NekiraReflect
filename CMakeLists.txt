@@ -84,11 +84,11 @@ target_include_directories(NekiraReflection
 # =============================================================================
 
 # 生成工具可执行文件
-add_executable(NekiraReflectGen
-    ${CMAKE_CURRENT_SOURCE_DIR}/Main/NekiraReflectGen.cpp
+add_executable(NekiraReflectTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/Main/NekiraReflectTool.cpp
 )
 
-target_include_directories(NekiraReflectGen PRIVATE
+target_include_directories(NekiraReflectTool PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/DynamicReflect
     ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/StaticReflect
     ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/TypeExtraction
@@ -98,7 +98,7 @@ target_include_directories(NekiraReflectGen PRIVATE
 )
 
 # 链接库
-target_link_libraries(NekiraReflectGen PRIVATE
+target_link_libraries(NekiraReflectTool PRIVATE
     NekiraReflection::NekiraReflection
     libclang
 )
@@ -111,7 +111,7 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 # 安装库和反射生成器
-install(TARGETS NekiraReflection NekiraReflectGen
+install(TARGETS NekiraReflection NekiraReflectTool
     EXPORT NekiraReflectionTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

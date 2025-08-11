@@ -25,7 +25,9 @@
 #include "clang-c/CXString.h"
 #include "clang-c/Index.h"
 #include <Tools/CodeUtilities.hpp>
+#include <cstring>
 #include <iostream>
+#include <vector>
 
 namespace NekiraReflect
 {
@@ -35,8 +37,8 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
 {
     CXIndex Index = clang_createIndex(0, 0);
 
-    const char* ArgsStr[] = {"-std=c++20", "-D__REFLECT_GEN_ENABLE__", "-fsyntax-only", "-Id:/NekiraReflect/include"};
-    int         ArgsNum = sizeof(ArgsStr) / sizeof(ArgsStr[0]);
+    const char*   ArgsStr[] = {"-std=c++20", "-D__REFLECT_GEN_ENABLE__", "-fsyntax-only", "-Id:/NekiraReflect/include"};
+    constexpr int ArgsNum = std::size(ArgsStr);
     const char* const* ArgsPtr = ArgsStr;
 
     CXTranslationUnit TSUnit = clang_parseTranslationUnit(Index, FileName.c_str(), ArgsPtr, ArgsNum, nullptr, 0,
@@ -76,7 +78,7 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
 // AST遍历回调函数
 CXChildVisitResult CodeScanHelper::Visitor(CXCursor Current, CXCursor Root, CXClientData ClientData)
 {
-    VisitorData* Data = static_cast<VisitorData*>(ClientData);
+    auto*        Data = static_cast<VisitorData*>(ClientData);
     CXCursorKind Kind = clang_getCursorKind(Current);
 
     // 仅处理主文件中的节点
@@ -115,19 +117,23 @@ CXChildVisitResult CodeScanHelper::Visitor(CXCursor Current, CXCursor Root, CXCl
 }
 
 // 处理枚举声明
-void CodeScanHelper::ProcessEnumDecl(CXCursor Cursor, VisitorData* Data)
+void CodeScanHelper::ProcessEnumDecl(const CXCursor& Cursor, VisitorData* Data)
 {
     if (!CheckAttribute(Cursor, "NEnum"))
     {
         return;
     }
 
-    EnumMetaInfo EnumMeta;
+    // 初始化枚举的命名空间
+    EnumMetaInfo EnumMeta{GetFullNameSpace(Cursor)};
 
     // 获取枚举名称
     CXString EnumSpelling = clang_getCursorSpelling(Cursor);
     EnumMeta.Name = clang_getCString(EnumSpelling);
     clang_disposeString(EnumSpelling);
+
+    // 获取枚举限定名称
+    EnumMeta.QualifiedName = BuildQualifiedName(EnumMeta.NameSpace, EnumMeta.Name);
 
     // 获取枚举值
     clang_visitChildren(Cursor, EnumValueVisitor, &EnumMeta);
@@ -137,14 +143,15 @@ void CodeScanHelper::ProcessEnumDecl(CXCursor Cursor, VisitorData* Data)
 }
 
 // 处理结构体声明
-void CodeScanHelper::ProcessStructDecl(CXCursor Cursor, VisitorData* Data)
+void CodeScanHelper::ProcessStructDecl(const CXCursor& Cursor, VisitorData* Data)
 {
     if (!CheckAttribute(Cursor, "NStruct"))
     {
         return;
     }
 
-    ClassMetaInfo StructMeta;
+    // 初始化结构体的命名空间
+    ClassMetaInfo StructMeta{GetFullNameSpace(Cursor)};
 
     // 获取结构体名称
     CXString StructSpelling = clang_getCursorSpelling(Cursor);
@@ -152,9 +159,7 @@ void CodeScanHelper::ProcessStructDecl(CXCursor Cursor, VisitorData* Data)
     clang_disposeString(StructSpelling);
 
     // 获取结构体限定名称
-    CXString StructQualify = clang_getCursorDisplayName(Cursor);
-    StructMeta.QualifiedName = clang_getCString(StructQualify);
-    clang_disposeString(StructQualify);
+    StructMeta.QualifiedName = BuildQualifiedName(StructMeta.NameSpace, StructMeta.Name);
 
     // 处理成员变量和函数
     clang_visitChildren(Cursor, MemberVisitor, &StructMeta);
@@ -164,14 +169,15 @@ void CodeScanHelper::ProcessStructDecl(CXCursor Cursor, VisitorData* Data)
 }
 
 // 处理类声明
-void CodeScanHelper::ProcessClassDecl(CXCursor Cursor, VisitorData* Data)
+void CodeScanHelper::ProcessClassDecl(const CXCursor& Cursor, VisitorData* Data)
 {
     if (!CheckAttribute(Cursor, "NClass"))
     {
         return;
     }
 
-    ClassMetaInfo ClassMeta;
+    // 初始化类的命名空间
+    ClassMetaInfo ClassMeta{GetFullNameSpace(Cursor)};
 
     // 获取类名称
     CXString ClassSpelling = clang_getCursorSpelling(Cursor);
@@ -179,9 +185,7 @@ void CodeScanHelper::ProcessClassDecl(CXCursor Cursor, VisitorData* Data)
     clang_disposeString(ClassSpelling);
 
     // 获取类限定名称
-    CXString ClassQualify = clang_getCursorDisplayName(Cursor);
-    ClassMeta.QualifiedName = clang_getCString(ClassQualify);
-    clang_disposeString(ClassQualify);
+    ClassMeta.QualifiedName = BuildQualifiedName(ClassMeta.NameSpace, ClassMeta.Name);
 
     // 处理成员变量和函数
     clang_visitChildren(Cursor, MemberVisitor, &ClassMeta);
@@ -191,7 +195,7 @@ void CodeScanHelper::ProcessClassDecl(CXCursor Cursor, VisitorData* Data)
 }
 
 // 处理成员变量的声明
-void CodeScanHelper::ProcessMemberVarDecl(CXCursor Cursor, ClassMetaInfo* ClassMeta)
+void CodeScanHelper::ProcessMemberVarDecl(const CXCursor& Cursor, ClassMetaInfo* ClassMeta)
 {
     if (!CheckAttribute(Cursor, "NProperty"))
     {
@@ -215,7 +219,7 @@ void CodeScanHelper::ProcessMemberVarDecl(CXCursor Cursor, ClassMetaInfo* ClassM
 }
 
 // 处理成员函数的声明
-void CodeScanHelper::ProcessMemberFuncDecl(CXCursor Cursor, ClassMetaInfo* ClassMeta)
+void CodeScanHelper::ProcessMemberFuncDecl(const CXCursor& Cursor, ClassMetaInfo* ClassMeta)
 {
     if (!CheckAttribute(Cursor, "NFunction"))
     {
@@ -241,7 +245,7 @@ void CodeScanHelper::ProcessMemberFuncDecl(CXCursor Cursor, ClassMetaInfo* Class
 // 成员访问回调(用于类和结构体)
 CXChildVisitResult CodeScanHelper::MemberVisitor(CXCursor Current, CXCursor Root, CXClientData ClientData)
 {
-    ClassMetaInfo* ClassMeta = static_cast<ClassMetaInfo*>(ClientData);
+    auto* ClassMeta = static_cast<ClassMetaInfo*>(ClientData);
 
     if (Current.kind == CXCursor_FieldDecl)
     {
@@ -261,7 +265,7 @@ CXChildVisitResult CodeScanHelper::EnumValueVisitor(CXCursor Current, CXCursor R
 {
     if (Current.kind == CXCursor_EnumConstantDecl)
     {
-        EnumMetaInfo* EnumMeta = static_cast<EnumMetaInfo*>(ClientData);
+        auto* EnumMeta = static_cast<EnumMetaInfo*>(ClientData);
 
         // 获取枚举值名称
         CXString    ValueSpelling = clang_getCursorSpelling(Current);
@@ -277,7 +281,7 @@ CXChildVisitResult CodeScanHelper::EnumValueVisitor(CXCursor Current, CXCursor R
 }
 
 // 检查是否有特定的Attribute
-bool CodeScanHelper::CheckAttribute(CXCursor Cursor, const std::string& AttributeName)
+bool CodeScanHelper::CheckAttribute(const CXCursor& Cursor, const std::string& AttributeName)
 {
     if (AttributeName.empty())
     {
@@ -292,7 +296,7 @@ bool CodeScanHelper::CheckAttribute(CXCursor Cursor, const std::string& Attribut
         {
             if (clang_getCursorKind(Current) == CXCursor_AnnotateAttr)
             {
-                AttributeSearchData* Data = static_cast<AttributeSearchData*>(ClientData);
+                auto* SearchData = static_cast<AttributeSearchData*>(ClientData);
 
                 CXString    AttrSpelling = clang_getCursorSpelling(Current);
                 const char* AttrCStr = clang_getCString(AttrSpelling);
@@ -301,10 +305,9 @@ bool CodeScanHelper::CheckAttribute(CXCursor Cursor, const std::string& Attribut
                 // 比较
                 if (AttrCStr != nullptr)
                 {
-                    std::string AttrString(AttrCStr);
-                    if (Data->Attribute == AttrString)
+                    if (SearchData->Attribute == AttrCStr)
                     {
-                        Data->bFound = true;
+                        SearchData->bFound = true;
 
                         clang_disposeString(AttrSpelling);
                         return CXChildVisit_Break;
@@ -319,6 +322,65 @@ bool CodeScanHelper::CheckAttribute(CXCursor Cursor, const std::string& Attribut
     return Data.bFound;
 }
 
+// 获取完整命名空间(以::分隔)
+std::string CodeScanHelper::GetFullNameSpace(const CXCursor& Cursor)
+{
+    std::vector<std::string> NameSpaces;
 
+    // 获取父节点。
+    CXCursor Parent = clang_getCursorSemanticParent(Cursor);
+
+    while (!clang_Cursor_isNull(Parent))
+    {
+        // 到达顶部编译单元时停止
+        if (Parent.kind == CXCursor_TranslationUnit)
+        {
+            break;
+        }
+        // 如果是命名空间，则向前插入
+        else if (Parent.kind == CXCursor_Namespace)
+        {
+            CXString NameSpaceSpelling = clang_getCursorSpelling(Parent);
+            auto     NameSpaceStr = clang_getCString(NameSpaceSpelling);
+
+            if (NameSpaceStr && strlen(NameSpaceStr) > 0)
+            {
+                NameSpaces.insert(NameSpaces.begin(), NameSpaceStr);
+            }
+
+            // 释放字符串
+            clang_disposeString(NameSpaceSpelling);
+        }
+
+        // 继续向上获取父节点
+        Parent = clang_getCursorSemanticParent(Parent);
+    }
+
+    // 拼接命名空间
+    std::string FullNameSpace;
+    for (const auto& NameSpace : NameSpaces)
+    {
+        // 如果不是第一个命名空间，则添加分隔符
+        if (!FullNameSpace.empty())
+        {
+            FullNameSpace += "::";
+        }
+
+        FullNameSpace += NameSpace;
+    }
+
+    return FullNameSpace;
+}
+
+// 获取限定名称(包含命名空间)
+std::string CodeScanHelper::BuildQualifiedName(const std::string& NameSpace, const std::string& Name)
+{
+    if (NameSpace.empty())
+    {
+        return Name;
+    }
+
+    return NameSpace + "::" + Name;
+}
 
 } // namespace NekiraReflect

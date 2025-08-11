@@ -28,7 +28,7 @@ if(NekiraReflection_FOUND)
     
     # 提供便利的变量
     set(NekiraReflection_LIBRARIES NekiraReflection::NekiraReflection)
-    set(NekiraReflection_GENERATOR_EXECUTABLE NekiraReflection::NekiraReflectGen)
+    set(NekiraReflection_GENERATOR_EXECUTABLE NekiraReflection::NekiraReflectTool)
     
     message(STATUS "Found NekiraReflection ${NEKIRA_REFLECTION_VERSION}")
 endif()

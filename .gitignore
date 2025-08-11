@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# 忽略.idea目录
+.idea/
+
 # 忽略VSCode 配置目录
 .vscode/
 

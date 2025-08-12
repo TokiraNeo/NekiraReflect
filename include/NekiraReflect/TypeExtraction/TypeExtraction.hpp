@@ -28,7 +28,6 @@
 #include "FunctionTraits.hpp"
 #include "VariableTraits.hpp"
 
-
 namespace NekiraReflect
 {
 

@@ -6,6 +6,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 设置输出目录
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 # 查找llvm、clang库
 find_package(LLVM REQUIRED CONFIG)
 find_package(Clang REQUIRED CONFIG)
@@ -21,26 +26,49 @@ message("Clang_DIR: ${Clang_DIR}")
 message("Clang_LIBRARIES: ${Clang_LIBRARIES}")
 
 # =============================================================================
+# 反射类型注册表库定义
+# =============================================================================
+
+# 添加头文件
+file(GLOB_RECURSE REGISTRY_HEADERS
+    "include/NekiraReflect/Registry/*.hpp"
+)
+
+# 收集源文件
+file(GLOB_RECURSE REGISTRY_SOURCES
+    "source/Registry/*.cpp"
+)
+
+# 创建反射类型注册表库(这里使用动态库，避免多个静态实例)
+add_library(NekiraReflectRegistry SHARED ${REGISTRY_HEADERS} ${REGISTRY_SOURCES})
+add_library(NekiraReflect::Registry ALIAS NekiraReflectRegistry)
+
+# 配置包含目录
+target_include_directories(NekiraReflectRegistry
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Registry
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/DynamicReflect
+)
+
+# =============================================================================
 # 核心库定义
 # =============================================================================
 
-# 设置输出目录
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 # 添加头文件
 file(GLOB_RECURSE CORE_HEADERS
-    "include/NekiraReflect/*.hpp"
+    "include/NekiraReflect/TypeExtraction/*.hpp"
+    "include/NekiraReflect/DynamicReflect/*.hpp"
+    "include/NekiraReflect/StaticReflect/*.hpp"
 )
 
 # 收集源文件
 file(GLOB_RECURSE CORE_SOURCES
-    "source/*.cpp"
+    "source/DynamicReflect/*.cpp"
 )
 
+
 # 创建核心库
-add_library(NekiraReflection ${CORE_HEADERS} ${CORE_SOURCES})
+add_library(NekiraReflection SHARED ${CORE_HEADERS} ${CORE_SOURCES})
 add_library(NekiraReflection::NekiraReflection ALIAS NekiraReflection)
 
 # 设置目标属性
@@ -57,12 +85,45 @@ target_include_directories(NekiraReflection
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/TypeExtraction
         ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/DynamicReflect
         ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/StaticReflect
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/TypeExtraction
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Generation
-        ${LLVM_INCLUDE_DIRS}
-        ${Clang_INCLUDE_DIRS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Registry
+)
+
+# 链接库
+target_link_libraries(NekiraReflection PRIVATE
+    NekiraReflectRegistry
+)
+
+# =============================================================================
+# 反射生成库
+# =============================================================================
+
+# 添加头文件
+file(GLOB_RECURSE GEN_HEADERS
+    "include/NekiraReflect/Generation/*.hpp"
+)
+
+# 收集源文件
+file(GLOB_RECURSE GEN_SOURCES
+    "source/Generation/*.cpp"
+)
+
+# 创建反射生成库
+add_library(NekiraReflectGen STATIC ${GEN_HEADERS} ${GEN_SOURCES})
+add_library(NekiraReflection::NekiraReflectGen ALIAS NekiraReflectGen)
+
+# 包含目录
+target_include_directories(NekiraReflectGen PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Generation
+    ${LLVM_INCLUDE_DIRS}
+    ${Clang_INCLUDE_DIRS}
+)
+
+# 依赖库
+target_link_libraries(NekiraReflectGen PRIVATE
+    libclang
 )
 
 # =============================================================================
@@ -73,27 +134,17 @@ target_include_directories(NekiraReflection
 add_executable(NekiraReflectTool
     ${CMAKE_CURRENT_SOURCE_DIR}/Main/NekiraReflectTool.cpp
 )
-
-# 设置目标属性
-set_target_properties(NekiraReflectTool PROPERTIES
-    VERSION ${PROJECT_VERSION}
-    EXECUTABLE "${CMAKE_INSTALL_BINDIR}/NekiraReflectTool"
-)
+add_executable(NekiraReflection::NekiraReflectTool ALIAS NekiraReflectTool)
 
 # 配置包含目录
 target_include_directories(NekiraReflectTool PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/DynamicReflect
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/StaticReflect
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/TypeExtraction
     ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Generation
-    ${LLVM_INCLUDE_DIRS}
-    ${Clang_INCLUDE_DIRS}
 )
 
 # 链接库
 target_link_libraries(NekiraReflectTool PRIVATE
-    NekiraReflection::NekiraReflection
-    libclang
+    NekiraReflection
+    NekiraReflectGen
 )
 
 # =============================================================================
@@ -113,8 +164,8 @@ include(NekiraReflectToolConfig)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-# 安装库和反射生成器
-install(TARGETS NekiraReflection NekiraReflectTool
+# 安装反射库、反射注册表库、反射生成库、反射生成工具
+install(TARGETS NekiraReflectRegistry NekiraReflection NekiraReflectGen NekiraReflectTool
     EXPORT NekiraReflectionTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "Registry/ReflectionRegistry.hpp"
+#include "ReflectionRegistry.hpp"
 #include "TypeCollection/CoreType.hpp"
 
 
@@ -39,7 +39,7 @@ namespace NekiraReflect
 template <typename EnumType>
 static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo(const std::string& Name)
 {
-    std::type_index TypeIndex = std::type_index(typeid(EnumType));
+    auto TypeIndex = std::type_index(typeid(EnumType));
 
     size_t TypeSize = sizeof(EnumType);
 

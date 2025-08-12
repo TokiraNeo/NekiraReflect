@@ -98,8 +98,8 @@ function(NekiraReflection_AddModule)
         # 令原先的目标依赖于反射生成目标
         add_dependencies(${NREFL_TARGET} ${NREFL_TARGET}_Reflection)
 
-        # 将生成的源文件添加到原目标
-        target_sources(${NREFL_TARGET} PRIVATE ${GENERATED_SOURCE_LIST})
+        # 将生成的源文件，头文件添加到原目标
+        target_sources(${NREFL_TARGET} PRIVATE ${GENERATED_SOURCE_LIST} ${GENERATED_HEADER_LIST})
 
         # 将反射生成目录添加到原目标的include目录，用于包含生成的头文件
         target_include_directories(${NREFL_TARGET} PRIVATE ${NREFL_OUTPUT_DIR})

@@ -15,15 +15,10 @@ set(NekiraReflection_LIBRARIES NekiraReflection::NekiraReflection)
 # 检查所有组件
 check_required_components(NekiraReflection)
 
-# 获取反射工具路径
-get_target_property(NekiraReflection_TOOL NekiraReflection::NekiraReflectTool EXECUTABLE)
-
 message(NOTICE "NekiraReflection: ${NekiraReflection_VERSION}")
-message(NOTICE "NekiraReflectTool: ${NekiraReflection_TOOL}")
 
 message(NOTICE "NekiraReflection_INCLUDE_DIRS: ${NekiraReflection_INCLUDE_DIRS}")
 message(NOTICE "NekiraReflection_LIBRARIES: ${NekiraReflection_LIBRARIES}")
-
 
 
 message(NOTICE "Usage: find_package(NekiraReflection REQUIRED)")

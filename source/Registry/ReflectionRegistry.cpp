@@ -23,7 +23,7 @@
  */
 
 
-#include "Registry/ReflectionRegistry.hpp"
+#include "ReflectionRegistry.hpp"
 
 namespace NekiraReflect
 {
@@ -58,7 +58,7 @@ EnumTypeInfo* ReflectionRegistry::GetEnumInfo(std::type_index TypeIndex) const
 }
 
 // Get Enum Info by Name(Would be slower)
-EnumTypeInfo* ReflectionRegistry::GetEnumInfoByName(const std::string& Name)
+EnumTypeInfo* ReflectionRegistry::GetEnumInfoByName(const std::string& Name) const
 {
     EnumTypeInfo* Result = nullptr;
 

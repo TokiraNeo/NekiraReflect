@@ -25,7 +25,8 @@
 
 #pragma once
 
-#include "Macros/CoreMacros.hpp"
-#include "Utility/Utilities.hpp"
+#include "NekiraReflect/DynamicReflect/Macros/CoreMacros.hpp"
+#include "NekiraReflect/DynamicReflect/Utility/Utilities.hpp"
+
 
 // ============================================= 动态反射注册工具 ============================================= //

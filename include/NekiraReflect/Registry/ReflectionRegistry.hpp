@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "TypeCollection/CoreType.hpp"
+#include "NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp"
 
 // ======================================= 动态反射全局注册表 ======================================= //
 namespace NekiraReflect
@@ -100,10 +100,10 @@ private:
 
 private:
     // Enum Info
-    EnumInfoMap EnumInfos;
+    EnumInfoMap EnumInfos {};
 
     // Class Info for Classes and Structs
-    ClassInfoMap ClassInfos;
+    ClassInfoMap ClassInfos {};
 };
 
 } // namespace NekiraReflect

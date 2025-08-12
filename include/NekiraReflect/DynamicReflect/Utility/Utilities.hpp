@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "ReflectionRegistry.hpp"
-#include "TypeCollection/CoreType.hpp"
+#include "NekiraReflect/Registry/ReflectionRegistry.hpp"
+#include "NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp"
 
 
 

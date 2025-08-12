@@ -26,12 +26,11 @@
 #pragma once
 
 
-#include "Tools/MetaInfo.hpp"
+#include "NekiraReflect/Generation/Tools/MetaInfo.hpp"
 #include "clang-c/Index.h"
 #include <fstream>
 #include <string>
 #include <vector>
-
 
 
 namespace NekiraReflect

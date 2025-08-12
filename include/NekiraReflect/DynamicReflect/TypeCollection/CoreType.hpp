@@ -24,7 +24,7 @@
 
 
 #pragma once
-#include "TypeCollection/MemberFuncWrapper.hpp"
+#include "NekiraReflect/DynamicReflect/TypeCollection/MemberFuncWrapper.hpp"
 #include <any>
 #include <cstdint>
 #include <iostream>
@@ -79,17 +79,17 @@ public:
         : Name(name), TypeIndex(typeIndex), Size(size)
     {}
 
-    inline const std::string GetName() const
+    inline std::string GetName() const
     {
         return Name;
     }
 
-    inline const std::type_index GetTypeIndex() const
+    inline std::type_index GetTypeIndex() const
     {
         return TypeIndex;
     }
 
-    inline const size_t GetSize() const
+    inline size_t GetSize() const
     {
         return Size;
     }
@@ -173,7 +173,7 @@ public:
     template <typename VarType>
     VarType& GetValue(void* Object) const
     {
-        VarType* MemberPtr = (VarType*)(((char*)Object) + Offset);
+        auto* MemberPtr = (VarType*)(((char*)Object) + Offset);
 
         return *MemberPtr;
     }
@@ -182,7 +182,7 @@ public:
     template <typename VarType>
     void SetValue(void* Object, const VarType& Value) const
     {
-        VarType* MemberPtr = (VarType*)(((char*)Object) + Offset);
+        auto* MemberPtr = (VarType*)(((char*)Object) + Offset);
 
         *MemberPtr = Value;
     }
@@ -234,7 +234,7 @@ public:
     {
         auto WrapperLambda = [funcPtr](void* Object, const std::vector<std::any>& Params) -> std::any
         {
-            ClassType* ObjectPtr = static_cast<ClassType*>(Object);
+            auto* ObjectPtr = static_cast<ClassType*>(Object);
             if constexpr (std::is_void_v<RT>)
             {
                 auto VoidLambda = [funcPtr, ObjectPtr](auto&&... args) -> void
@@ -242,7 +242,7 @@ public:
 
                 std::apply(VoidLambda, Anys_To_Tuple<Args...>(Params));
 
-                return std::any();
+                return {};
             }
             else
             {
@@ -263,7 +263,7 @@ public:
     {
         auto WrapperLambda = [funcPtr](void* Object, const std::vector<std::any>& Params) -> std::any
         {
-            ClassType* ObjectPtr = static_cast<ClassType*>(Object);
+            auto* ObjectPtr = static_cast<ClassType*>(Object);
             if constexpr (std::is_void_v<RT>)
             {
                 auto VoidLambda = [funcPtr, ObjectPtr](auto&&... args) -> void
@@ -271,7 +271,7 @@ public:
 
                 std::apply(VoidLambda, Anys_To_Tuple<Args...>(Params));
 
-                return std::any();
+                return {};
             }
             else
             {
@@ -326,8 +326,7 @@ public:
     template <typename VarType>
     void SetVariableValue(void* object, const std::string& name, const VarType& value)
     {
-        auto varInfo = GetVariable(name);
-        if (varInfo)
+        if (auto varInfo = GetVariable(name))
         {
             varInfo->SetValue(object, value);
         }

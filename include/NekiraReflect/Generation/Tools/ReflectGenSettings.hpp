@@ -31,7 +31,8 @@ namespace NekiraReflect
 {
 struct ReflectGenSettings
 {
-    std::vector<std::string> IncludePaths; // 头文件搜索路径
-    std::vector<std::string> Definitions;  // 预处理宏定义
+    std::vector<std::string> IncludePaths;    // 头文件搜索路径
+    std::vector<std::string> CommandLineArgs; // 命令行参数
+    std::vector<std::string> Definitions;     // 预处理宏定义
 };
 } // namespace NekiraReflect

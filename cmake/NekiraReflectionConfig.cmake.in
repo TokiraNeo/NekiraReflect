@@ -1,36 +1,34 @@
 @PACKAGE_INIT@
 
-# 设置变量
-set(NEKIRA_REFLECTION_VERSION @PROJECT_VERSION@)
-
-# 查找依赖
-find_package(LLVM REQUIRED CONFIG)
-find_package(Clang REQUIRED CONFIG)
-
-# 包含目标
+# 包含导出的目标配置
 include("${CMAKE_CURRENT_LIST_DIR}/NekiraReflectionTargets.cmake")
 
-# 检查组件
-set(NekiraReflection_FOUND TRUE)
+# 包含反射生成工具配置
+include("${CMAKE_CURRENT_LIST_DIR}/NekiraReflectToolConfig.cmake")
 
-# 检查所有必需的组件是否可用
-foreach(component ${NekiraReflection_FIND_COMPONENTS})
-    if(NOT TARGET NekiraReflection::${component})
-        set(NekiraReflection_FOUND FALSE)
-        set(NekiraReflection_NOT_FOUND_MESSAGE "Missing component: ${component}")
-        break()
-    endif()
-endforeach()
+# 设置变量
+set(NekiraReflection_VERSION @PROJECT_VERSION@)
+set(NekiraReflection_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
+set(NekiraReflection_LIBRARIES NekiraReflection::NekiraReflection)
 
-if(NekiraReflection_FOUND)
-    # 设置变量供用户使用
-    get_target_property(NekiraReflection_INCLUDE_DIRS NekiraReflection::NekiraReflection INTERFACE_INCLUDE_DIRECTORIES)
-    
-    # 提供便利的变量
-    set(NekiraReflection_LIBRARIES NekiraReflection::NekiraReflection)
-    set(NekiraReflection_GENERATOR_EXECUTABLE NekiraReflection::NekiraReflectTool)
-    
-    message(STATUS "Found NekiraReflection ${NEKIRA_REFLECTION_VERSION}")
+# 检查所有组件
+check_required_components(NekiraReflection)
+
+# 搜索反射生成工具的路径
+get_target_property(ReflectToolPath NekiraReflectTool::NekiraReflectTool IMPORTED_LOCATION)
+
+# 若空，则尝试获取Release版本的路径
+if(NOT ReflectToolPath)
+    get_target_property(ReflectToolPath NekiraReflectTool::NekiraReflectTool IMPORTED_LOCATION_RELEASE)
 endif()
 
-check_required_components(NekiraReflection)
+# 若仍然为空，则尝试获取Debug版本的路径
+if(NOT ReflectToolPath)
+    get_target_property(ReflectToolPath NekiraReflectTool::NekiraReflectTool IMPORTED_LOCATION_DEBUG)
+endif()
+
+# 设置反射生成工具的路径
+set(NekiraReflection_TOOL "${ReflectToolPath}")
+
+message(STATUS "NekiraReflection: ${NekiraReflection_VERSION}")
+message(STATUS "NekiraReflectTool: ${NekiraReflection_TOOL}")

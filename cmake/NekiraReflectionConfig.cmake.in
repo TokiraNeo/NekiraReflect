@@ -11,24 +11,20 @@ set(NekiraReflection_VERSION @PROJECT_VERSION@)
 set(NekiraReflection_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
 set(NekiraReflection_LIBRARIES NekiraReflection::NekiraReflection)
 
+
 # 检查所有组件
 check_required_components(NekiraReflection)
 
-# 搜索反射生成工具的路径
-get_target_property(ReflectToolPath NekiraReflectTool::NekiraReflectTool IMPORTED_LOCATION)
+# 获取反射工具路径
+get_target_property(NekiraReflection_TOOL NekiraReflection::NekiraReflectTool EXECUTABLE)
 
-# 若空，则尝试获取Release版本的路径
-if(NOT ReflectToolPath)
-    get_target_property(ReflectToolPath NekiraReflectTool::NekiraReflectTool IMPORTED_LOCATION_RELEASE)
-endif()
+message(NOTICE "NekiraReflection: ${NekiraReflection_VERSION}")
+message(NOTICE "NekiraReflectTool: ${NekiraReflection_TOOL}")
 
-# 若仍然为空，则尝试获取Debug版本的路径
-if(NOT ReflectToolPath)
-    get_target_property(ReflectToolPath NekiraReflectTool::NekiraReflectTool IMPORTED_LOCATION_DEBUG)
-endif()
+message(NOTICE "NekiraReflection_INCLUDE_DIRS: ${NekiraReflection_INCLUDE_DIRS}")
+message(NOTICE "NekiraReflection_LIBRARIES: ${NekiraReflection_LIBRARIES}")
 
-# 设置反射生成工具的路径
-set(NekiraReflection_TOOL "${ReflectToolPath}")
 
-message(STATUS "NekiraReflection: ${NekiraReflection_VERSION}")
-message(STATUS "NekiraReflectTool: ${NekiraReflection_TOOL}")
+
+message(NOTICE "Usage: find_package(NekiraReflection REQUIRED)")
+message(NOTICE "Usage: target_link_libraries(your_target PRIVATE NekiraReflection)")

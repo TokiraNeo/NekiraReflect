@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include <StaticReflect.hpp>
+#include "StaticReflect.hpp"
 #include <iostream>
 
 using namespace NekiraReflect;

@@ -25,9 +25,8 @@
 
 #pragma once
 
-
-#include <Registry/ReflectionRegistry.hpp>
-#include <TypeCollection/CoreType.hpp>
+#include "Registry/ReflectionRegistry.hpp"
+#include "TypeCollection/CoreType.hpp"
 
 
 

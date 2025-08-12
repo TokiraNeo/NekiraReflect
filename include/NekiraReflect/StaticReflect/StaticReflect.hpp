@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <TypeCollection/StaticTypeInfo.hpp>
-#include <TypeExtraction.hpp>
+#include "StaticTypeInfo.hpp"
+#include "TypeExtraction.hpp"
 
 
 

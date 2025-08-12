@@ -26,9 +26,8 @@
 #pragma once
 
 
-
-#include <Tools/MetaInfo.hpp>
-#include <clang-c/Index.h>
+#include "Tools/MetaInfo.hpp"
+#include "clang-c/Index.h"
 #include <fstream>
 #include <string>
 #include <vector>

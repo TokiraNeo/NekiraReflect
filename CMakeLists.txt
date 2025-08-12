@@ -74,6 +74,12 @@ add_executable(NekiraReflectTool
     ${CMAKE_CURRENT_SOURCE_DIR}/Main/NekiraReflectTool.cpp
 )
 
+# 设置目标属性
+set_target_properties(NekiraReflectTool PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    EXECUTABLE "${CMAKE_INSTALL_BINDIR}/NekiraReflectTool"
+)
+
 # 配置包含目录
 target_include_directories(NekiraReflectTool PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/DynamicReflect

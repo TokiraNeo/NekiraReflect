@@ -24,7 +24,7 @@
 
 
 #pragma once
-#include <TypeCollection/MemberFuncWrapper.hpp>
+#include "TypeCollection/MemberFuncWrapper.hpp"
 #include <any>
 #include <cstdint>
 #include <iostream>

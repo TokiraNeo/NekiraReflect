@@ -26,7 +26,7 @@
 
 #include <iostream>
 
-#include <DynamicReflect.hpp>
+#include "DynamicReflect.hpp"
 
 
 using namespace NekiraReflect;

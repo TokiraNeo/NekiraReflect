@@ -25,8 +25,7 @@
 
 #pragma once
 
-
-#include <TypeCollection/CoreType.hpp>
+#include "TypeCollection/CoreType.hpp"
 
 
 // ======================================= 动态反射全局注册表 ======================================= //

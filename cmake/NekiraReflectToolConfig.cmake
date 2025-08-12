@@ -111,7 +111,7 @@ function(NekiraReflection_AddModule)
             NEKIRA_REFLECT_GENERATED_SOURCES "${GENERATED_SOURCE_LIST}"
         )
 
-        message(STATUS "Added reflection files for: ${NREFL_TARGET}")
+        message(NOTICE "Added reflection files for: ${NREFL_TARGET}")
     endif ()
 
 endfunction() # NekiraReflection_AddModule
@@ -121,6 +121,11 @@ endfunction() # NekiraReflection_AddModule
 # 清理反射生成的文件
 # ========================================
 function(NekiraReflection_CleanModule TARGET)
+    # 检查是否提供了目标
+    if(NOT TARGET)
+        message(FATAL_ERROR "NekiraReflection_CleanModule: TARGET is required.")
+    endif()
+
     # 获取存储在目标属性中的反射生成目录和文件列表
     get_target_property(GENERATED_DIR ${TARGET} NEKIRA_REFLECT_GENERATED_DIR)
     get_target_property(GENERATED_HEADERS ${TARGET} NEKIRA_REFLECT_GENERATED_HEADERS)
@@ -135,6 +140,6 @@ function(NekiraReflection_CleanModule TARGET)
         )
     endif()
 
-    message(STATUS "Removed reflection files for: ${TARGET}")
+    message(NOTICE "Removed reflection files for: ${TARGET}")
 
 endfunction() # NekiraReflection_CleanModule

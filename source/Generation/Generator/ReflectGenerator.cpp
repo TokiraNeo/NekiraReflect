@@ -22,10 +22,8 @@
  * SOFTWARE.
  */
 
-
-
-#include <Generator/ReflectGenerator.hpp>
-#include <Tools/CodeConsume.hpp>
+#include "Generator/ReflectGenerator.hpp"
+#include "Tools/CodeConsume.hpp"
 #include <iostream>
 
 namespace NekiraReflect

@@ -23,7 +23,7 @@
  */
 
 
-#include <Registry/ReflectionRegistry.hpp>
+#include "ReflectionRegistry.hpp"
 
 namespace NekiraReflect
 {
@@ -31,14 +31,14 @@ namespace NekiraReflect
 // Register Enum Info
 void ReflectionRegistry::RegisterEnum(std::unique_ptr<EnumTypeInfo> EnumInfo)
 {
-    std::type_index TypeIndex = EnumInfo->GetTypeIndex();
+    const std::type_index TypeIndex = EnumInfo->GetTypeIndex();
     EnumInfos[TypeIndex] = std::move(EnumInfo);
 }
 
 // Register Class Info
 void ReflectionRegistry::RegisterClass(std::unique_ptr<ClassTypeInfo> ClassInfo)
 {
-    std::type_index TypeIndex = ClassInfo->GetTypeIndex();
+    const std::type_index TypeIndex = ClassInfo->GetTypeIndex();
     ClassInfos[TypeIndex] = std::move(ClassInfo);
 }
 
@@ -47,7 +47,7 @@ EnumTypeInfo* ReflectionRegistry::GetEnumInfo(std::type_index TypeIndex) const
 {
     EnumTypeInfo* Result = nullptr;
 
-    auto it = EnumInfos.find(TypeIndex);
+    const auto it = EnumInfos.find(TypeIndex);
 
     if (it != EnumInfos.end())
     {
@@ -58,7 +58,7 @@ EnumTypeInfo* ReflectionRegistry::GetEnumInfo(std::type_index TypeIndex) const
 }
 
 // Get Enum Info by Name(Would be slower)
-EnumTypeInfo* ReflectionRegistry::GetEnumInfoByName(const std::string& Name)
+EnumTypeInfo* ReflectionRegistry::GetEnumInfoByName(const std::string& Name) const
 {
     EnumTypeInfo* Result = nullptr;
 
@@ -79,7 +79,7 @@ ClassTypeInfo* ReflectionRegistry::GetClassInfo(std::type_index TypeIndex) const
 {
     ClassTypeInfo* Result = nullptr;
 
-    auto it = ClassInfos.find(TypeIndex);
+    const auto it = ClassInfos.find(TypeIndex);
 
     if (it != ClassInfos.end())
     {

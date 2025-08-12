@@ -25,9 +25,7 @@
 
 #pragma once
 
-
-#include <TypeCollection/CoreType.hpp>
-
+#include "NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp"
 
 // ======================================= 动态反射全局注册表 ======================================= //
 namespace NekiraReflect
@@ -39,6 +37,9 @@ class ReflectionRegistry
     using ClassInfoMap = std::unordered_map<std::type_index, std::unique_ptr<ClassTypeInfo>>;
 
 public:
+    ReflectionRegistry(const ReflectionRegistry&) = delete;
+    ReflectionRegistry& operator=(const ReflectionRegistry&) = delete;
+
     // 获取单例实例
     static inline ReflectionRegistry& Get()
     {
@@ -71,13 +72,13 @@ public:
     template <typename EnumType>
     EnumTypeInfo* GetEnumInfo() const
     {
-        std::type_index TypeIndex = std::type_index(typeid(EnumType));
+        auto TypeIndex = std::type_index(typeid(EnumType));
 
         return GetEnumInfo(TypeIndex);
     }
 
     // Get Enum Info by Name(Would be slower)
-    EnumTypeInfo* GetEnumInfoByName(const std::string& Name);
+    EnumTypeInfo* GetEnumInfoByName(const std::string& Name) const;
 
     // Get Class Info by TypeIndex
     ClassTypeInfo* GetClassInfo(std::type_index TypeIndex) const;
@@ -86,7 +87,7 @@ public:
     template <typename ClassType>
     ClassTypeInfo* GetClassInfo() const
     {
-        std::type_index TypeIndex = std::type_index(typeid(ClassType));
+        auto TypeIndex = std::type_index(typeid(ClassType));
 
         return GetClassInfo(TypeIndex);
     }
@@ -97,15 +98,12 @@ public:
 private:
     ReflectionRegistry() = default;
 
-    ReflectionRegistry(const ReflectionRegistry&) = delete;
-    ReflectionRegistry& operator=(const ReflectionRegistry&) = delete;
-
 private:
     // Enum Info
-    EnumInfoMap EnumInfos;
+    EnumInfoMap EnumInfos {};
 
     // Class Info for Classes and Structs
-    ClassInfoMap ClassInfos;
+    ClassInfoMap ClassInfos {};
 };
 
 } // namespace NekiraReflect

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include <Tools/CodeConsume.hpp>
+#include "Tools/CodeConsume.hpp"
 #include <fstream>
 
 
@@ -49,7 +49,7 @@ void CodeGenerator::GenerateCode(const std::filesystem::path& InputFile, const s
 
     // 生成头文件内容
     HeaderStream << "#pragma once" << '\n' << '\n';
-    HeaderStream << "#include <NekiraReflect/DynamicReflect/Accessor/ReflectAccessor.hpp>" << '\n';
+    HeaderStream << "#include \"NekiraReflect/DynamicReflect/Accessor/ReflectAccessor.hpp\"" << '\n';
     HeaderStream << '\n';
 
     // 生成源文件内容

@@ -66,6 +66,9 @@ function(NekiraReflection_AddModule)
 
         # 添加预处理定义
         if(NREFL_DEFINITIONS)
+            # 确保包含__NEKIRA_REFLECT_TOOL__预定义，否则反射宏为空
+            list(APPEND REFLECT_TOOL_ARGS "-D__NEKIRA_REFLECT_TOOL__")
+
             foreach (DEFINITION ${NREFL_DEFINITIONS})
                 list(APPEND REFLECT_TOOL_ARGS "-D${DEFINITION}")
             endforeach ()

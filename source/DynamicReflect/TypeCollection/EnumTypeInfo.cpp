@@ -47,8 +47,8 @@ void EnumTypeInfo::AddEnumValues(const EnumValuesMap& values)
 // Get enum value by name, return true if found
 bool EnumTypeInfo::GetEnumValueByName(const std::string& name, int64_t& outValue) const
 {
-    bool bFound = false;
-    auto it = EnumValues.find(name);
+    bool       bFound = false;
+    const auto it = EnumValues.find(name);
 
     if (it != EnumValues.end())
     {
@@ -62,8 +62,8 @@ bool EnumTypeInfo::GetEnumValueByName(const std::string& name, int64_t& outValue
 // Get enum name by value, return true if found
 bool EnumTypeInfo::GetEnumNameByValue(const int64_t value, std::string& outName) const
 {
-    bool bFound = false;
-    auto it = EnumNames.find(value);
+    bool       bFound = false;
+    const auto it = EnumNames.find(value);
 
     if (it != EnumNames.end())
     {

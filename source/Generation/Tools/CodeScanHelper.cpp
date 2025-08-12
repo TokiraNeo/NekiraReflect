@@ -38,7 +38,7 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
     CXIndex Index = clang_createIndex(0, 0);
 
     // [TODO] 移除这里的-I include路径
-    const char*   ArgsStr[] = {"-std=c++20", "-D__REFLECT_GEN_ENABLE__", "-fsyntax-only", "-Id:/NekiraReflect/include"};
+    const char*   ArgsStr[] = {"-std=c++20", "-D__NEKIRA_REFLECT_TOOL__", "-fsyntax-only", "-Id:/NekiraReflect/include"};
     constexpr int ArgsNum = std::size(ArgsStr);
     const char* const* ArgsPtr = ArgsStr;
 
@@ -55,6 +55,8 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
         return;
     }
 
+
+    /* [INFO] 在Release版本中取消诊断，以允许源文件可以预先包含对应的.gen.hpp文件即使该文件还未生成。
     // 提供诊断信息
     unsigned DiagNum = clang_getNumDiagnostics(TSUnit);
     for (unsigned i = 0; i < DiagNum; ++i)
@@ -65,6 +67,7 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
         clang_disposeString(DiagStr);
         clang_disposeDiagnostic(Diag);
     }
+    */
 
     // 获取AST根节点
     CXCursor RootCursor = clang_getTranslationUnitCursor(TSUnit);

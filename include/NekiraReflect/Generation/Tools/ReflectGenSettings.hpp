@@ -24,15 +24,17 @@
 
 
 #pragma once
-#include <string>
 #include <vector>
+#include <string>
 
 namespace NekiraReflect
 {
 struct ReflectGenSettings
 {
-    std::vector<std::string> IncludePaths;    // 头文件搜索路径
-    std::vector<std::string> CommandLineArgs; // 命令行参数
-    std::vector<std::string> Definitions;     // 预处理宏定义
+    // 命令行参数
+    // -I<path> 添加包含路径
+    // -D<macro> 定义预处理宏
+    // -<> 其他参数
+    std::vector<const char*> CommandLineArgs;
 };
 } // namespace NekiraReflect

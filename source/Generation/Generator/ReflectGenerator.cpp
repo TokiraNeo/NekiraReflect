@@ -22,35 +22,34 @@
  * SOFTWARE.
  */
 
+#include "Tools/ReflectGenSettings.hpp"
 #include "Generator/ReflectGenerator.hpp"
 #include "Tools/CodeConsume.hpp"
+#include "Tools/CodeUtilities.hpp"
 #include <iostream>
 
 namespace NekiraReflect
 {
 // 扫描代码并生成反射代码
-void ReflectGenerator::GenerateReflectCode(const std::filesystem::path& InputFile)
+void ReflectGenerator::GenerateReflectCode(const std::filesystem::path& InputFile,
+                                           const std::filesystem::path& OutputDir,
+                                           const ReflectGenSettings& Settings)
 {
     VisitorData Data;
 
     // 扫描代码
-    std::cout << "Scanning file: " << InputFile.filename() << '\n';
-    CodeScanner::ScanCode(InputFile.string(), Data);
+    std::cout << "\033[32m-- Scan File: " << InputFile.filename() << "\033[0m\n";
+    CodeScanner::ScanCode(InputFile.string(), Settings, Data);
 
     if (Data.Enums.empty() && Data.Classes.empty())
     {
-        std::cout << "Skip File: " << InputFile.filename() << '\n';
+        std::cout << "\033[33m-Skip File: " << InputFile.filename() << "\033[0m\n";
         return;
     }
 
-    // 创建输出目录
-    const std::filesystem::directory_entry GeneratedDir("Generated");
-    if (!GeneratedDir.exists())
-    {
-        std::filesystem::create_directory("Generated");
-    }
-
     // 生成反射代码
-    CodeGenerator::GenerateCode(InputFile, Data.Enums, Data.Classes);
+    std::cout << "\033[34m-- Generate Code For: " << InputFile.filename() << "\033[0m\n";
+    CodeGenerator::GenerateCode(InputFile, OutputDir, Data.Enums, Data.Classes);
 }
+
 } // namespace NekiraReflect

@@ -66,9 +66,6 @@ function(NekiraReflection_AddModule)
 
         # 添加预处理定义
         if(NREFL_DEFINITIONS)
-            # 确保包含__NEKIRA_REFLECT_TOOL__预定义，否则反射宏为空
-            list(APPEND REFLECT_TOOL_ARGS "-D__NEKIRA_REFLECT_TOOL__")
-
             foreach (DEFINITION ${NREFL_DEFINITIONS})
                 list(APPEND REFLECT_TOOL_ARGS "-D${DEFINITION}")
             endforeach ()
@@ -81,7 +78,6 @@ function(NekiraReflection_AddModule)
             ARGS ${HEADER_FILE} ${NREFL_OUTPUT_DIR} ${REFLECT_TOOL_ARGS}
             # 依赖NekiraReflectTool和头文件，且只当头文件发生变化时才重新生成
             DEPENDS NekiraReflectTool ${HEADER_FILE}
-            COMMENT "Generating reflection files for: ${HEADER_FILE}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         )
 
@@ -95,7 +91,7 @@ function(NekiraReflection_AddModule)
     if(GENERATED_HEADER_LIST OR GENERATED_SOURCE_LIST)
         add_custom_target(${NREFL_TARGET}_Reflection
             DEPENDS ${GENERATED_HEADER_LIST} ${GENERATED_SOURCE_LIST}
-            COMMENT "Building reflection files for: ${NREFL_TARGET}"
+            COMMENT "-Building reflection module for: ${NREFL_TARGET}"
         )
 
         # 令原先的目标依赖于反射生成目标
@@ -114,7 +110,7 @@ function(NekiraReflection_AddModule)
             NEKIRA_REFLECT_GENERATED_SOURCES "${GENERATED_SOURCE_LIST}"
         )
 
-        message(NOTICE "Added reflection files for: ${NREFL_TARGET}")
+        message(NOTICE "-Added reflection module for: ${NREFL_TARGET}")
     endif ()
 
 endfunction() # NekiraReflection_AddModule
@@ -139,10 +135,10 @@ function(NekiraReflection_CleanModule TARGET)
         # 添加自定义命令，调用CMake清理命令
         add_custom_target(${TARGET}_CleanReflection
             COMMAND ${CMAKE_COMMAND} -E remove ${GENERATED_HEADERS} ${GENERATED_SOURCES}
-            COMMENT "Cleaning reflection files for: ${TARGET}"
+            COMMENT "-Cleaning reflection module for: ${TARGET}"
         )
     endif()
 
-    message(NOTICE "Removed reflection files for: ${TARGET}")
+    message(NOTICE "-Removed reflection module for: ${TARGET}")
 
 endfunction() # NekiraReflection_CleanModule

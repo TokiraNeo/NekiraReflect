@@ -25,17 +25,26 @@
 
 #pragma once
 
+
 #include <filesystem>
+
 
 namespace NekiraReflect
 {
+struct ReflectGenSettings;
 
 // 生成反射代码
 class ReflectGenerator final
 {
 public:
+    ReflectGenerator() = default;
+
     // 扫描代码并生成反射代码
-    static void GenerateReflectCode(const std::filesystem::path& InputFile);
+    static void GenerateReflectCode(const std::filesystem::path& InputFile, const std::filesystem::path& OutputDir,
+        const ReflectGenSettings& Settings);
+
+private:
+
 };
 
 } // namespace NekiraReflect

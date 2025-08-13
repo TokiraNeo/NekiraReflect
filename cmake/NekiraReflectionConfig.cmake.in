@@ -22,4 +22,5 @@ message(NOTICE "NekiraReflection_LIBRARIES: ${NekiraReflection_LIBRARIES}")
 
 
 message(NOTICE "Usage: find_package(NekiraReflection REQUIRED)")
-message(NOTICE "Usage: target_link_libraries(your_target PRIVATE NekiraReflection)")
+message(NOTICE "Usage: target_link_libraries(your_target PRIVATE NekiraReflection::NekiraReflection)")
+message(NOTICE "Usage: target_include_directories(your_target PRIVATE ${NekiraReflection_INCLUDE_DIRS})")

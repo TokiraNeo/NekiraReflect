@@ -28,6 +28,11 @@
 #include "NekiraReflect/Generation/Tools/CodeUtilities.hpp"
 #include <filesystem>
 
+namespace NekiraReflect
+{
+struct ReflectGenSettings;
+}
+
 
 
 namespace NekiraReflect
@@ -35,17 +40,20 @@ namespace NekiraReflect
 class CodeGenerator final
 {
 public:
+    CodeGenerator() = default;
+
     // 生成枚举、类、结构体的反射代码
-    // OutputFileStem: 输出文件名(不包含后缀)
-    static void GenerateCode(const std::filesystem::path& InputFile, const std::vector<EnumMetaInfo>& Enums,
-                             const std::vector<ClassMetaInfo>& Classes);
+    static void GenerateCode(const std::filesystem::path& InputFile, const std::filesystem::path& OutputDir,
+                             const std::vector<EnumMetaInfo>& Enums, const std::vector<ClassMetaInfo>& Classes);
 };
 
 // 用于扫描抽象语法树，查找反射相关Attribute
 class CodeScanner
 {
 public:
-    static void ScanCode(const std::string& InputFile, VisitorData& OutData);
+    CodeScanner() = default;
+
+    static void ScanCode(const std::string& InputFile, const ReflectGenSettings& Settings, VisitorData& OutData);
 };
 
 } // namespace NekiraReflect

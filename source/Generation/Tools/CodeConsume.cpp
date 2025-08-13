@@ -23,6 +23,7 @@
  */
 
 #include "Tools/CodeConsume.hpp"
+#include "Tools/ReflectGenSettings.hpp"
 #include <fstream>
 
 
@@ -30,19 +31,18 @@
 namespace NekiraReflect
 {
 // 生成枚举、类、结构体的反射代码
-// OutputFile: 输出文件名(不包含后缀)
-void CodeGenerator::GenerateCode(const std::filesystem::path& InputFile, const std::vector<EnumMetaInfo>& Enums,
-                                 const std::vector<ClassMetaInfo>& Classes)
+void CodeGenerator::GenerateCode(const std::filesystem::path& InputFile, const std::filesystem::path& OutputDir,
+                                 const std::vector<EnumMetaInfo>& Enums, const std::vector<ClassMetaInfo>& Classes)
 {
+    // 输入文件名(不包含后缀)
     const std::string InputFileStem = InputFile.stem().string();
-
     // 输出文件名(.gen.hpp & .gen.cpp)
     const std::string HeaderFileName = InputFileStem + ".gen.hpp";
     const std::string SourceFileName = InputFileStem + ".gen.cpp";
 
     // 输出文件路径
-    const std::string HeaderFile = "Generated/" + HeaderFileName;
-    const std::string SourceFile = "Generated/" + SourceFileName;
+    const std::string HeaderFile = OutputDir.string() + "/" + HeaderFileName;
+    const std::string SourceFile = OutputDir.string() + "/" + SourceFileName;
 
     std::ofstream HeaderStream(HeaderFile);
     std::ofstream SourceStream(SourceFile);
@@ -54,7 +54,7 @@ void CodeGenerator::GenerateCode(const std::filesystem::path& InputFile, const s
 
     // 生成源文件内容
     SourceStream << "#include \"" << HeaderFileName << "\"" << '\n';
-    SourceStream << "#include \"" << "../" << InputFile.string() << "\"" << '\n';
+    SourceStream << "#include \"" << InputFile.string() << "\"" << '\n';
     SourceStream << '\n';
 
     // 生成枚举的反射代码
@@ -71,9 +71,9 @@ void CodeGenerator::GenerateCode(const std::filesystem::path& InputFile, const s
 }
 
 // 用于扫描抽象语法树，查找反射相关Attribute
-void CodeScanner::ScanCode(const std::string& InputFile, VisitorData& OutData)
+void CodeScanner::ScanCode(const std::string& InputFile, const ReflectGenSettings& Settings, VisitorData& OutData)
 {
-    CodeScanHelper::ScanCode(InputFile, OutData);
+    CodeScanHelper::ScanCode(InputFile, Settings, OutData);
 }
 
 } // namespace NekiraReflect

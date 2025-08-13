@@ -29,7 +29,7 @@
 #endif // NEKIRA_REFLECT_BODY
 
 
-#ifdef __REFLECT_GEN_ENABLE__
+#ifdef __NEKIRA_REFLECT_TOOL__
 
 #define NCLASS(...) __attribute__((annotate("NClass"))) __attribute__((annotate(#__VA_ARGS__)))
 
@@ -41,7 +41,7 @@
 
 #define NFUNCTION(...) __attribute__((annotate("NFunction"))) __attribute__((annotate(#__VA_ARGS__)))
 
-#else // __REFLECT_GEN_ENABLE__
+#else
 
 #define NCLASS(...)
 
@@ -53,4 +53,4 @@
 
 #define NFUNCTION(...)
 
-#endif // __REFLECT_GEN_ENABLE__
+#endif

@@ -32,6 +32,10 @@
 #include <string>
 #include <vector>
 
+namespace NekiraReflect
+{
+struct ReflectGenSettings;
+}
 
 namespace NekiraReflect
 {
@@ -75,7 +79,7 @@ class CodeScanHelper final
 {
 public:
     // 扫描源码的AST
-    static void ScanCode(const std::string& FileName, VisitorData& OutData);
+    static void ScanCode(const std::string& FileName, const ReflectGenSettings& Settings, VisitorData& OutData);
 
 private:
     // AST遍历回调函数

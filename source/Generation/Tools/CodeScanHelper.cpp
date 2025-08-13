@@ -22,32 +22,39 @@
  * SOFTWARE.
  */
 
+#include "Tools/CodeUtilities.hpp"
+#include "Tools/ReflectGenSettings.hpp"
 #include "clang-c/CXString.h"
 #include "clang-c/Index.h"
-#include "Tools/CodeUtilities.hpp"
 #include <cstring>
 #include <iostream>
 #include <vector>
+
 
 namespace NekiraReflect
 {
 
 // 扫描源码的AST
-void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
+void CodeScanHelper::ScanCode(const std::string& FileName, const ReflectGenSettings& Settings, VisitorData& OutData)
 {
     CXIndex Index = clang_createIndex(0, 0);
 
-    // [TODO] 移除这里的-I include路径
-    const char*   ArgsStr[] = {"-std=c++20", "-D__REFLECT_GEN_ENABLE__", "-fsyntax-only", "-Id:/NekiraReflect/include"};
-    constexpr int ArgsNum = std::size(ArgsStr);
-    const char* const* ArgsPtr = ArgsStr;
+    int                ArgsNum = Settings.CommandLineArgs.size();
+    const char* const* ArgsPtr = Settings.CommandLineArgs.data();
 
+    /* 不提供详细报错代码
     CXTranslationUnit TSUnit = clang_parseTranslationUnit(Index, FileName.c_str(), ArgsPtr, ArgsNum, nullptr, 0,
-                                                          CXTranslationUnit_DetailedPreprocessingRecord);
+                                                          CXTranslationUnit_SkipFunctionBodies);
+                                                          */
+    CXTranslationUnit TSUnit = nullptr;
+    // 记录报错代码
+    const auto Result =
+    clang_parseTranslationUnit2(Index, FileName.c_str(), ArgsPtr, ArgsNum, nullptr, 0, CXTranslationUnit_SkipFunctionBodies, &TSUnit);
 
     if (TSUnit == nullptr)
     {
-        std::cerr << "Failed to parse translation unit: " << FileName << '\n';
+        std::cerr << "\033[31mFailed to parse translation unit: " << FileName << "\033[0m\n";
+        std::cerr << "\033[31mError code: " << Result << "\033[0m\n";
 
         clang_disposeIndex(Index);
         clang_disposeTranslationUnit(TSUnit);
@@ -55,6 +62,8 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
         return;
     }
 
+    /*
+    // [TODO] 在Release版本中取消诊断，以允许源文件可以预先包含对应的.gen.hpp文件即使该文件还未生成。
     // 提供诊断信息
     unsigned DiagNum = clang_getNumDiagnostics(TSUnit);
     for (unsigned i = 0; i < DiagNum; ++i)
@@ -65,6 +74,7 @@ void CodeScanHelper::ScanCode(const std::string& FileName, VisitorData& OutData)
         clang_disposeString(DiagStr);
         clang_disposeDiagnostic(Diag);
     }
+    */
 
     // 获取AST根节点
     CXCursor RootCursor = clang_getTranslationUnitCursor(TSUnit);

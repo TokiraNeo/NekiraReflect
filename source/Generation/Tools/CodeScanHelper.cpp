@@ -37,7 +37,7 @@ namespace NekiraReflect
 // 扫描源码的AST
 void CodeScanHelper::ScanCode(const std::string& FileName, const ReflectGenSettings& Settings, VisitorData& OutData)
 {
-    CXIndex Index = clang_createIndex(0, 0);
+    CXIndex Index = clang_createIndex(0, 1);
 
     int                ArgsNum = Settings.CommandLineArgs.size();
     const char* const* ArgsPtr = Settings.CommandLineArgs.data();
@@ -48,8 +48,8 @@ void CodeScanHelper::ScanCode(const std::string& FileName, const ReflectGenSetti
                                                           */
     CXTranslationUnit TSUnit = nullptr;
     // 记录报错代码
-    const auto Result =
-    clang_parseTranslationUnit2(Index, FileName.c_str(), ArgsPtr, ArgsNum, nullptr, 0, CXTranslationUnit_SkipFunctionBodies, &TSUnit);
+    const auto Result = clang_parseTranslationUnit2(Index, FileName.c_str(), ArgsPtr, ArgsNum, nullptr, 0,
+                                                    CXTranslationUnit_SkipFunctionBodies, &TSUnit);
 
     if (TSUnit == nullptr)
     {

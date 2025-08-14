@@ -119,7 +119,7 @@ template <typename ClassType>
 static std::unique_ptr<ClassTypeInfo> MakeClassTypeInfo(const std::string& Name)
 {
     auto         TypeIndex = GetTypeIndex<ClassType>();
-    const size_t          TypeSize = sizeof(ClassType);
+    const size_t TypeSize = sizeof(ClassType);
 
     auto ClassInfo = std::make_unique<ClassTypeInfo>(Name, TypeIndex);
 

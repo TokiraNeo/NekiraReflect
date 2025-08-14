@@ -1,5 +1,5 @@
 ﻿/**
-* MIT License
+ * MIT License
  *
  * Copyright (c) 2025 TokiraNeo (https://github.com/TokiraNeo)
  *
@@ -24,6 +24,5 @@
 
 #pragma once
 
-#include "NekiraReflect/StaticReflect/StaticReflect.hpp"
 #include "NekiraReflect/DynamicReflect/DynamicReflect.hpp"
-
+#include "NekiraReflect/StaticReflect/StaticReflect.hpp"

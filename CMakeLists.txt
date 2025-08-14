@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(NekiraReflection VERSION 1.0.0 LANGUAGES CXX)
+project(NekiraReflectionLib VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -41,7 +41,7 @@ file(GLOB_RECURSE REGISTRY_SOURCES
 
 # 创建反射类型注册表库(这里使用动态库，避免多个静态实例)
 add_library(NekiraReflectRegistry SHARED ${REGISTRY_HEADERS} ${REGISTRY_SOURCES})
-add_library(NekiraReflect::Registry ALIAS NekiraReflectRegistry)
+add_library(NekiraReflectionLib::NekiraReflectRegistry ALIAS NekiraReflectRegistry)
 
 # 配置包含目录
 target_include_directories(NekiraReflectRegistry
@@ -72,7 +72,7 @@ file(GLOB_RECURSE CORE_SOURCES
 
 # 创建核心库
 add_library(NekiraReflection SHARED ${CORE_HEADERS} ${CORE_SOURCES})
-add_library(NekiraReflection::NekiraReflection ALIAS NekiraReflection)
+add_library(NekiraReflectionLib::NekiraReflection ALIAS NekiraReflection)
 
 # 设置目标属性
 set_target_properties(NekiraReflection PROPERTIES
@@ -115,7 +115,7 @@ file(GLOB_RECURSE GEN_SOURCES
 
 # 创建反射生成库
 add_library(NekiraReflectGen STATIC ${GEN_HEADERS} ${GEN_SOURCES})
-add_library(NekiraReflection::NekiraReflectGen ALIAS NekiraReflectGen)
+add_library(NekiraReflectionLib::NekiraReflectGen ALIAS NekiraReflectGen)
 
 # 包含目录
 target_include_directories(NekiraReflectGen PRIVATE
@@ -140,7 +140,8 @@ target_link_libraries(NekiraReflectGen PRIVATE
 add_executable(NekiraReflectTool
     ${CMAKE_CURRENT_SOURCE_DIR}/Main/NekiraReflectTool.cpp
 )
-add_executable(NekiraReflection::NekiraReflectTool ALIAS NekiraReflectTool)
+add_executable(NekiraReflectionLib::NekiraReflectTool ALIAS NekiraReflectTool)
+
 
 # 配置包含目录
 target_include_directories(NekiraReflectTool PRIVATE
@@ -156,59 +157,62 @@ target_link_libraries(NekiraReflectTool PRIVATE
 )
 
 # =============================================================================
-# 包含反射生成工具配置
-# =============================================================================
-
-# 将cmake目录添加到CMAKE_MODULE_PATH
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-# 包含反射生成工具的配置文件
-include(NekiraReflectToolConfig)
-
-# =============================================================================
 # 安装配置
 # =============================================================================
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-# 安装反射库、反射注册表库、反射生成库、反射生成工具
-install(TARGETS NekiraReflectRegistry NekiraReflection NekiraReflectGen NekiraReflectTool
-    EXPORT NekiraReflectionTargets
+# 配置文件目录
+set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/NekiraReflectionLib)
+
+# 将cmake目录添加到CMAKE_MODULE_PATH
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# 配置NekiraReflectionLib包体
+install(TARGETS NekiraReflection NekiraReflectGen NekiraReflectRegistry NekiraReflectTool
+    EXPORT NekiraReflectionLibTargets
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 # 安装头文件
 install(DIRECTORY include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h"
+    FILES_MATCHING PATTERN "*.hpp"
 )
 
-# 配置文件目录
-set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/NekiraReflection)
-
-# 安装反射生成器配置
-install(FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/NekiraReflectToolConfig.cmake"
+# 安装包体的Targets.cmake文件
+install(EXPORT NekiraReflectionLibTargets
+    FILE NekiraReflectionLibTargets.cmake
+    NAMESPACE NekiraReflectionLib::
     DESTINATION ${CONFIG_INSTALL_DIR}
 )
 
-# 导出目标
-install(EXPORT NekiraReflectionTargets
-    FILE NekiraReflectionTargets.cmake
-    NAMESPACE NekiraReflection::
-    DESTINATION ${CONFIG_INSTALL_DIR}
+
+# 包体的配置文件
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/NekiraReflectionLibConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectionLibConfig.cmake"
+    INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
+    PATH_VARS CMAKE_INSTALL_INCLUDEDIR
 )
 
-# 创建配置文件
+# NekiraReflection的配置文件
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/NekiraReflectionConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectionConfig.cmake"
     INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
-    PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
+    PATH_VARS CMAKE_INSTALL_INCLUDEDIR
+)
+
+# NekiraReflectTool的配置文件
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/NekiraReflectToolConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectToolConfig.cmake"
+    INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
+    PATH_VARS CMAKE_INSTALL_INCLUDEDIR
 )
 
 # 创建版本文件
@@ -220,7 +224,9 @@ write_basic_package_version_file(
 
 # 安装配置文件
 install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectionLibConfig.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectionConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectToolConfig.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectionConfigVersion.cmake"
     DESTINATION ${CONFIG_INSTALL_DIR}
 )
@@ -229,9 +235,10 @@ install(FILES
 # 导出
 # =============================================================================
 
-export(EXPORT NekiraReflectionTargets
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectionTargets.cmake"
-    NAMESPACE NekiraReflection::
+export(EXPORT NekiraReflectionLibTargets
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/NekiraReflectionLibTargets.cmake"
+    NAMESPACE NekiraReflectionLib::
 )
 
-export(PACKAGE NekiraReflection)
+# 统一导出包为NekiraReflectionLib
+export(PACKAGE NekiraReflectionLib)

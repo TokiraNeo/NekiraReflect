@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-#include "Tools/ReflectGenSettings.hpp"
 #include "Generator/ReflectGenerator.hpp"
 #include "Tools/CodeConsume.hpp"
 #include "Tools/CodeUtilities.hpp"
+#include "Tools/ReflectGenSettings.hpp"
 #include <iostream>
+
 
 namespace NekiraReflect
 {
 // 扫描代码并生成反射代码
 void ReflectGenerator::GenerateReflectCode(const std::filesystem::path& InputFile,
-                                           const std::filesystem::path& OutputDir,
-                                           const ReflectGenSettings& Settings)
+                                           const std::filesystem::path& OutputDir, const ReflectGenSettings& Settings)
 {
     VisitorData Data;
 

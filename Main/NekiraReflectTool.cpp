@@ -24,13 +24,14 @@
 
 #include "Generator/ReflectGenerator.hpp"
 #include "Tools/ReflectGenSettings.hpp"
+#include <cstring>
 #include <filesystem>
 #include <iostream>
-#include <cstring>
+
 
 static void PrintHelp()
 {
-    std::cout << "\033[32mUsage: " << "NekiraReflectTool " << "<input_header> [output_dir] [options]" << "\033[0m\n";
+    std::cout << "\033[32mUsage: " << "NekiraReflectTool " << "<input_header> <output_dir> [options]" << "\033[0m\n";
     std::cout << "Options:\n"
               << "  \033[35m-I<path>\033[0m       Add include path (e.g., -I/usr/include)\n"
               << "  \033[35m-D<macro>\033[0m      Define a preprocessor macro (e.g., -DDEBUG)\n"
@@ -38,7 +39,7 @@ static void PrintHelp()
 
     std::cout << "Single Arg:\n";
     std::cout << "  \033[36m-help\033[0m Usage information." << "\n";
-    //std::cout << "  \033[36m-zako\033[0m Secret♥ " << "\n";
+    // std::cout << "  \033[36m-zako\033[0m Secret♥ " << "\n";
 }
 
 static void PrintSecretInfo()
@@ -94,10 +95,11 @@ int main(int argc, char* argv[])
     // 默认输出目录
     std::filesystem::path OutputDir = "Generated";
     // 检查是否提供了输出目录
-    if(argc > 2 && argv[2][0] != '-')
+    if (argc > 2 && argv[2][0] != '-')
     {
         OutputDir = argv[2];
     }
+
 
     // 检查输出目录是否存在，如果不存在则创建
     if (!std::filesystem::exists(OutputDir))
@@ -111,10 +113,7 @@ int main(int argc, char* argv[])
     // 解析其他参数
     for (int i = 2; i < argc; ++i)
     {
-        if(argv[i][0] == '-')
-        {
-            Settings.CommandLineArgs.push_back(argv[i]);
-        }
+        Settings.CommandLineArgs.push_back(argv[i]);
     }
 
     // 生成反射代码

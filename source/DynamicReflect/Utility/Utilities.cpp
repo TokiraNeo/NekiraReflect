@@ -1,5 +1,5 @@
-/**
- * MIT License
+﻿/**
+* MIT License
  *
  * Copyright (c) 2025 TokiraNeo (https://github.com/TokiraNeo)
  *
@@ -22,56 +22,46 @@
  * SOFTWARE.
  */
 
-#include "TypeCollection/CoreType.hpp"
+#include "Utility/Utilities.hpp"
+#include "ReflectionRegistry.hpp"
 
 
 namespace NekiraReflect
 {
 
-// Add enum value by name and corresponding value
-void EnumTypeInfo::AddEnumValue(const std::string& name, int64_t value)
+// Register Enum TypeInfo
+void RegisterEnumInfo(std::unique_ptr<EnumTypeInfo> EnumInfo)
 {
-    EnumValues[name] = value;
-    EnumNames[value] = name;
+    ReflectionRegistry::Get().RegisterEnum(std::move(EnumInfo));
 }
 
-// Add multiple enum values
-void EnumTypeInfo::AddEnumValues(const EnumValuesMap& values)
+// Register Class TypeInfo
+void RegisterClassInfo(std::unique_ptr<ClassTypeInfo> ClassInfo)
 {
-    for (const auto& [name, value] : values)
-    {
-        AddEnumValue(name, value);
-    }
+    ReflectionRegistry::Get().RegisterClass(std::move(ClassInfo));
 }
 
-// Get enum value by name, return true if found
-bool EnumTypeInfo::GetEnumValueByName(const std::string& name, int64_t& outValue) const
+} // namespace NekiraReflect
+
+
+namespace NekiraReflect
 {
-    bool       bFound = false;
-    const auto it = EnumValues.find(name);
-
-    if (it != EnumValues.end())
-    {
-        outValue = it->second;
-        bFound = true;
-    }
-
-    return bFound;
+// Get Enum TypeInfo by std::type_index
+EnumTypeInfo* GetNEnum(std::type_index TypeIndex)
+{
+    return ReflectionRegistry::Get().GetEnumInfo(TypeIndex);
 }
 
-// Get enum name by value, return true if found
-bool EnumTypeInfo::GetEnumNameByValue(const int64_t value, std::string& outName) const
+// Get Class TypeInfo by std::type_index
+ClassTypeInfo* GetNClass(std::type_index TypeIndex)
 {
-    bool       bFound = false;
-    const auto it = EnumNames.find(value);
+    return ReflectionRegistry::Get().GetClassInfo(TypeIndex);
+}
 
-    if (it != EnumNames.end())
-    {
-        outName = it->second;
-        bFound = true;
-    }
-
-    return bFound;
+// Get Struct TypeInfo by std::type_index
+ClassTypeInfo* GetNStruct(std::type_index TypeIndex)
+{
+    return ReflectionRegistry::Get().GetClassInfo(TypeIndex);
 }
 
 } // namespace NekiraReflect

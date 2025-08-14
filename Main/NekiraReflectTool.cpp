@@ -38,7 +38,7 @@ static void PrintHelp()
 
     std::cout << "Single Arg:\n";
     std::cout << "  \033[36m-help\033[0m Usage information." << "\n";
-    std::cout << "  \033[36m-zako\033[0m Secret♥ " << "\n";
+    //std::cout << "  \033[36m-zako\033[0m Secret♥ " << "\n";
 }
 
 static void PrintSecretInfo()

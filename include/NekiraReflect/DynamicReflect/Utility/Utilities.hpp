@@ -25,12 +25,21 @@
 
 #pragma once
 
-#include "NekiraReflect/Registry/ReflectionRegistry.hpp"
 #include "NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp"
 
 
 
 // ======================================= 动态反射工具函数 ======================================= //
+
+namespace NekiraReflect
+{
+// Get std::type_index by Type
+template <typename T>
+static std::type_index GetTypeIndex()
+{
+    return std::type_index(typeid(T));
+}
+} // namespace NekiraReflect
 
 
 namespace NekiraReflect
@@ -39,9 +48,9 @@ namespace NekiraReflect
 template <typename EnumType>
 static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo(const std::string& Name)
 {
-    auto TypeIndex = std::type_index(typeid(EnumType));
+    auto TypeIndex = GetTypeIndex<EnumType>();
 
-    size_t TypeSize = sizeof(EnumType);
+    const size_t TypeSize = sizeof(EnumType);
 
     auto EnumInfo = std::make_unique<EnumTypeInfo>(Name, TypeIndex);
 
@@ -54,17 +63,17 @@ static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo(const std::string& Name)
 template <typename EnumType>
 static std::unique_ptr<EnumTypeInfo> MakeEnumTypeInfo(const std::string& Name, const EnumValuesMap& Pairs)
 {
-    std::type_index TypeIndex = std::type_index(typeid(EnumType));
+    auto TypeIndex = GetTypeIndex<EnumType>();
 
-    size_t TypeSize = sizeof(EnumType);
+    const size_t TypeSize = sizeof(EnumType);
 
     auto EnumInfo = std::make_unique<EnumTypeInfo>(Name, TypeIndex);
 
     EnumInfo->SetSize(TypeSize);
 
-    for (const auto& Pair : Pairs)
+    for (const auto& [name, value] : Pairs)
     {
-        EnumInfo->AddEnumValue(Pair.first, Pair.second);
+        EnumInfo->AddEnumValue(name, value);
     }
 
     return EnumInfo;
@@ -109,8 +118,8 @@ namespace NekiraReflect
 template <typename ClassType>
 static std::unique_ptr<ClassTypeInfo> MakeClassTypeInfo(const std::string& Name)
 {
-    std::type_index TypeIndex = std::type_index(typeid(ClassType));
-    size_t          TypeSize = sizeof(ClassType);
+    auto         TypeIndex = GetTypeIndex<ClassType>();
+    const size_t          TypeSize = sizeof(ClassType);
 
     auto ClassInfo = std::make_unique<ClassTypeInfo>(Name, TypeIndex);
 
@@ -127,15 +136,152 @@ namespace NekiraReflect
 {
 
 // Register Enum TypeInfo
-static void RegisterEnumInfo(std::unique_ptr<EnumTypeInfo> EnumInfo)
-{
-    ReflectionRegistry::Get().RegisterEnum(std::move(EnumInfo));
-}
+static void RegisterEnumInfo(std::unique_ptr<EnumTypeInfo> EnumInfo);
 
 // Register Class TypeInfo
-static void RegisterClassInfo(std::unique_ptr<ClassTypeInfo> ClassInfo)
+static void RegisterClassInfo(std::unique_ptr<ClassTypeInfo> ClassInfo);
+
+} // namespace NekiraReflect
+
+
+namespace NekiraReflect
 {
-    ReflectionRegistry::Get().RegisterClass(std::move(ClassInfo));
+// Get Enum TypeInfo by std::type_index
+// @example:
+// namespace Nekira::Test
+// {
+// enum class NENUM() SampleEnum
+// {
+//     Value1 = 20,
+//     Value2 = 200
+// };
+// } // namespace Nekira::Test
+//
+// GetNEnum( std::type_index( typeid(Nekira::Test::SampleEnum) ) );
+// OR:
+// GetNEnum( GetTypeIndex<Nekira::Test::SampleEnum>() );
+static EnumTypeInfo* GetNEnum(std::type_index TypeIndex);
+
+} // namespace NekiraReflect
+
+
+namespace NekiraReflect
+{
+// Get Enum TypeInfo by Enum Type(include namespace)
+// @example:
+// namespace Nekira::Test
+// {
+// enum class NENUM() SampleEnum
+// {
+//     Value1 = 20,
+//     Value2 = 200
+// };
+// } // namespace Nekira::Test
+//
+// GetNEnum<Nekira::Test::SampleEnum>();
+template <typename EnumType>
+static EnumTypeInfo* GetNEnum()
+{
+    auto TypeIndex = GetTypeIndex<EnumType>();
+    return GetNEnum(TypeIndex);
+}
+
+} // namespace NekiraReflect
+
+
+namespace NekiraReflect
+{
+// Get Class TypeInfo by std::type_index
+// @example:
+// namespace Nekira::Test
+// {
+// class NCLASS() SampleClass
+// {
+//     NEKIRA_REFLECT_BODY(SampleClass)
+// private:
+//     NPROPERTY()
+//     int Value;
+// };
+// } // namespace Nekira::Test
+//
+// GetNClass( std::type_index( typeid(Nekira::Test::SampleClass) ) );
+// OR:
+// GetNClass( GetTypeIndex<Nekira::Test::SampleClass>() );
+static ClassTypeInfo* GetNClass(std::type_index TypeIndex);
+
+} // namespace NekiraReflect
+
+
+namespace NekiraReflect
+{
+// Get Class TypeInfo by Class Type(include namespace)
+// @example:
+// namespace Nekira::Test
+// {
+// class NCLASS() SampleClass
+// {
+//     NEKIRA_REFLECT_BODY(SampleClass)
+// private:
+//     NPROPERTY()
+//     int Value;
+// };
+// } // namespace Nekira::Test
+//
+// GetNClass<Nekira::Test::SampleClass>();
+template <typename ClassType>
+static ClassTypeInfo* GetNClass()
+{
+    auto TypeIndex = GetTypeIndex<ClassType>();
+    return GetNClass(TypeIndex);
+}
+
+} // namespace NekiraReflect
+
+
+namespace NekiraReflect
+{
+// Get Struct TypeInfo by std::type_index
+// @example:
+// namespace Nekira::Test
+// {
+// struct NSTRUCT() SampleStruct
+// {
+//     NEKIRA_REFLECT_BODY(SampleStruct)
+// private:
+//     NPROPERTY()
+//     int Value;
+// };
+// } // namespace Nekira::Test
+//
+// GetNStruct( std::type_index( typeid(Nekira::Test::SampleStruct) ) );
+// OR:
+// GetNStruct( GetTypeIndex<Nekira::Test::SampleStruct>() );
+static ClassTypeInfo* GetNStruct(std::type_index TypeIndex);
+
+} // namespace NekiraReflect
+
+
+namespace NekiraReflect
+{
+// Get Struct TypeInfo by Struct Type(include namespace)
+// @example:
+// namespace Nekira::Test
+// {
+// struct NSTRUCT() SampleStruct
+// {
+//     NEKIRA_REFLECT_BODY(SampleStruct)
+// private:
+//     NPROPERTY()
+//     int Value;
+// };
+// } // namespace Nekira::Test
+//
+// GetNStruct<Nekira::Test::SampleStruct>();
+template <typename StructType>
+static ClassTypeInfo* GetNStruct()
+{
+    auto TypeIndex = GetTypeIndex<StructType>();
+    return GetNStruct(TypeIndex);
 }
 
 } // namespace NekiraReflect

@@ -61,6 +61,7 @@ file(GLOB_RECURSE CORE_HEADERS
     "include/NekiraReflect/TypeExtraction/*.hpp"
     "include/NekiraReflect/DynamicReflect/*.hpp"
     "include/NekiraReflect/StaticReflect/*.hpp"
+    "include/NekiraReflect/Core.hpp"
 )
 
 # 收集源文件

@@ -1,26 +1,14 @@
-@PACKAGE_INIT@
 
-# 包含导出的目标配置
-include("${CMAKE_CURRENT_LIST_DIR}/NekiraReflectionTargets.cmake")
-
-# 包含反射生成工具配置
-include("${CMAKE_CURRENT_LIST_DIR}/NekiraReflectToolConfig.cmake")
 
 # 设置变量
-set(NekiraReflection_VERSION @PROJECT_VERSION@)
 set(NekiraReflection_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
-set(NekiraReflection_LIBRARIES NekiraReflection::NekiraReflection)
+set(NekiraReflection_LIBRARIES NekiraReflectionLib::NekiraReflection)
 
 
 # 检查所有组件
 check_required_components(NekiraReflection)
 
-message(NOTICE "NekiraReflection: ${NekiraReflection_VERSION}")
-
 message(NOTICE "NekiraReflection_INCLUDE_DIRS: ${NekiraReflection_INCLUDE_DIRS}")
 message(NOTICE "NekiraReflection_LIBRARIES: ${NekiraReflection_LIBRARIES}")
 
 
-message(NOTICE "Usage: find_package(NekiraReflection REQUIRED)")
-message(NOTICE "Usage: target_link_libraries(your_target PRIVATE NekiraReflection::NekiraReflection)")
-message(NOTICE "Usage: target_include_directories(your_target PRIVATE ${NekiraReflection_INCLUDE_DIRS})")

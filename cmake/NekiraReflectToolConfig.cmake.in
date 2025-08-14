@@ -1,21 +1,37 @@
+
+
+# ========================================
+# 搜索NekiraReflectTool.exe
+# ========================================
+find_program(NekiraReflectTool_EXE
+    NAMES NekiraReflectTool
+    HINTS "${PACKAGE_PREFIX_DIR}/bin"
+)
+
+# 如果未找到NekiraReflectTool，则报错
+if(NOT NekiraReflectTool_EXE)
+    message(FATAL_ERROR "NekiraReflectTool.exe not found.")
+endif()
+
+# 设置NekiraReflectTool的路径
+set(NekiraReflectTool_Path "${NekiraReflectTool_EXE}")
+
+message(NOTICE "NekiraReflectTool_Path: ${NekiraReflectTool_Path}")
+
+
 # ========================================
 # 添加反射模块
 # ========================================
 function(NekiraReflection_AddModule)
-    # 可选项
+    # 忽略空格，换行等
     set(options "")
     # 反射输出目录
     set(oneValueArgs TARGET OUTPUT_DIR)
     # 需要反射的头文件、include包含路径、预定义
-    set(multiValueArgs HEADERS INCLUDE_PATHS DEFINITIONS)
+    set(multiValueArgs HEADERS INCLUDE_PATHS DEFINITIONS OPTIONS)
 
-    # 解析参数(以NREFL_开头)
-    cmake_parse_arguments(NREFL
-        "${options}"
-        "${oneValueArgs}"
-        "${multiValueArgs}"
-        ${ARGN}
-    )
+    # 解析参数(以NREFL_开头)(必须传递至少4个参数，所以这里的${ARGN}是占位符)
+    cmake_parse_arguments(NREFL "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     # 检查必需参数
     if(NOT NREFL_TARGET)
@@ -33,6 +49,30 @@ function(NekiraReflection_AddModule)
     # 存储反射生成的头文件、源文件
     set(GENERATED_HEADER_LIST "")
     set(GENERATED_SOURCE_LIST "")
+
+    # 配置NekiraReflectTool的参数
+    set(REFLECT_TOOL_ARGS "")
+
+    # 添加include路径
+    if(NREFL_INCLUDE_PATHS)
+        foreach(INCLUDE_PATH ${NREFL_INCLUDE_PATHS})
+            list(APPEND REFLECT_TOOL_ARGS "-I${INCLUDE_PATH}")
+        endforeach()
+    endif()
+
+    # 添加预处理定义
+    if(NREFL_DEFINITIONS)
+        foreach(DEFINITION ${NREFL_DEFINITIONS})
+            list(APPEND REFLECT_TOOL_ARGS "-D${DEFINITION}")
+        endforeach()
+    endif()
+
+    # 添加额外的可选参数
+    if(NREFL_OPTIONS)
+        foreach(OPTION ${NREFL_OPTIONS})
+            list(APPEND REFLECT_TOOL_ARGS "${OPTION}")
+        endforeach()
+    endif()
 
     # 处理每个头文件
     foreach(HEADER_FILE ${NREFL_HEADERS})
@@ -54,31 +94,13 @@ function(NekiraReflection_AddModule)
         SET(GENERATED_HEADER "${NREFL_OUTPUT_DIR}/${HEADER_STEM}.gen.hpp")
         SET(GENERATED_SOURCE "${NREFL_OUTPUT_DIR}/${HEADER_STEM}.gen.cpp")
 
-        # 配置NekiraReflectTool的参数
-        set(REFLECT_TOOL_ARGS "")
-
-        # 添加include路径
-        if(NREFL_INCLUDE_PATHS)
-            foreach (INCLUDE_PATH ${NREFL_INCLUDE_PATHS})
-                list(APPEND REFLECT_TOOL_ARGS "-I${INCLUDE_PATH}")
-            endforeach()
-        endif()
-
-        # 添加预处理定义
-        if(NREFL_DEFINITIONS)
-            foreach (DEFINITION ${NREFL_DEFINITIONS})
-                list(APPEND REFLECT_TOOL_ARGS "-D${DEFINITION}")
-            endforeach ()
-        endif()
-
         # 自定义命令，调用NekiraReflectTool生成反射代码
         add_custom_command(
             OUTPUT ${GENERATED_HEADER} ${GENERATED_SOURCE}
-            COMMAND NekiraReflectTool
+            COMMAND ${NekiraReflectTool_EXE}
             ARGS ${HEADER_FILE} ${NREFL_OUTPUT_DIR} ${REFLECT_TOOL_ARGS}
             # 依赖NekiraReflectTool和头文件，且只当头文件发生变化时才重新生成
-            DEPENDS NekiraReflectTool ${HEADER_FILE}
-            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+            DEPENDS ${NekiraReflectTool_EXE} ${HEADER_FILE}
         )
 
         # 将生成的头文件和源文件添加到列表中
@@ -91,7 +113,7 @@ function(NekiraReflection_AddModule)
     if(GENERATED_HEADER_LIST OR GENERATED_SOURCE_LIST)
         add_custom_target(${NREFL_TARGET}_Reflection
             DEPENDS ${GENERATED_HEADER_LIST} ${GENERATED_SOURCE_LIST}
-            COMMENT "-Building reflection module for: ${NREFL_TARGET}"
+            COMMENT "-- Building reflection module for: ${NREFL_TARGET}"
         )
 
         # 令原先的目标依赖于反射生成目标
@@ -110,7 +132,7 @@ function(NekiraReflection_AddModule)
             NEKIRA_REFLECT_GENERATED_SOURCES "${GENERATED_SOURCE_LIST}"
         )
 
-        message(NOTICE "-Added reflection module for: ${NREFL_TARGET}")
+        message(NOTICE "-- Added reflection module for: ${NREFL_TARGET}")
     endif ()
 
 endfunction() # NekiraReflection_AddModule
@@ -135,10 +157,10 @@ function(NekiraReflection_CleanModule TARGET)
         # 添加自定义命令，调用CMake清理命令
         add_custom_target(${TARGET}_CleanReflection
             COMMAND ${CMAKE_COMMAND} -E remove ${GENERATED_HEADERS} ${GENERATED_SOURCES}
-            COMMENT "-Cleaning reflection module for: ${TARGET}"
+            COMMENT "-- Cleaning reflection module for: ${TARGET}"
         )
     endif()
 
-    message(NOTICE "-Removed reflection module for: ${TARGET}")
+    message(NOTICE "-- Removed reflection module for: ${TARGET}")
 
 endfunction() # NekiraReflection_CleanModule

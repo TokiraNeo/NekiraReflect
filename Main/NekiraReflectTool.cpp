@@ -111,10 +111,14 @@ int main(int argc, char* argv[])
     Settings.CommandLineArgs.push_back("-D__NEKIRA_REFLECT_TOOL__");
 
     // 解析其他参数
-    for (int i = 2; i < argc; ++i)
+    if (argc > 3)
     {
-        Settings.CommandLineArgs.push_back(argv[i]);
+        for (int i = 3; i < argc; ++i)
+        {
+            Settings.CommandLineArgs.push_back(argv[i]);
+        }
     }
+
 
     // 生成反射代码
     NekiraReflect::ReflectGenerator::GenerateReflectCode(InputHeader, OutputDir, Settings);

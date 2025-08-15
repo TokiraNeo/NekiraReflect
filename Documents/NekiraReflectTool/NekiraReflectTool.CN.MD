@@ -19,13 +19,13 @@ NekiraReflectTool 会扫描指定头文件，识别其中的反射宏，生成�
 #### 帮助命令
 
 ```powershell
-NekiraReflect -help
+NekiraReflectTool -help
 ```
 
 #### 手动扫描生成反射文件
 
 ```powershell
-NekiraReflect <input_header> <output_dir> [options]
+NekiraReflectTool <input_header> <output_dir> [options]
 ```
 
 ### CMake 配置(非常推荐)

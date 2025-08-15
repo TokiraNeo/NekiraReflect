@@ -54,6 +54,8 @@ function(NekiraReflection_AddModule)
     set(REFLECT_TOOL_ARGS "")
 
     # 添加include路径
+    # 确保添加NekiraReflection库的include路径，这样NekiraReflectTool才能识别其中的有关头文件
+    list(APPEND REFLECT_TOOL_ARGS "-I@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
     if(NREFL_INCLUDE_PATHS)
         foreach(INCLUDE_PATH ${NREFL_INCLUDE_PATHS})
             list(APPEND REFLECT_TOOL_ARGS "-I${INCLUDE_PATH}")

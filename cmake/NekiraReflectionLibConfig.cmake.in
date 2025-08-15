@@ -3,7 +3,10 @@
 message(NOTICE "NekiraReflectionLib: @PROJECT_VERSION@")
 
 # 包含导出的NekiraReflection、NekiraReflectTool目标配置
+
+# 这里确保先导入NekiraReflection，以获得NekiraReflection的include路径信息
 include("${CMAKE_CURRENT_LIST_DIR}/NekiraReflectionConfig.cmake")
+
 include("${CMAKE_CURRENT_LIST_DIR}/NekiraReflectToolConfig.cmake")
 
 # 包含导出的NekiraReflectLib目标详细信息

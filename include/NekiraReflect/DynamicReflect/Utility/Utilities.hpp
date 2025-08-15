@@ -136,10 +136,10 @@ namespace NekiraReflect
 {
 
 // Register Enum TypeInfo
-static void RegisterEnumInfo(std::unique_ptr<EnumTypeInfo> EnumInfo);
+void RegisterEnumInfo(std::unique_ptr<EnumTypeInfo> EnumInfo);
 
 // Register Class TypeInfo
-static void RegisterClassInfo(std::unique_ptr<ClassTypeInfo> ClassInfo);
+void RegisterClassInfo(std::unique_ptr<ClassTypeInfo> ClassInfo);
 
 } // namespace NekiraReflect
 
@@ -160,7 +160,7 @@ namespace NekiraReflect
 // GetNEnum( std::type_index( typeid(Nekira::Test::SampleEnum) ) );
 // OR:
 // GetNEnum( GetTypeIndex<Nekira::Test::SampleEnum>() );
-static EnumTypeInfo* GetNEnum(std::type_index TypeIndex);
+EnumTypeInfo* GetNEnum(std::type_index TypeIndex);
 
 } // namespace NekiraReflect
 
@@ -207,7 +207,7 @@ namespace NekiraReflect
 // GetNClass( std::type_index( typeid(Nekira::Test::SampleClass) ) );
 // OR:
 // GetNClass( GetTypeIndex<Nekira::Test::SampleClass>() );
-static ClassTypeInfo* GetNClass(std::type_index TypeIndex);
+ClassTypeInfo* GetNClass(std::type_index TypeIndex);
 
 } // namespace NekiraReflect
 
@@ -256,7 +256,7 @@ namespace NekiraReflect
 // GetNStruct( std::type_index( typeid(Nekira::Test::SampleStruct) ) );
 // OR:
 // GetNStruct( GetTypeIndex<Nekira::Test::SampleStruct>() );
-static ClassTypeInfo* GetNStruct(std::type_index TypeIndex);
+ClassTypeInfo* GetNStruct(std::type_index TypeIndex);
 
 } // namespace NekiraReflect
 

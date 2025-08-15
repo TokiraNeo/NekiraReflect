@@ -69,7 +69,7 @@ struct field_traits : field_traits_base<T>
     constexpr field_traits(T pointer, const char* name) : FieldPointer(pointer), FieldName(name)
     {}
 
-    constexpr field_traits(T Pointer) : FieldPointer(Pointer), FieldName("")
+    explicit constexpr field_traits(T Pointer) : FieldPointer(Pointer), FieldName("")
     {}
 };
 

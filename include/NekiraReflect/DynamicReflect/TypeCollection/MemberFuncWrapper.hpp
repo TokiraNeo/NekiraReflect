@@ -41,7 +41,7 @@ template <typename Callable, typename RT, typename... Args>
     requires std::is_invocable_r_v<RT, Callable, Args...>
 struct MemberFuncWrapper_Impl : MemberFuncWrapper_Base<RT, Args...>
 {
-    MemberFuncWrapper_Impl(Callable&& obj) : CallableObj(std::forward<Callable>(obj))
+    explicit MemberFuncWrapper_Impl(Callable&& obj) : CallableObj(std::forward<Callable>(obj))
     {}
 
     RT Invoke(Args... args) override
@@ -63,7 +63,7 @@ struct MemberFuncWrapper<RT(Args...)>
 
     template <typename Callable>
         requires std::is_invocable_r_v<RT, Callable, Args...>
-    MemberFuncWrapper(Callable func)
+    explicit MemberFuncWrapper(Callable func)
         : Wrapper(std::make_unique<MemberFuncWrapper_Impl<Callable, RT, Args...>>(std::move(func)))
     {}
 

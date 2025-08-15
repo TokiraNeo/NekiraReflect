@@ -9,9 +9,7 @@ NekiraReflection 是主要的核心库，提供了类型萃取、静态反射、
 要想使用 NekiraReflection 库，需在 CMake 中进行如下配置：
 
 ```cmake
-find_package(NekiraReflection REQUIRED)
-
-target_link_libaries(Target NekiraReflection::NekiraReflection)
+target_link_libaries(Target PRIVATE NekiraReflectionLib::NekiraReflection)
 
 target_include_directories(Target PRIVATE ${NekiraReflection_INCLUDE_DIRS})
 ```
@@ -63,11 +61,15 @@ template <typename T>
 constexpr auto GetStaticTypeInfo() -> StaticTypeInfo<T>;
 ```
 
+---
+
 ```cpp
 // 获取成员变量指针
 template <typename ClassType, std::size_t Index>
 constexpr auto GetMemberFunction();
 ```
+
+---
 
 ```cpp
 // 获取成员变量指针

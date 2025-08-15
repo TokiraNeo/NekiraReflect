@@ -58,7 +58,7 @@ STATIC_REFLECT_END()
 ```cpp
 // 获取特定的类型的静态反射信息（前提是该类型已注册静态反射
 template <typename T>
-constexpr auto GetStaticTypeInfo() -> StaticTypeInfo<T>;
+static constexpr auto GetStaticTypeInfo() -> StaticTypeInfo<T>;
 ```
 
 ---
@@ -66,7 +66,7 @@ constexpr auto GetStaticTypeInfo() -> StaticTypeInfo<T>;
 ```cpp
 // 获取成员变量指针
 template <typename ClassType, std::size_t Index>
-constexpr auto GetMemberFunction();
+static constexpr auto GetMemberFunction();
 ```
 
 ---
@@ -74,7 +74,7 @@ constexpr auto GetMemberFunction();
 ```cpp
 // 获取成员变量指针
 template <typename ClassType, std::size_t Index>
-constexpr auto GetMemberVariable()
+static constexpr auto GetMemberVariable()
 ```
 
 ## 动态反射

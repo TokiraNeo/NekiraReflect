@@ -46,9 +46,9 @@ find_package(NekiraReflectionLib REQUIRED)
 
 ## 文档
 
-### [NekiraReflection](../NekiraReflection/NekiraReflection.CN.MD)
+### [NekiraReflection](Documents/NekiraReflection/NekiraReflection.CN.MD)
 
-### [NekiraReflectTool](../NekiraReflectTool/NekiraReflectTool.CN.MD)
+### [NekiraReflectTool](Documents/NekiraReflectTool/NekiraReflectTool.CN.MD)
 
 ## License
 

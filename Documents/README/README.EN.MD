@@ -48,3 +48,13 @@ find_package(NekiraReflectionLib REQUIRED)
 ### [NekiraReflection](../NekiraReflection/NekiraReflection.EN.MD)
 
 ### [NekiraReflectTool](../NekiraReflectTool/NekiraReflectTool.EN.MD)
+
+---
+
+## License
+
+```
+MIT License
+
+Copyright (c) 2025 TokiraNeo (https://github.com/TokiraNeo)
+```

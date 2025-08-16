@@ -142,4 +142,6 @@ private:
 
     NFUNCTION()
     void ReflectFunc()
+};
+
 ```

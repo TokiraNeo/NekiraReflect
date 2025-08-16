@@ -111,5 +111,6 @@ NekiraReflection_AddModule(
         TARGET Math
         HEADERS ${MATH_HEADERS}
         INCLUDE_PATHS
-        OPTIONS -std=c++20 -fsyntax-only -x
+        OPTIONS -std=c++20 -fsyntax-only -x c++
+)
 ```

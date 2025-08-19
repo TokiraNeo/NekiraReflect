@@ -47,7 +47,7 @@ add_library(NekiraReflectionLib::NekiraReflectRegistry ALIAS NekiraReflectRegist
 target_include_directories(NekiraReflectRegistry
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 
         ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Registry
 )
@@ -86,7 +86,7 @@ set_target_properties(NekiraReflection PROPERTIES
 target_include_directories(NekiraReflection
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/TypeExtraction
         ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/DynamicReflect
@@ -120,7 +120,7 @@ add_library(NekiraReflectionLib::NekiraReflectGen ALIAS NekiraReflectGen)
 # 包含目录
 target_include_directories(NekiraReflectGen PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 
     ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Generation
     ${LLVM_INCLUDE_DIRS}
@@ -146,7 +146,7 @@ add_executable(NekiraReflectionLib::NekiraReflectTool ALIAS NekiraReflectTool)
 # 配置包含目录
 target_include_directories(NekiraReflectTool PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     ${CMAKE_CURRENT_SOURCE_DIR}/include/NekiraReflect/Generation
 )
 

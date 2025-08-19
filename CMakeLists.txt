@@ -15,6 +15,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 find_package(LLVM REQUIRED CONFIG)
 find_package(Clang REQUIRED CONFIG)
 
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
 # 调试信息
 message("LIBXML2_INCLUDE_DIR: ${LIBXML2_INCLUDE_DIR}")
 message("LIBXML2_LIBRARIES: ${LIBXML2_LIBRARIES}")
@@ -159,9 +162,6 @@ target_link_libraries(NekiraReflectTool PRIVATE
 # =============================================================================
 # 安装配置
 # =============================================================================
-
-include(GNUInstallDirs)
-include(CMakePackageConfigHelpers)
 
 # 配置文件目录
 set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/NekiraReflectionLib)

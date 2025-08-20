@@ -1,4 +1,15 @@
-﻿# NekiraReflectionLib
+﻿<h1 align="center">
+    <b>NekiraReflectionLib</b>
+</h1>
+
+![GitHub License](https://img.shields.io/github/license/TokiraNeo/NekiraReflect?style=flat-square&labelColor=2EA2EF&color=2EEFDC)
+![GitHub top language](https://img.shields.io/github/languages/top/TokiraNeo/NekiraReflect?style=flat-square&labelColor=29F5BB&color=29C9F5)
+![C++ std](https://img.shields.io/badge/C%2B%2B_std-%3E%3D20-%23FF5C9A?style=flat-square&labelColor=%23C988F7)
+![CMake Version](https://img.shields.io/badge/CMake-%3E%3D20-8EFF80?style=flat-square&labelColor=CEFF80)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/TokiraNeo/NekiraReflect/main?style=flat-square&labelColor=91CBED&color=A0AEDE)
+
+[![README CN](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-D8E0F8?style=for-the-badge&labelColor=E0D8F8&color=D8E0F8)](/Documents/README/README.CN.MD)
+[![README EN](https://img.shields.io/badge/README-EN-D8E0F8?style=for-the-badge&labelColor=E0D8F8&color=D8E0F8)](/Documents/README/README.EN.MD)
 
 ## 项目简介
 
@@ -45,16 +56,16 @@ find_package(NekiraReflectionLib REQUIRED)
 
 ## 文档
 
-### [NekiraReflection](../NekiraReflection/NekiraReflection.CN.MD)
+### NekiraReflection
 
-### [NekiraReflectTool](../NekiraReflectTool/NekiraReflectTool.CN.MD)
+[![NekiraReflection](https://img.shields.io/badge/Doc-NekiraReflection-BFCCF2?style=for-the-badge&labelColor=CCBFF2&color=BFCCF2)](/Documents/NekiraReflection/NekiraReflection.CN.MD)
+
+### NekiraReflecTool
+
+[![NekiraReflecTool](https://img.shields.io/badge/Doc-NekiraReflectTool-BFCCF2?style=for-the-badge&labelColor=CCBFF2&color=BFCCF2)](/Documents/NekiraReflectTool/NekiraReflectTool.CN.MD)
 
 ---
 
-## License
+## 📜 License
 
-```
-MIT License
-
-Copyright (c) 2025 TokiraNeo (https://github.com/TokiraNeo)
-```
+[![License](https://img.shields.io/badge/License-MIT-38E575?style=for-the-badge)](/LICENSE)

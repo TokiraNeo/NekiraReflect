@@ -48,7 +48,7 @@ public:
 };
 
 // 用于扫描抽象语法树，查找反射相关Attribute
-class CodeScanner
+class CodeScanner final
 {
 public:
     CodeScanner() = default;

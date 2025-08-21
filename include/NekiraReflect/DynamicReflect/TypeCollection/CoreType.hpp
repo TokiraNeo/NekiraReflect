@@ -79,6 +79,8 @@ public:
         : Name(name), TypeIndex(typeIndex), Size(size)
     {}
 
+    virtual ~TypeInfo() = default;
+
     inline std::string GetName() const
     {
         return Name;
@@ -113,7 +115,7 @@ private:
 namespace NekiraReflect
 {
 
-class EnumTypeInfo : public TypeInfo
+class EnumTypeInfo final : public TypeInfo
 {
 public:
     EnumTypeInfo(const std::string& name, std::type_index typeIndex) : TypeInfo(name, typeIndex, 0)
@@ -159,7 +161,7 @@ private:
 namespace NekiraReflect
 {
 
-class MemberVarInfo : public TypeInfo
+class MemberVarInfo final : public TypeInfo
 {
 public:
     template <typename ClassType, typename VarType>
@@ -224,7 +226,7 @@ std::tuple<Args...> Anys_To_Tuple(const std::vector<std::any>& Params)
 // ========================================== 成员函数信息 ========================================== //
 namespace NekiraReflect
 {
-class MemberFuncInfo : public TypeInfo
+class MemberFuncInfo final : public TypeInfo
 {
 public:
     // Member Function(non-const)
@@ -306,7 +308,7 @@ private:
 namespace NekiraReflect
 {
 
-class ClassTypeInfo : public TypeInfo
+class ClassTypeInfo final : public TypeInfo
 {
 
 

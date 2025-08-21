@@ -32,7 +32,7 @@
 namespace NekiraReflect
 {
 
-class ReflectionRegistry
+class ReflectionRegistry final
 {
     using EnumInfoMap = std::unordered_map<std::type_index, std::unique_ptr<EnumTypeInfo>>;
     using ClassInfoMap = std::unordered_map<std::type_index, std::unique_ptr<ClassTypeInfo>>;

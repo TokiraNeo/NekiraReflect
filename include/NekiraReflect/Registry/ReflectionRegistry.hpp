@@ -41,12 +41,11 @@ public:
     ReflectionRegistry(const ReflectionRegistry&) = delete;
     ReflectionRegistry& operator=(const ReflectionRegistry&) = delete;
 
+    ReflectionRegistry(ReflectionRegistry&&) = delete;
+    ReflectionRegistry& operator=(ReflectionRegistry&&) = delete;
+
     // 获取单例实例
-    static inline ReflectionRegistry& Get()
-    {
-        static ReflectionRegistry Instance;
-        return Instance;
-    }
+    static ReflectionRegistry& Get();
 
     // Register Enum Info
     void RegisterEnum(std::unique_ptr<EnumTypeInfo> EnumInfo);
@@ -55,16 +54,10 @@ public:
     void RegisterClass(std::unique_ptr<ClassTypeInfo> ClassInfo);
 
     // Remove Enum Info
-    inline void RemoveEnum(std::type_index TypeIndex)
-    {
-        EnumInfos.erase(TypeIndex);
-    }
+    void RemoveEnum(std::type_index TypeIndex);
 
     // Remove Class Info
-    inline void RemoveClass(std::type_index TypeIndex)
-    {
-        ClassInfos.erase(TypeIndex);
-    }
+    void RemoveClass(std::type_index TypeIndex);
 
     // Get Enum Info by TypeIndex
     EnumTypeInfo* GetEnumInfo(std::type_index TypeIndex) const;

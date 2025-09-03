@@ -28,6 +28,12 @@
 namespace NekiraReflect
 {
 
+ReflectionRegistry& ReflectionRegistry::Get()
+{
+    static ReflectionRegistry Instance;
+    return Instance;
+}
+
 // Register Enum Info
 void ReflectionRegistry::RegisterEnum(std::unique_ptr<EnumTypeInfo> EnumInfo)
 {
@@ -40,6 +46,18 @@ void ReflectionRegistry::RegisterClass(std::unique_ptr<ClassTypeInfo> ClassInfo)
 {
     const std::type_index TypeIndex = ClassInfo->GetTypeIndex();
     ClassInfos[TypeIndex] = std::move(ClassInfo);
+}
+
+// Remove Enum Info
+void ReflectionRegistry::RemoveEnum(std::type_index TypeIndex)
+{
+    EnumInfos.erase(TypeIndex);
+}
+
+// Remove Class Info
+void ReflectionRegistry::RemoveClass(std::type_index TypeIndex)
+{
+    ClassInfos.erase(TypeIndex);
 }
 
 // Get Enum Info by TypeIndex

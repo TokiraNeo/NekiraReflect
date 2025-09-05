@@ -25,8 +25,10 @@
 
 #pragma once
 
-#include "NekiraReflect/TypeExtraction/TypeExtraction.hpp"
-#include "StaticTypeInfo.hpp"
+#include <NekiraReflect/StaticReflect/TypeExtraction/TypeExtraction.hpp>
+#include <NekiraReflect/StaticReflect/TypeInfo/StaticTypeInfo.hpp>
+
+
 
 
 // [INFO] NekiraReflect::TypeInfo定义在TypeCollection/StaticTypeInfo.hpp中

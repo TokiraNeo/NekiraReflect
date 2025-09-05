@@ -2,11 +2,12 @@
 
 # 设置变量
 set(NekiraReflection_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
-set(NekiraReflection_LIBRARIES NekiraReflectionLib::NekiraReflection)
+set(NekiraReflection_LIBRARIES 
+    NekiraReflectionLib::NekiraReflectStatic
+    NekiraReflectionLib::NekiraReflectDynamic
+)
 
 
-# 检查所有组件
-check_required_components(NekiraReflection)
 
 message(NOTICE "NekiraReflection_INCLUDE_DIRS: ${NekiraReflection_INCLUDE_DIRS}")
 message(NOTICE "NekiraReflection_LIBRARIES: ${NekiraReflection_LIBRARIES}")

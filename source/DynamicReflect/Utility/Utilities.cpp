@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-#include "Utility/Utilities.hpp"
-#include "ReflectionRegistry.hpp"
+#include <Registry/ReflectionRegistry.hpp>
+#include <Utility/Utilities.hpp>
+
 
 
 namespace NekiraReflect

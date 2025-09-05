@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-#include "Generator/ReflectGenerator.hpp"
-#include "Tools/CodeConsume.hpp"
-#include "Tools/CodeUtilities.hpp"
-#include "Tools/ReflectGenSettings.hpp"
+#include <Generator/ReflectGenerator.hpp>
+#include <Tools/CodeConsume.hpp>
+#include <Tools/CodeUtilities.hpp>
+#include <Tools/ReflectGenSettings.hpp>
 #include <iostream>
 
 

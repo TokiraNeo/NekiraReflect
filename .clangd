@@ -7,4 +7,4 @@ CompileFlags:
 # 代码补全
 Completion:
   ArgumentLists: Delimiters # 函数补全：只补全函数名和括号
-
+  HeaderInsertion: Never # 关闭自动插入头文件

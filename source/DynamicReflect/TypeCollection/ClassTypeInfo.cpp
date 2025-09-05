@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "TypeCollection/CoreType.hpp"
+#include <TypeCollection/CoreType.hpp>
 
 
 namespace NekiraReflect

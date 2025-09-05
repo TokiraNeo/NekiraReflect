@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "NekiraReflect/Generation/Tools/CodeUtilities.hpp"
+#include <NekiraReflect/Generation/Tools/CodeUtilities.hpp>
 #include <filesystem>
 
 namespace NekiraReflect

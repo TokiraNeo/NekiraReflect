@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#include "Tools/CodeConsume.hpp"
-#include "Tools/ReflectGenSettings.hpp"
+#include <Tools/CodeConsume.hpp>
+#include <Tools/ReflectGenSettings.hpp>
 #include <fstream>
 
 

@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#include "Generator/ReflectGenerator.hpp"
-#include "Tools/ReflectGenSettings.hpp"
+#include <NekiraReflect/Generation/Generator/ReflectGenerator.hpp>
+#include <NekiraReflect/Generation/Tools/ReflectGenSettings.hpp>
 #include <cstring>
 #include <filesystem>
 #include <iostream>

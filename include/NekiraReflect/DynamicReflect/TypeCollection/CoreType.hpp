@@ -24,7 +24,7 @@
 
 
 #pragma once
-#include "NekiraReflect/DynamicReflect/TypeCollection/MemberFuncWrapper.hpp"
+#include <NekiraReflect/DynamicReflect/TypeCollection/MemberFuncWrapper.hpp>
 #include <any>
 #include <cstdint>
 #include <iostream>

@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp"
+#include <NekiraReflect/DynamicReflect/TypeCollection/CoreType.hpp>
 
 
 

@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "NekiraReflect/DynamicReflect/Utility/Utilities.hpp"
+#include <NekiraReflect/DynamicReflect/Utility/Utilities.hpp>
 
 namespace NekiraReflect
 {

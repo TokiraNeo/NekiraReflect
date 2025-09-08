@@ -45,7 +45,7 @@ You can explicitly include the `gen.hpp` file in your source header before it is
 ```cpp
 // Test.h
 
-#include "NekiraReflect/Core.hpp"
+#include "NekiraReflect/DynamicReflect/Core/Core.hpp"
 #include "Test.gen.hpp"
 
 namespace Nekira::Test

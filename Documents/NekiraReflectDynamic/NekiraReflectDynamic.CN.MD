@@ -47,7 +47,7 @@ target_include_directories(Target PRIVATE ${NekiraReflection_INCLUDE_DIRS})
 ```cpp
 // Test.h
 
-#include "NekiraReflect/Core.hpp"
+#include "NekiraReflect/DynamicReflect/Core/Core.hpp"
 #include "Test.gen.hpp"
 
 namespace Nekira::Test

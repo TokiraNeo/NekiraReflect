@@ -56,9 +56,13 @@ find_package(NekiraReflectionLib REQUIRED)
 
 ## 文档
 
-### NekiraReflection
+### NekiraReflectStatic
 
-[![NekiraReflection](https://img.shields.io/badge/Doc-NekiraReflection-BFCCF2?style=for-the-badge&labelColor=CCBFF2&color=BFCCF2)](/Documents/NekiraReflection/NekiraReflection.CN.MD)
+[![NekiraReflectStatic](https://img.shields.io/badge/Doc-NekiraReflectStatic-BFCCF2?style=for-the-badge&labelColor=CCBFF2&color=BFCCF2)](/Documents/NekiraReflectStatic/NekiraReflectStatic.CN.MD)
+
+### NekiraReflectDynamic
+
+[![NekiraReflectDynamic](https://img.shields.io/badge/Doc-NekiraReflectDynamic-BFCCF2?style=for-the-badge&labelColor=CCBFF2&color=BFCCF2)](/Documents/NekiraReflectDynamic/NekiraReflectDynamic.CN.MD)
 
 ### NekiraReflecTool
 

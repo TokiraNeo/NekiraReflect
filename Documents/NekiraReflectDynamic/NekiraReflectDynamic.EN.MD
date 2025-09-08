@@ -1,85 +1,28 @@
-# NekiraReflection
+# NekiraReflectDynamic
 
 ## Overview
 
-NekiraReflection is the main core library, providing essential features for type traits, static reflection, and dynamic reflection.
+NekiraReflectDynamic focus on providing essential features for Dynamic Reflection.
 
-## Linking the Library
-
-To use the NekiraReflection library, configure CMake as follows:
+## Linking
 
 ```cmake
-target_link_libraries(Target PRIVATE NekiraReflectionLib::NekiraReflection)
+target_link_libraries(Target PRIVATE NekiraReflectionLib::NekiraReflectDynamic)
 
 target_include_directories(Target PRIVATE ${NekiraReflection_INCLUDE_DIRS})
 ```
 
-## Interfaces
+## Interface
 
-Include the following header file in your project to use NekiraReflection features:
+To use NekiraReflectDynamic, include the following header:
 
-```cpp
-#include "NekiraReflect/Core.hpp"
-```
-
-## Static Reflection
-
-### Static Reflection Registration
-
-```cpp
-struct SampleStruct
-{
-    int Value;
-    const char* Args[];
-
-    void Func() {}
-
-    void ConstFunc() const {}
-};
-
-STATIC_REFLECT_BEGIN(SampleStruct)
-STATIC_REFLECT_VARIABLES
-(
-    // MemberVarPtr + MemberVarName
-    STATIC_REGISTER_VARIABLE(&SampleStruct::Value, Value),
-    STATIC_REGISTER_VARIABLE(&SampleStruct::Args, Args)
-)
-STATIC_REFLECT_FUNCTIONS
-(
-    // MemberFuncPtr + MemberFuncName
-    STATIC_REGISTER_FUNCTION(&SampleStruct::Func, Func)
-    STATIC_REGISTER_FUNCTION(&SampleStruct::ConstFunc, ConstFunc)
-)
-STATIC_REFLECT_END()
-```
-
-### Static Reflection Interfaces
-
-```cpp
-// Get static reflection info for a specific type (the type must be registered for static reflection)
-template <typename T>
-static constexpr auto GetStaticTypeInfo() -> StaticTypeInfo<T>;
-```
-
----
-
-```cpp
-// Get member function pointer
-template <typename ClassType, std::size_t Index>
-static constexpr auto GetMemberFunction();
-```
-
----
-
-```cpp
-// Get member variable pointer
-template <typename ClassType, std::size_t Index>
-static constexpr auto GetMemberVariable();
+```c++
+#include "NekiraReflect/DynamicReflect/Core/Core.hpp"
 ```
 
 ## Dynamic Reflection
 
-`NekiraReflectTool` scans header files and automatically generates reflection information for dynamic reflection. For details, see: [NekiraReflectTool](../NekiraReflectTool/NekiraReflectTool.EN.MD)
+`NekiraReflectTool` scans header files and automatically generates reflection information for dynamic reflection. For details, see: [NekiraReflectTool](/Documents/NekiraReflectTool/NekiraReflectTool.EN.MD)
 
 ### Reflection Macros
 

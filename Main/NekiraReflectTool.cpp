@@ -39,24 +39,6 @@ static void PrintHelp()
 
     std::cout << "Single Arg:\n";
     std::cout << "  \033[36m-help\033[0m Usage information." << "\n";
-    // std::cout << "  \033[36m-zako\033[0m Secret♥ " << "\n";
-}
-
-static void PrintSecretInfo()
-{
-    std::cout << "\033[31mZako♥ Zako~Zako♥ Zako~\033[0m\n";
-    std::cout << "\033[35m杂鱼♥ 杂鱼~杂鱼♥ 杂鱼~\033[0m\n";
-
-    std::cout << "\033[36m杂鱼大哥哥不知道怎么用吧(ᗒᗣᗕ)՞~~♥ ♥ \033[0m\n";
-
-    std::cout << "\033[32m(✧≖‿ゝ≖)\033[0m\n";
-    std::cout << "\033[32m(✧≖‿ゝ≖)\033[0m\n";
-    std::cout << "\033[32m(✧≖‿ゝ≖)\033[0m\n";
-
-    std::cout << "\033[34m如果实在想用的话, 试试\"NekiraReflectTool -help\"吧♥ ~\033[0m\n";
-    std::cout << "\033[35m如果还是不会用的话, 去看一下TokiraNeo的GitHub仓库吧♥ ~\033[0m\n";
-    std::cout << "\033[33mhttps://github.com/TokiraNeo/NekiraReflect\033[0m\n";
-    std::cout << "\033[31m_(:△」∠)_\033[0m\n";
 }
 
 int main(int argc, char* argv[])
@@ -65,12 +47,6 @@ int main(int argc, char* argv[])
     if (argc < 2)
     {
         std::cout << "Print \"NekiraReflectTool -help\" usage information.\n";
-        return 0;
-    }
-
-    if (std::strcmp(argv[1], "-zako") == 0)
-    {
-        PrintSecretInfo();
         return 0;
     }
 

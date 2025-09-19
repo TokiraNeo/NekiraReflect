@@ -2,14 +2,14 @@
     <b>NekiraReflectionLib</b>
 </h1>
 
-![GitHub License](https://img.shields.io/github/license/TokiraNeo/NekiraReflect?style=flat-square&labelColor=2EA2EF&color=2EEFDC)
-![GitHub top language](https://img.shields.io/github/languages/top/TokiraNeo/NekiraReflect?style=flat-square&labelColor=29F5BB&color=29C9F5)
-![C++ std](https://img.shields.io/badge/C%2B%2B_std-%3E%3D20-%23FF5C9A?style=flat-square&labelColor=%23C988F7)
-![CMake Version](https://img.shields.io/badge/CMake-%3E%3D3.20-8EFF80?style=flat-square&labelColor=CEFF80)
-![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/TokiraNeo/NekiraReflect/main?style=flat-square&labelColor=91CBED&color=A0AEDE)
+![GitHub License](https://img.shields.io/github/license/TokiraNeo/NekiraReflect?style=flat-square&labelColor=363a4f&color=b7bdf8)
+![GitHub top language](https://img.shields.io/github/languages/top/TokiraNeo/NekiraReflect?style=flat-square&labelColor=363a4f&color=b7bdf8)
+![C++ std](https://img.shields.io/badge/C%2B%2B_std-%3E%3D20-%23b7bdf8?style=flat-square&labelColor=%23363a4f)
+![CMake Version](https://img.shields.io/badge/CMake-%3E%3D3.20-b7bdf8?style=flat-square&labelColor=363a4f)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/TokiraNeo/NekiraReflect/main?style=flat-square&labelColor=363a4f&color=b7bdf8)
 
-[![README CN](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-D8E0F8?style=for-the-badge&labelColor=E0D8F8&color=D8E0F8)](/Documents/README/README.CN.MD)
-[![README EN](https://img.shields.io/badge/README-EN-D8E0F8?style=for-the-badge&labelColor=E0D8F8&color=D8E0F8)](/Documents/README/README.EN.MD)
+[![README CN](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-D8E0F8?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/README/README.CN.MD)
+[![README EN](https://img.shields.io/badge/README-EN-D8E0F8?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/README/README.EN.MD)
 
 ## 项目简介
 
@@ -58,15 +58,15 @@ find_package(NekiraReflectionLib REQUIRED)
 
 ### NekiraReflectStatic
 
-[![NekiraReflectStatic](https://img.shields.io/badge/Doc-NekiraReflectStatic-BFCCF2?style=for-the-badge&labelColor=CCBFF2&color=BFCCF2)](/Documents/NekiraReflectStatic/NekiraReflectStatic.CN.MD)
+[![NekiraReflectStatic](https://img.shields.io/badge/Doc-NekiraReflectStatic-BFCCF2?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/NekiraReflectStatic/NekiraReflectStatic.CN.MD)
 
 ### NekiraReflectDynamic
 
-[![NekiraReflectDynamic](https://img.shields.io/badge/Doc-NekiraReflectDynamic-BFCCF2?style=for-the-badge&labelColor=CCBFF2&color=BFCCF2)](/Documents/NekiraReflectDynamic/NekiraReflectDynamic.CN.MD)
+[![NekiraReflectDynamic](https://img.shields.io/badge/Doc-NekiraReflectDynamic-BFCCF2?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/NekiraReflectDynamic/NekiraReflectDynamic.CN.MD)
 
 ### NekiraReflecTool
 
-[![NekiraReflecTool](https://img.shields.io/badge/Doc-NekiraReflectTool-BFCCF2?style=for-the-badge&labelColor=CCBFF2&color=BFCCF2)](/Documents/NekiraReflectTool/NekiraReflectTool.CN.MD)
+[![NekiraReflecTool](https://img.shields.io/badge/Doc-NekiraReflectTool-BFCCF2?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/NekiraReflectTool/NekiraReflectTool.CN.MD)
 
 ---
 

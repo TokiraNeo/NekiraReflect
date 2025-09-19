@@ -81,6 +81,7 @@ struct MemberFuncWrapper<RT(Args...)>
     }
 
 private:
+    //@[TODO] 这里在外部使用时，指针类型无法正常支持万能引用，考虑优化
     std::unique_ptr<MemberFuncWrapper_Base<RT, Args...>> Wrapper;
 };
 

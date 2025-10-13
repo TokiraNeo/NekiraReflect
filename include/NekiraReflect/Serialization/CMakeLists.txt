@@ -12,6 +12,12 @@ file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/source/Serialization/*.cpp")
 add_library(NekiraReflectSerialize STATIC ${HEADERS} ${SOURCES})
 add_library(NekiraReflectionLib::NekiraReflectSerialize ALIAS NekiraReflectSerialize)
 
+# link libraries
+target_link_libraries(NekiraReflectSerialize
+    PRIVATE
+        nlohmann_Json
+)
+
 # include
 target_include_directories(NekiraReflectSerialize 
     PUBLIC

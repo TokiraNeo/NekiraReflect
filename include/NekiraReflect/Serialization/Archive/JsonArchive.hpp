@@ -1,5 +1,5 @@
 ﻿/**
-* MIT License
+ * MIT License
  *
  * Copyright (c) 2025 TokiraNeo (https://github.com/TokiraNeo)
  *
@@ -31,6 +31,17 @@ namespace NekiraReflect
 
 class JsonArchive final : public ArchiveBase
 {
+public:
+    JsonArchive() = default;
+    ~JsonArchive() override = default;
+
+    JsonArchive(const JsonArchive&) = default;
+    JsonArchive& operator=(const JsonArchive&) = default;
+
+    JsonArchive(JsonArchive&&) noexcept = default;
+    JsonArchive& operator=(JsonArchive&&) noexcept = default;
+
+private:
 
 };
 

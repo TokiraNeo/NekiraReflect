@@ -11,6 +11,13 @@
 [![README CN](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-D8E0F8?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/README/README.CN.MD)
 [![README EN](https://img.shields.io/badge/README-EN-D8E0F8?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/README/README.EN.MD)
 
+> [!Important]
+>
+> ### ThirdParty
+>
+> - [nlohmann Json](https://github.com/nlohmann/json)
+> - [LibClang](https://github.com/llvm/llvm-project)
+
 ## 项目简介
 
 NekiraReflectionLib 是一个基于 C++ 的反射工具库，提供静态反射与动态反射功能，包含一个反射生成器。

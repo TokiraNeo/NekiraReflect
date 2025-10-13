@@ -4,6 +4,9 @@
 
 include(GNUInstallDirs)
 
+# find Clang package
+find_package(Clang REQUIRED CONFIG)
+
 # Headers, Sources
 file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/source/Generation/*.cpp")

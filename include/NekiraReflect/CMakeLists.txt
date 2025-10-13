@@ -6,3 +6,4 @@
 add_subdirectory(StaticReflect)
 add_subdirectory(DynamicReflect)
 add_subdirectory(Generation)
+add_subdirectory(Serialization)

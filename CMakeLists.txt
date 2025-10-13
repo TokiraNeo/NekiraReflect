@@ -15,28 +15,18 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# 查找llvm、clang库
-find_package(LLVM REQUIRED CONFIG)
-find_package(Clang REQUIRED CONFIG)
 
 # 导入必要模块
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-# 调试信息
-message("LIBXML2_INCLUDE_DIR: ${LIBXML2_INCLUDE_DIR}")
-message("LIBXML2_LIBRARIES: ${LIBXML2_LIBRARIES}")
-message("LLVM_INCLUDE_DIRS: ${LLVM_INCLUDE_DIRS}")
-message("LLVM_DIR: ${LLVM_DIR}")
-message("LLVM_LIBRARIES: ${LLVM_LIBRARIES}")
-message("Clang_INCLUDE_DIRS: ${Clang_INCLUDE_DIRS}")
-message("Clang_DIR: ${Clang_DIR}")
-message("Clang_LIBRARIES: ${Clang_LIBRARIES}")
+
 
 # =====================================
 # 子目录、子模块
 # =====================================
 
+add_subdirectory(ThirdParty)
 add_subdirectory(include/NekiraReflect)
 add_subdirectory(Main)
 
@@ -46,6 +36,7 @@ set(SubModules
     NekiraReflectDynamic
     NekiraReflectGen
     NekiraReflectTool
+    NekiraReflectSerialize
 )
 
 # 遍历添加子模块

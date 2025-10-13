@@ -11,6 +11,13 @@
 [![README CN](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-D8E0F8?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/README/README.CN.MD)
 [![README EN](https://img.shields.io/badge/README-EN-D8E0F8?style=for-the-badge&labelColor=363a4f&color=b7bdf8)](/Documents/README/README.EN.MD)
 
+> [!Important]
+>
+> ### ThirdParty
+>
+> - [nlohmann Json](https://github.com/nlohmann/json)
+> - [LibClang](https://github.com/llvm/llvm-project)
+
 ## Introduction
 
 NekiraReflectionLib is a C++ Reflection Utilities Library, including static reflection, dynamic reflection, type traits, and a reflection generation tool.

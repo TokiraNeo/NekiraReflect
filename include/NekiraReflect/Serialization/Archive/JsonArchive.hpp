@@ -42,7 +42,6 @@ public:
     JsonArchive& operator=(JsonArchive&&) noexcept = default;
 
 private:
-
 };
 
 } // namespace NekiraReflect

@@ -35,8 +35,9 @@ set(SubModules
     NekiraReflectStatic
     NekiraReflectDynamic
     NekiraReflectGen
-    NekiraReflectTool
     NekiraReflectSerialize
+    NekiraReflectTool
+    NekiraSerializeTool
 )
 
 # 遍历添加子模块

@@ -54,3 +54,6 @@ Test/
 
 # 忽略测试用的生成文件
 Generated/
+
+# 忽略测试用的序列化文件
+Serialization/

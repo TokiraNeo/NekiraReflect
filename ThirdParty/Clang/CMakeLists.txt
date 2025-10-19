@@ -2,7 +2,7 @@
 # Clang/CMakeLists.txt
 # =================================
 
-list(APPEND CMAKE_PREFIX_PATH ${CLANG_CMAKE_DIR})
+list(APPEND CMAKE_PREFIX_PATH ${CLANG_CMAKE_PATH})
 
 find_package(Clang REQUIRED CONFIG)
 

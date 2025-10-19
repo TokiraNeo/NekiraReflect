@@ -1,5 +1,5 @@
 ﻿/**
-* MIT License
+ * MIT License
  *
  * Copyright (c) 2025 TokiraNeo (https://github.com/TokiraNeo)
  *
@@ -28,6 +28,7 @@
 #include <cstring>
 
 using Json = nlohmann::json;
+
 
 static void PrintHelp()
 {
@@ -66,19 +67,19 @@ int main(int argc, char* argv[])
         return 1;
     }
     // 检查文件是否是JSON文件
-    if( InputJson.extension() != ".json" || InputJson.extension() != ".JSON" )
+    if( InputJson.extension() != ".json" && InputJson.extension() != ".JSON" )
     {
         std::cerr << "Error: Input file is not a JSON file: " << InputJson << "\n";
         return 1;
     }
 
     // 默认输出目录
-    std::filesystem::path OutputDir = "Serialization";
+    std::filesystem::path outputDir = "Serialization";
 
     // 检查输出目录是否存在，如果不存在则创建
-    if (!std::filesystem::exists(OutputDir))
+    if (!std::filesystem::exists(outputDir))
     {
-        std::filesystem::create_directories(OutputDir);
+        std::filesystem::create_directories(outputDir);
     }
 
     // 读取 JSON 文件
@@ -89,6 +90,7 @@ int main(int argc, char* argv[])
     std::cout << "Read JSON data:\n" << data.dump() << '\n';
 
     // @TODO: 进行序列化或反序列化操作
+
 
     return 0;
 }

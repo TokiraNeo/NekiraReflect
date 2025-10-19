@@ -25,7 +25,6 @@
 
 #pragma once
 
-
 #include "clang-c/Index.h"
 #include <NekiraReflect/Generation/Tools/MetaInfo.hpp>
 #include <fstream>
